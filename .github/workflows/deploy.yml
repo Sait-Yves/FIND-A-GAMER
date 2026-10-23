@@ -1,0 +1,69 @@
+name: CI/CD Pipeline - LobbyGamer
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Vitest Unit Tests
+        run: npm test
+
+  deploy:
+    name: Deploy to VPS
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Execute Remote SSH Commands on VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            set -e
+            echo "🚀 Starting automated deployment for LobbyGamer..."
+            cd /var/www/lobbygamer
+
+            # Initialize Git repo if missing
+            if [ ! -d .git ]; then
+              git init
+              git remote add origin https://github.com/Sait-Yves/FIND-A-GAMER.git
+            fi
+
+            # Pull latest changes from main
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Rebuild and restart the Docker containers
+            echo "🐳 Rebuilding and restarting Docker containers..."
+            docker compose build app
+            docker compose up -d
+
+            # Synchronize database schema
+            echo "🗄️ Synchronizing Prisma database schema..."
+            docker compose exec -T app npx prisma db push --skip-generate
+
+            # Clean up old unused Docker images
+            docker image prune -f
+
+            echo "✅ Deployment completed successfully!"
