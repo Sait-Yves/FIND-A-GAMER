@@ -1,21 +1,22 @@
 # ==========================================
 # Étape 1 : Dépendances (Base)
 # ==========================================
-FROM node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat
+FROM node:20-bookworm-slim AS deps
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Copie des fichiers de dépendances et du schéma Prisma
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma/
 
-# Installation stricte des paquets avec génération des clients
+# Installation stricte des paquets
 RUN npm ci
 
 # ==========================================
 # Étape 2 : Construction (Builder)
 # ==========================================
-FROM node:20-alpine AS builder
+FROM node:20-bookworm-slim AS builder
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -35,7 +36,8 @@ RUN npm run build
 # ==========================================
 # Étape 3 : Image Minimale de Production (Runner)
 # ==========================================
-FROM node:20-alpine AS runner
+FROM node:20-bookworm-slim AS runner
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -43,9 +45,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Sécurité : utilisateur non-root dédié
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+# Sécurité : utilisateur non-root dédié (Debian / glibc)
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 nextjs
 
 # Assets publics statiques et artefacts Prisma
 COPY --from=builder /app/public ./public
