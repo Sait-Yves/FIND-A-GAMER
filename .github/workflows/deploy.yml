@@ -61,7 +61,7 @@ jobs:
 
             # Synchronize database schema
             echo "🗄️ Synchronizing Prisma database schema..."
-            docker compose exec -T app npx prisma db push --skip-generate
+            docker compose exec -T -u root app npx prisma db push --skip-generate
 
             # Clean up old unused Docker images
             docker image prune -f

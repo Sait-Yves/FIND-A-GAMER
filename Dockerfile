@@ -45,15 +45,22 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Sécurité : utilisateur non-root dédié (Debian / glibc)
+# Sécurité : utilisateur non-root avec dossier home accessible et cache npm dédié
 RUN groupadd --system --gid 1001 nodejs && \
-    useradd --system --uid 1001 nextjs
+    useradd --system --uid 1001 --create-home --home-dir /home/nextjs nextjs && \
+    mkdir -p /home/nextjs/.npm && \
+    chown -R nextjs:nodejs /home/nextjs
 
-# Assets publics statiques et artefacts Prisma
+ENV HOME=/home/nextjs
+ENV npm_config_cache=/home/nextjs/.npm
+
+# Assets publics statiques et artefacts Prisma (incluant la CLI prisma locale)
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/.bin ./node_modules/.bin
 
 # Fichiers compilés par Next.js standalone
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
