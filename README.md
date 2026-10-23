@@ -293,6 +293,11 @@ docker compose cp prisma/seed.js app:/app/prisma/seed.js
 docker compose exec app node prisma/seed.js
 ```
 
+### Intégration & Déploiement Continus (CI/CD GitHub Actions) :
+Un pipeline complet de CI/CD est configuré dans [.github/workflows/deploy.yml](file:///.github/workflows/deploy.yml) :
+- **Continuous Integration (CI) :** À chaque `git push` sur `main`, GitHub Actions exécute l'environnement Ubuntu, installe les dépendances et joue la suite de tests unitaires Vitest.
+- **Continuous Deployment (CD) :** Si les tests passent avec succès, le runner se connecte automatiquement en SSH sécurisé au VPS (`78.138.58.162`), synchronise le dépôt (`git pull`), reconstruit les conteneurs Docker sans interruption (`docker compose build app && docker compose up -d`) et met à jour le schéma Prisma.
+
 ---
 
 ## 🚀 11. Guide de Démarrage Rapide (Local & Production)
