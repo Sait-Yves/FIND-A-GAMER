@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { CreateTicketModal } from "@/components/tickets/CreateTicketModal";
 
-export default function ExplorerPage() {
+function ExplorerContent() {
   const searchParams = useSearchParams();
   const initialGame = searchParams.get("game") || "Tous";
 
@@ -640,5 +640,20 @@ export default function ExplorerPage() {
         onCreated={() => fetchTickets()}
       />
     </div>
+  );
+}
+
+export default function ExplorerPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-surface flex flex-col items-center justify-center text-primary gap-3">
+          <span className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs font-display text-on-surface-variant">Chargement de LobbyGamer...</span>
+        </div>
+      }
+    >
+      <ExplorerContent />
+    </Suspense>
   );
 }
