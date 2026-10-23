@@ -1,0 +1,255 @@
+// Prisma Schema for LobbyGamer
+// Database: MySQL (compatible with XAMPP / MariaDB / MySQL 8.x)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------
+// ENUMS
+// ----------------------------------------------------
+
+enum Platform {
+  PC
+  XBOX
+  PLAYSTATION
+  SWITCH
+  MOBILE
+  CROSSPLAY
+}
+
+enum PlayerType {
+  CASUAL
+  HARDCORE
+  COMPETITIVE
+  CHILL
+  CHATTY
+  STRATEGIST
+  ROLEPLAY
+}
+
+enum TicketStatus {
+  OPEN
+  FULL
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ParticipantRole {
+  HOST
+  MEMBER
+}
+
+enum ParticipantStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  LEFT
+  KICKED
+}
+
+// ----------------------------------------------------
+// USER & PROFILE
+// ----------------------------------------------------
+
+model User {
+  id               String       @id @default(cuid())
+  email            String       @unique
+  username         String       @unique
+  passwordHash     String
+  avatarUrl        String?      @db.VarChar(512)
+  bio              String?      @db.Text
+  age              Int?
+  primaryPlatform  Platform     @default(PC)
+  playerType       PlayerType   @default(CHILL)
+  reputationScore  Float        @default(100.0) // Score calculé (sur 100 ou 5.0)
+  totalReviews     Int          @default(0)
+  lastActiveAt     DateTime     @default(now())
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  // Relations Profil
+  favoriteGames    UserFavoriteGame[]
+
+  // Relations Tickets & Activité
+  hostedTickets    Ticket[]           @relation("TicketHost")
+  participations   Participant[]
+  
+  // Relations Évaluations / Karma
+  reviewsGiven     Review[]           @relation("ReviewAuthor")
+  reviewsReceived  Review[]           @relation("ReviewTarget")
+
+  // Relations Messagerie
+  sentMessages     Message[]          @relation("MessageSender")
+  conversations    ConversationMember[]
+
+  @@index([username])
+  @@index([reputationScore])
+  @@index([lastActiveAt])
+  @@map("users")
+}
+
+model UserFavoriteGame {
+  id           String   @id @default(cuid())
+  userId       String
+  rawgGameId   Int      // ID officiel du jeu sur l'API RAWG
+  gameTitle    String   @db.VarChar(255)
+  gameSlug     String   @db.VarChar(255)
+  gameCoverUrl String?  @db.VarChar(512)
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, rawgGameId])
+  @@index([rawgGameId])
+  @@map("user_favorite_games")
+}
+
+// ----------------------------------------------------
+// TICKETS (LFG - Salons de recherche de groupe)
+// ----------------------------------------------------
+
+model Ticket {
+  id                 String       @id @default(cuid())
+  title              String       @db.VarChar(120)
+  description        String       @db.Text
+  hostId             String
+  
+  // Référence Jeu (RAWG API)
+  rawgGameId         Int
+  gameTitle          String       @db.VarChar(255)
+  gameSlug           String       @db.VarChar(255)
+  gameCoverUrl       String?      @db.VarChar(512)
+
+  // Règles imposées par l'hôte
+  is18Plus           Boolean      @default(false)
+  micRequired        Boolean      @default(true)
+  targetPlatform     Platform     @default(CROSSPLAY)
+  requiredPlayerType PlayerType?
+  language           String       @default("FR") @db.VarChar(10)
+  customRules        String?      @db.Text
+
+  // Gestion des places
+  maxPlayers         Int          @default(4)
+  currentPlayers     Int          @default(1)
+  status             TicketStatus @default(OPEN)
+  
+  // Planification
+  scheduledAt        DateTime?    // Null si session immédiate
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  // Relations
+  host               User          @relation("TicketHost", fields: [hostId], references: [id], onDelete: Cascade)
+  participants       Participant[]
+  messages           Message[]     @relation("TicketMessages")
+  reviews            Review[]
+
+  @@index([rawgGameId])
+  @@index([status])
+  @@index([targetPlatform])
+  @@index([scheduledAt])
+  @@map("tickets")
+}
+
+model Participant {
+  id         String            @id @default(cuid())
+  ticketId   String
+  userId     String
+  role       ParticipantRole   @default(MEMBER)
+  status     ParticipantStatus @default(PENDING)
+  joinedAt   DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  ticket     Ticket            @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([ticketId, userId])
+  @@index([ticketId, status])
+  @@map("ticket_participants")
+}
+
+// ----------------------------------------------------
+// SYSTÈME DE RÉPUTATION & ÉVALUATION (KARMA)
+// ----------------------------------------------------
+
+model Review {
+  id           String   @id @default(cuid())
+  ticketId     String   // Preuve de participation commune à un ticket
+  reviewerId   String   // Joueur qui donne la note
+  targetUserId String   // Joueur évalué
+  
+  rating       Int      // Note de 1 (très mauvais) à 5 (exemplaire)
+  comment      String?  @db.Text
+  
+  // Badges comportementaux sélectionnés (Stocké en JSON pour flexibilité MySQL)
+  // Ex: ["FAIR_PLAY", "GOOD_COMMUNICATION", "PATIENT", "TEAM_PLAYER", "RAGE_QUIT"]
+  tags         Json?    
+
+  createdAt    DateTime @default(now())
+
+  ticket       Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  reviewer     User     @relation("ReviewAuthor", fields: [reviewerId], references: [id], onDelete: Cascade)
+  targetUser   User     @relation("ReviewTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  // Un joueur ne peut noter un coéquipier qu'une seule fois par session de ticket
+  @@unique([ticketId, reviewerId, targetUserId])
+  @@index([targetUserId])
+  @@map("reviews")
+}
+
+// ----------------------------------------------------
+// MESSAGERIE (Tickets & 1-to-1)
+// ----------------------------------------------------
+
+model Conversation {
+  id           String               @id @default(cuid())
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  members      ConversationMember[]
+  messages     Message[]            @relation("DirectMessages")
+
+  @@map("conversations")
+}
+
+model ConversationMember {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  joinedAt       DateTime     @default(now())
+  lastReadAt     DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@map("conversation_members")
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  senderId       String
+  content        String        @db.Text
+  createdAt      DateTime      @default(now())
+
+  // Si le message appartient au chat de groupe d'un Ticket
+  ticketId       String?
+  ticket         Ticket?       @relation("TicketMessages", fields: [ticketId], references: [id], onDelete: Cascade)
+
+  // Si le message appartient à une conversation privée 1-to-1
+  conversationId String?
+  conversation   Conversation? @relation("DirectMessages", fields: [conversationId], references: [id], onDelete: Cascade)
+
+  sender         User          @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, createdAt])
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}

@@ -1,0 +1,792 @@
+<!DOCTYPE html><html class="dark" lang="fr" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface":"#10131a","primary-fixed":"#6ffbbe","on-tertiary-fixed-variant":"#004e5c","tertiary-fixed":"#acedff","surface-tint":"#4edea3","secondary-fixed-dim":"#c0c1ff","surface-container-low":"#191b23","on-background":"#e1e2ec","on-primary-fixed":"#002113","secondary":"#c0c1ff","on-tertiary":"#003640","on-secondary-fixed":"#07006c","on-tertiary-fixed":"#001f26","surface-container-high":"#272a32","secondary-fixed":"#e1e0ff","on-surface":"#e1e2ec","on-primary-fixed-variant":"#005236","on-primary-container":"#00422b","error":"#ffb4ab","inverse-on-surface":"#2d3038","outline-variant":"#3c4a42","surface-variant":"#32353d","secondary-container":"#3131c0","on-tertiary-container":"#003f4b","on-error":"#690005","primary":"#4edea3","background":"#10131a","surface-dim":"#10131a","inverse-primary":"#006c49","surface-bright":"#363941","tertiary-container":"#00b2d0","outline":"#86948a","tertiary":"#4cd7f6","on-error-container":"#ffdad6","on-secondary-fixed-variant":"#2f2ebe","on-secondary":"#1000a9","surface-container-highest":"#32353d","on-surface-variant":"#bbcabf","primary-fixed-dim":"#4edea3","on-secondary-container":"#b0b2ff","inverse-surface":"#e1e2ec","surface-container-lowest":"#0b0e15","surface-container":"#1d1f27","error-container":"#93000a","primary-container":"#10b981","tertiary-fixed-dim":"#4cd7f6","on-primary":"#003824"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xl":"2.5rem","margin-desktop":"2rem","space-sm":"0.5rem","margin":"1rem","gutter":"1rem","gutter-desktop":"1.5rem","space-md":"1rem","space-lg":"1.5rem","space-xs":"0.25rem"},"fontFamily":{"body-sm":["Inter"],"display":["Space Grotesk"],"headline-sm":["Space Grotesk"],"label-md":["Space Grotesk"],"headline-md":["Space Grotesk"],"body-lg":["Inter"],"label-lg":["Space Grotesk"],"headline-lg":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"display-mobile":["Space Grotesk"],"label-sm":["Space Grotesk"],"body-md":["Inter"]},"fontSize":{"body-sm":["0.8125rem",{"lineHeight":"1.25rem","fontWeight":"400"}],"display":["3.5rem",{"lineHeight":"4rem","letterSpacing":"-0.03em","fontWeight":"700"}],"headline-sm":["1.125rem",{"lineHeight":"1.5rem","fontWeight":"600"}],"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.05em","fontWeight":"600"}],"headline-md":["1.25rem",{"lineHeight":"1.75rem","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["1.125rem",{"lineHeight":"1.75rem","fontWeight":"400"}],"label-lg":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.02em","fontWeight":"600"}],"headline-lg":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.01em","fontWeight":"700"}],"display-mobile":["2.25rem",{"lineHeight":"2.75rem","letterSpacing":"-0.02em","fontWeight":"700"}],"label-sm":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.08em","fontWeight":"700"}],"body-md":["0.9375rem",{"lineHeight":"1.5rem","fontWeight":"400"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 h-16 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.3)] flex items-center justify-between px-gutter-desktop"><div class="flex items-center gap-space-lg w-72"><div class="flex items-center gap-space-sm"><img alt="LobbyGamer Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VgPNG6kjJcrz29Iqbqtx2G6Y1oZSoeMwCzvx3MH6rmFQiZq75-VpLYzo5CR-lfx4ZnhfY6j_VlMaggYuqYn7hEGGbOWGi1sjuEoGTnhidBejh7X-ZFGrPgiktlvtJ7zqktou0oWnKt58CAOoDihHkB1zjnrBe6o7ZeH5nTRSoEsSF20lpNRUJLJjSzHyImYTHhUnnAZ8WwfME5XhjXgOYpfwkl2DVIAnuDflZ2OjqZq0eW5IJZvWdKgMI"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface uppercase">LOBBYGAMER</span></div><div class="flex items-center gap-space-xs px-2 py-0.5 rounded-full bg-surface-container-low"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="font-label-sm text-label-sm text-primary uppercase">LIVE</span></div></div><div class="flex-1 max-w-xl mx-space-lg"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-lg pointer-events-none">search</span><input class="w-full h-10 pl-10 pr-4 bg-surface-container-lowest text-on-surface placeholder-on-surface-variant rounded-xl font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-tertiary transition-all" placeholder="Rechercher un jeu, un salon, un joueur... [Ctrl+K]" type="text"><span class="absolute right-3 px-1.5 py-0.5 rounded bg-surface-container-high font-label-sm text-label-sm text-on-surface-variant">⌘K</span></div></div><div class="flex items-center gap-space-md"><button class="flex items-center gap-space-xs px-space-md py-2 bg-primary-container text-on-primary-container font-label-md text-label-md rounded-xl hover:bg-primary hover:text-on-primary transition-all shadow-[0_0_16px_-2px_rgba(16,185,129,0.35)]" type="button"><span class="material-symbols-outlined text-lg">add</span><span class="">Créer un Ticket</span></button><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-xl"><button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined text-xl">mic</span></button><button class="relative p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined text-xl">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-container-low"></span></button></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="relative"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmCLg9evfLxJS8RSyam8E6jSqTbyo-HxMJ31xTjTRE-vo-k9aTCSP_SwwOt-ZkFt06f2eKECTT7SeLz142nrRoSJQlcMUsRAfPdmJ5mMxmjqdZBEUNoJATfkB075S8j70OJ59GCpgLl7CQ_8pCQsuC3JHPVdIr3ML1by38jGcV2FHu6b5l42OWPVgsct4c9-Tz8hmVlgkEgJavcEEt_Y4fMTm7UrZSUGWzUtYrVuxNLRKtvjV1pOS-"><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface"></span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-label-md text-label-md text-on-surface">@Valkyrie_FR</span></div><span class="font-label-sm text-label-sm text-primary">En Ligne</span></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-72 bg-surface-container-lowest z-40 flex flex-col justify-between py-space-md px-space-sm"><nav class="flex flex-col gap-space-xs px-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a aria-current="page" class="flex items-center justify-between px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary-container font-headline-sm" data-path="explorer-les-salons" href="#"><span class="font-label-lg text-label-lg">Explorer les Salons</span><span class="material-symbols-outlined text-sm">dashboard</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mes-tickets" href="#"><span class="font-label-lg text-label-lg">Mes Tickets</span><span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">2</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="messagerie-et-voc" href="#"><span class="font-label-lg text-label-lg">Messagerie &amp; Voc</span><span class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold">5</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="jeux-favoris" href="#"><span class="font-label-lg text-label-lg">Jeux Favoris</span><span class="material-symbols-outlined text-sm">sports_esports</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="classements-et-fair-play" href="#"><span class="font-label-lg text-label-lg">Classements &amp; Fair-Play</span><span class="material-symbols-outlined text-sm">military_tech</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="parametres" href="#"><span class="font-label-lg text-label-lg">Paramètres</span><span class="material-symbols-outlined text-sm">tune</span></a></nav><div class="flex flex-col gap-space-sm px-space-xs pt-space-md bg-surface-container-low rounded-xl"><div class="flex flex-col gap-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider px-space-xs">Plateformes Connectées</span><div class="flex items-center justify-between px-space-xs py-1"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-body-sm text-body-sm text-on-surface">Steam</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Lié</span></div><div class="flex items-center justify-between px-space-xs py-1"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-body-sm text-body-sm text-on-surface">Xbox Live</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Lié</span></div><div class="flex items-center justify-between px-space-xs py-1"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-body-sm text-body-sm text-on-surface">Discord</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Vocal</span></div></div><div class="pt-space-xs flex items-center justify-between bg-surface-container-lowest p-space-sm rounded-lg"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-base">public</span><span class="font-label-sm text-label-sm text-on-surface">Europe (Frankfurt)</span></div><span class="font-label-sm text-label-sm text-primary bg-primary/10 px-1.5 py-0.5 rounded">18ms</span></div></div></aside><div class="pl-72"><main class="w-full pt-16 min-h-screen bg-surface px-margin-desktop py-space-lg"><div class="flex flex-col w-full">
+<!-- Top Tactical Telemetry & Quick Header -->
+<section class="flex flex-col gap-space-md mb-space-lg">
+<!-- Live Operational Status Strip -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-lowest text-on-surface">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+<span class="font-headline-sm text-headline-sm tracking-tight text-on-surface">RADAR DE RECHERCHE</span>
+</div>
+<span class="text-outline-variant font-mono text-label-sm">|</span>
+<div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+<span class="text-primary font-label-md text-label-md">3 842</span> Joueurs actifs
+          <span class="mx-1 text-outline-variant">•</span>
+<span class="text-tertiary font-label-md text-label-md">589</span> Salons disponibles
+          <span class="mx-1 text-outline-variant">•</span>
+<span class="text-secondary font-label-md text-label-md">~42s</span> Matchmaking médian
+        </div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-high font-label-sm text-label-sm text-primary">
+<span class="material-symbols-outlined text-sm">wifi_tethering</span>
+<span class="">FLUX TEMPS-RÉEL ACTIF</span>
+</div>
+<button class="flex items-center justify-center p-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all" id="refreshFeedBtn">
+<span class="material-symbols-outlined text-base">sync</span>
+</button>
+</div>
+</div>
+<!-- Quick Game Selector Strip -->
+<div class="relative w-full overflow-hidden">
+<div class="flex items-center gap-space-sm overflow-x-auto pb-1 scrollbar-none" id="gamePicker">
+<!-- Apex Legends (Selected) -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container text-on-surface shadow-[0_0_0_1px_#10B981,0_0_16px_-2px_rgba(16,185,129,0.35)] shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">military_tech</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-primary leading-tight">Apex Legends</span>
+<span class="font-label-sm text-label-sm text-primary/80">148 salons actifs</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-primary ml-1"></span>
+</button>
+<!-- Valorant -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">shield</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-on-surface leading-tight">Valorant</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">92 salons actifs</span>
+</div>
+</button>
+<!-- Helldivers 2 -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">rocket_launch</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-on-surface leading-tight">Helldivers 2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">64 salons actifs</span>
+</div>
+</button>
+<!-- Warzone -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary-fixed font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">radar</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-on-surface leading-tight">Warzone 3</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">115 salons actifs</span>
+</div>
+</button>
+<!-- Rocket League -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">sports_soccer</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-on-surface leading-tight">Rocket League</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">43 salons actifs</span>
+</div>
+</button>
+<!-- Counter-Strike 2 -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">crisis_alert</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-on-surface leading-tight">CS 2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">88 salons actifs</span>
+</div>
+</button>
+<!-- R6 Siege -->
+<button class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all" type="button">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-lg">security</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-lg text-on-surface leading-tight">R6 Siege</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">39 salons actifs</span>
+</div>
+</button>
+</div>
+</div>
+</section>
+<!-- Filter & Matchmaking Control Bar -->
+<section class="flex flex-col gap-space-md p-space-md rounded-xl bg-surface-container-lowest mb-space-lg shadow-sm">
+<!-- Top Filter Controls -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-sm">
+<!-- Mode Dropdown -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mode de jeu</label>
+<div class="relative">
+<select class="w-full h-10 px-3 bg-surface-container text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-tertiary">
+<option>Tous les modes (Ranked &amp; Normaux)</option>
+<option>Classé / Ranked Grind</option>
+<option>Entraînement / Scrims</option>
+<option>Partie Rapide / Chill</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-base pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Platform Dropdown -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Plateforme</label>
+<div class="relative">
+<select class="w-full h-10 px-3 bg-surface-container text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-tertiary">
+<option>Crossplay (Toutes plateformes)</option>
+<option>PC Master Race (Steam / EA)</option>
+<option>PlayStation 5</option>
+<option>Xbox Series X|S</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-base pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Language Dropdown -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Langue &amp; Région</label>
+<div class="relative">
+<select class="w-full h-10 px-3 bg-surface-container text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-tertiary">
+<option>Français &amp; Anglais (Europe)</option>
+<option>Français uniquement (100% FR)</option>
+<option>Anglais global (Global EU)</option>
+<option>Allemand / Espagnol</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-base pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Rank Dropdown -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Niveau / Rang</label>
+<div class="relative">
+<select class="w-full h-10 px-3 bg-surface-container text-on-surface font-body-sm text-body-sm rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-tertiary">
+<option>Tous niveaux acceptés</option>
+<option>Platine / Diamant +</option>
+<option>Master / Apex Predator</option>
+<option>Débutant / Reprise de jeu</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-base pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Quick Filter Tags & Sorting Row -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-2">
+<!-- Fast Filter Chips -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm shadow-[0_0_0_1px_#10B981]" type="button">
+<span class="material-symbols-outlined text-sm">mic</span>
+<span class="">Micro requis</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-bright transition-all" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="">+18 Seulement</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm shadow-[0_0_0_1px_#06B6D4]" type="button">
+<span class="material-symbols-outlined text-sm">verified</span>
+<span class="">Fair-play 4.5+ ★</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:text-on-surface hover:bg-surface-bright transition-all" type="button">
+<span class="material-symbols-outlined text-sm">self_improvement</span>
+<span class="">Chill / Détente</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:text-on-surface hover:bg-surface-bright transition-all" type="button">
+<span class="material-symbols-outlined text-sm">swords</span>
+<span class="">Tryhard / Scrims</span>
+</button>
+</div>
+<!-- Sorting Options -->
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+<span class="">Trier par :</span>
+<button class="px-2 py-1 rounded bg-surface-container-high text-primary font-headline-sm text-label-sm">Plus récents</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-high text-on-surface transition-all">Remplissage rapide</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-high text-on-surface transition-all">Meilleur Ping</button>
+</div>
+</div>
+</section>
+<!-- 2-Column Responsive Dashboard Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-start">
+<!-- LEFT: Main LFG Feed (8 Cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- TICKET CARD 1: Apex Legends Trio Ranked -->
+<article class="flex flex-col rounded-xl bg-surface-container-low p-space-lg hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.25)] transition-all relative overflow-hidden group">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-primary"></div>
+<!-- Header & Host Info -->
+<div class="flex flex-wrap items-start justify-between gap-space-sm mb-space-sm pl-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container-high" data-alt="High tech cyberpunk gamer avatar wearing an illuminated emerald helmet, high contrast digital character illustration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP6kJBWKyPciGBdNMfJhORKzUpFj5s5s5PDKVY7MLtBm6tix62uuyew1cuxDpDf3qcprXq7Sa4wiE4nnjvvr6aS6EVkZ1UgHjNtRMu-9uegHjsnV5VXgsjTCZfVw7_7f6B1lfFstRxTYPyIoLPZNPBur_L1DK3OG1y5LG_4-alI_GvpR3Oqu68aL8b7plAsWQd_Bu1zaT9DjFlROnyFE3HG6YisHW64O-MVCzaO3fKUWR-qCRD-mm8">
+<span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-on-primary font-label-sm text-[9px] font-bold">★</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">@Noxis_FPS</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-tertiary font-bold">HÔTE SQUAD</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-primary font-bold">4.9 / 5 ★</span>
+<span class="">•</span>
+<span class="">Fair-Play Score: 99%</span>
+<span class="">•</span>
+<span class="text-primary-fixed">98 matches finis</span>
+</div>
+</div>
+</div>
+<!-- Server / Telemetry -->
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-primary text-base">sensors</span>
+<span class="font-label-sm text-label-sm text-on-surface">EU Frankfurt</span>
+<span class="font-label-sm text-label-sm text-primary px-1 rounded bg-primary/10">19ms</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-1">Crossplay ON</span>
+</div>
+</div>
+<!-- Ticket Title & Description -->
+<div class="flex flex-col gap-1.5 mb-space-md pl-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm uppercase">Apex Legends</span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">TRIO RANKED - GRIND MASTER / DIAMANT II+</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Cherche 1 joueur sérieux avec bon call et focus endgame. Pas de toxicité, rotation propre en zone. On joue Valkyrie / Bangalore combo. Objectif points RP constants.
+          </p>
+</div>
+<!-- Squad Tags -->
+<div class="flex flex-wrap gap-space-xs mb-space-md pl-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">mic</span> MICRO OBLIGATOIRE
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-error/15 text-error font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">verified_user</span> +18 ANS REQUIS
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-tertiary/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">diamond</span> DIAMANT II MINIMUM
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">flag</span> OBJECTIF TOP 1
+          </span>
+</div>
+<!-- Squad Slots Grid (Apex Trio: 3 Slots) -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm mb-space-lg pl-space-xs">
+<!-- Slot 1 (Host Filled) -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Tactical soldier portrait with neon tactical visor and dark aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJZigeEIG7LRg8EcyFJfbhJPZdIF0zM47WHT5tHe37gKU9ay8frlum_DMNraWgp93sbDbGhAN3YjlajcjSTbxrUBwGbEEre_QGt3o9KQ9A_Ec0YpyZiCjAzwlifwA2UNuQr44N1BNulw7_3fmhhot16iXhDa759pR27GyA-74EwsF9IiJgWTcSCoIzcHiqkUUiFthM57muCsbIaFifBQnyWgYO1A2PrAjy8GzH_kvRgnaHtC_URM2n">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface truncate">Noxis_FPS</span>
+<span class="font-label-sm text-[10px] text-primary">Bangalore • Lv.420</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-base">mic</span>
+</div>
+<!-- Slot 2 (Filled) -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Futuristic woman gamer profile picture with cybernetic neon blue implants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ULBvVEzyDYvDlRkTwMdFq1BYY0RpKW0UBImFxkugJza4bEmFqHphk-XHws9p5JI4zyOAHY1yvGcEBb2SxinNI4wfeuHaI-fbm6BkXc8iZMqcevoClwEu-BBXj9rUnqrkm0NuA_IV0s0aTiqjz2FbjmaHzDjxk4L1laA21DJtGT23RNn-zu3SVq-vkXAJmpgx1YI0Afu5ACelAYFBLhEe9joNb8STZXb3hKwx1SVoiyZOyezuVe7B">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface truncate">Kira_Aim</span>
+<span class="font-label-sm text-[10px] text-tertiary">Conduit • Lv.312</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-base">mic</span>
+</div>
+<!-- Slot 3 (Open Vacancy) -->
+<button class="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-all group/slot cursor-pointer" type="button">
+<span class="material-symbols-outlined text-base group-hover/slot:scale-125 transition-transform">person_add</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Slot 3 Libre</span>
+</button>
+</div>
+<!-- Footer / CTA Bar -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-lowest/50 -mx-space-lg -mb-space-lg px-space-lg py-3">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-bold text-primary">2 / 3</span> Joueurs prêts
+            </div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Créé il y a 4 min</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Sauvegarder le ticket" type="button">
+<span class="material-symbols-outlined text-lg">bookmark</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Partager" type="button">
+<span class="material-symbols-outlined text-lg">share</span>
+</button>
+<button class="flex items-center gap-2 px-space-md py-2 bg-primary-container hover:bg-primary text-on-primary-container hover:text-on-primary font-headline-sm text-label-lg rounded-xl shadow-[0_0_16px_-2px_rgba(16,185,129,0.4)] transition-all" type="button">
+<span class="material-symbols-outlined text-lg">login</span>
+<span class="">Rejoindre le Lobby</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TICKET CARD 2: Valorant Premier Elite Scrims -->
+<article class="flex flex-col rounded-xl bg-surface-container-low p-space-lg hover:shadow-[0_0_24px_-4px_rgba(6,182,212,0.25)] transition-all relative overflow-hidden group">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-tertiary"></div>
+<!-- Header & Host Info -->
+<div class="flex flex-wrap items-start justify-between gap-space-sm mb-space-sm pl-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container-high" data-alt="Tactical masked e-sports player portrait with sleek cyan lighting reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyG2y_LcZN3zcnN7DR4gZ5VImsROAZ3S4-lDm3Kka0qKVCKfh0zBct941qvtPnP8xb98WyDt7GpRnGJC7AutPU0RXwVk9wgBWtNPVeyl2D50WlGSQOffSWh-wDLSiCxayBBFB_OyQD6LgGCMbRwgsX0Dcme9EdJ6aYw8I57xc_YvGSkJtXrnzM07vz2RGc1Pf2XzH-5m35OefKgWgHxAJlTMoL0Y4AQ-oUhmRbMH53pgJnj4kem0yt">
+<span class="material-symbols-outlined absolute -bottom-1 -right-1 text-tertiary bg-surface-container-lowest rounded-full text-base">verified</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">@SovaGod</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary/15 font-label-sm text-label-sm text-tertiary font-bold">VÉRIFIÉ PREMIER</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-tertiary font-bold">5.0 / 5 ★</span>
+<span class="">•</span>
+<span class="">Capitaine Equipe 'Nova-9'</span>
+</div>
+</div>
+</div>
+<!-- Telemetry -->
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-tertiary text-base">bolt</span>
+<span class="font-label-sm text-label-sm text-on-surface">Paris EU-Central</span>
+<span class="font-label-sm text-label-sm text-tertiary px-1 rounded bg-tertiary/10">12ms</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-1">PC Only</span>
+</div>
+</div>
+<!-- Ticket Title & Description -->
+<div class="flex flex-col gap-1.5 mb-space-md pl-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm uppercase">Valorant</span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">PREMIER TOURNAMENT SUB &amp; SCRIMS CE SOIR</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Besoin d'un initiateur ou contrôleur expérimenté pour notre match officiel Premier Division Élite prévu à 21h00. Bonne humeur exigée, micro fluide Discord, exécutions propres sur Ascent et Haven.
+          </p>
+</div>
+<!-- Squad Tags -->
+<div class="flex flex-wrap gap-space-xs mb-space-md pl-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-secondary/15 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">headset</span> FR VOCAL DISCORD
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-tertiary/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">military_tech</span> IMMORTAL 1+ REQUIS
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">analytics</span> STRATÉGIES FIXES
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">handshake</span> NON-TOXIQUE
+          </span>
+</div>
+<!-- Squad Slots (5 Slots) -->
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-space-xs mb-space-lg pl-space-xs">
+<div class="flex flex-col items-center text-center p-2 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full mb-1 object-cover" data-alt="Tactical Valorant Initiator avatar with futuristic mechanical eyepatch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzE9ZBDziwEVvwKKIiJo4zHgg0RLKSEPDOrodyi67z1_mj13VdikOfI3g5nFaHXYOmV2-ZLG8NvtPLu3X6kg4mBDRNJSrSlRo_LLZK0K89XX69Mo5WF5nkwqcCPoeuj2hSx__aF2-n3uqmoQcQR7ISXNTTGmM8FrXw_EME4IyT_sEqwf81HXgkHhIl2ADqb_evZzBnEJUvFm40AHc662gza2kdK3d8i41iz7OnpKMCBa1UeDOpOxUk">
+<span class="font-label-sm text-label-sm text-on-surface truncate w-full">SovaGod</span>
+<span class="font-label-sm text-[10px] text-tertiary">Sova (Cap)</span>
+</div>
+<div class="flex flex-col items-center text-center p-2 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full mb-1 object-cover" data-alt="Female cyber-duelist avatar with glowing neon pink hair and tactical visor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQcZ05P_62KHYOqp4bkDmsO0YjREF7vtKnaxjltUz2AYi5v5GKgTCz644TttgmWL_gSJMYysOZNgHHX23rtVflJHFfIqRi-rSHofYDOQCDMIk1coiAY0TUNtH4JhYrfwl4rg6xEtuRA3Qp3XgvSPnP7nZzQiJNV09GqYkkBeLR3Dzyvg2356lydUa-Nv4esr0ez32Mir5J9wl6wLIjVQOuI1kGK9bYII5JqqTkPpOc1QRMobQMoJfJ">
+<span class="font-label-sm text-label-sm text-on-surface truncate w-full">Kitsune_7</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Jett</span>
+</div>
+<div class="flex flex-col items-center text-center p-2 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full mb-1 object-cover" data-alt="Heavy armored sentinel character profile photo in dark sci fi setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW108FZAWJ38gzvuDyj0rJgTdZjEpBfM13iMSfCmC9uq0IuDXxwiKTJs_0T7Rs4hWiRqdG_4PGjEDuMB1L6JZqsvu2zXbm2Ua30YsDc1MO80rQfOPJJdQg07aV9m69NMLkO2gxx5Tq9y6wFJXDQ3RqGlYmT0LZOcpn0z8RHCaE8wXopFDEQMxEy3d0Gk9Wen9ylSMl9L1J9Zj6c_W97hF4zjQCG9wJ7X3GqiXUA0ydjKiTcKuK7kCp">
+<span class="font-label-sm text-label-sm text-on-surface truncate w-full">StoneWall</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Cypher</span>
+</div>
+<div class="flex flex-col items-center text-center p-2 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full mb-1 object-cover" data-alt="Mysterious controller character with purple smoky eyes and dark hood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0lDIIxxSg3bi-qjuUypmCx1QrwlyISfugdcQfhMi7xAFaJ65A8r3brfkHT1QRWSJBVOWa64bpj6dKPxsLUplykU6HVWDOrXimwWfdsTiDNTqxhoxam6qZXUh5q3WU_qvQKT1sMt_P7R0LepaJhA6DTFqm6VE-HSz2MTU87od1ysy0TB8gS8oUBsajhO-hA2ik1RGkBdSqKrYEfOu7DB_OSjnVctvnKm_GLghxxbkLAkZys4KCgJ0C">
+<span class="font-label-sm text-label-sm text-on-surface truncate w-full">Abyss_X</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Omen</span>
+</div>
+<!-- Final Empty Slot -->
+<button class="flex flex-col items-center justify-center p-2 rounded-lg bg-tertiary/10 hover:bg-tertiary/20 text-tertiary transition-all cursor-pointer" type="button">
+<span class="material-symbols-outlined text-lg mb-0.5">add_circle</span>
+<span class="font-label-sm text-label-sm font-bold">PLACE #5</span>
+<span class="font-label-sm text-[9px] uppercase tracking-wider text-tertiary-fixed">Initiateur</span>
+</button>
+</div>
+<!-- Footer / CTA Bar -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-lowest/50 -mx-space-lg -mb-space-lg px-space-lg py-3">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-tertiary/15 font-label-sm text-label-sm text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+<span class="font-bold">4 / 5</span> DERNIÈRE PLACE DISPO
+            </div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tournoi dans 48 min</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">bookmark</span>
+</button>
+<button class="flex items-center gap-2 px-space-md py-2 bg-tertiary-container hover:bg-tertiary text-on-tertiary-container hover:text-on-tertiary font-headline-sm text-label-lg rounded-xl shadow-[0_0_16px_-2px_rgba(6,182,212,0.4)] transition-all" type="button">
+<span class="material-symbols-outlined text-lg">login</span>
+<span class="">Rejoindre le Lobby</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TICKET CARD 3: Helldivers 2 Co-op -->
+<article class="flex flex-col rounded-xl bg-surface-container-low p-space-lg hover:shadow-[0_0_24px_-4px_rgba(192,193,255,0.25)] transition-all relative overflow-hidden group">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-secondary"></div>
+<!-- Header & Host Info -->
+<div class="flex flex-wrap items-start justify-between gap-space-sm mb-space-sm pl-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container-high" data-alt="Helldivers shock trooper helmet bathed in fiery atmospheric drop entry light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASfLtoSEZQV32oLsjixHb40SHDqSBJiwK_ok-8-4TlBYZNN_JUFfnQ-jdPkRVNaeklmL5dcjH26i3dCm7DyniBZJtw59XylctaSZEdXjjjJAWwfd1PfBAi6ca6D28frmEBhCY7RYItdKhqbMODNOBPkYi0A7xLX-DWmbwshYFK-8ff4tNL5F1RpzPdqKvuipck6WCaU4Xj89E6dEjJX8dP4TJx2sQ4kiLPwZ1JZtkYPOwYRQnrhIJx">
+<span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-on-secondary font-label-sm text-[9px] font-bold">★</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">@DemocracyFirst</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-secondary font-bold">MARÉCHAL</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-secondary font-bold">4.8 / 5 ★</span>
+<span class="">•</span>
+<span class="">Spécialiste Extraction Super-Terre</span>
+</div>
+</div>
+</div>
+<!-- Telemetry -->
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-secondary text-base">public</span>
+<span class="font-label-sm text-label-sm text-on-surface">Europe Nord</span>
+<span class="font-label-sm text-label-sm text-primary px-1 rounded bg-primary/10">24ms</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-1">Crossplay</span>
+</div>
+</div>
+<!-- Ticket Title & Description -->
+<div class="flex flex-col gap-1.5 mb-space-md pl-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase">Helldivers 2</span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">HELLDIVE DIFFICULTÉ 9 - FARM ÉCHANTILLONS SUPER-TERRE</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Session chill et entraide pour débloquer les modules de vaisseau niveau max. On purge les nids Automates et on extrait tous les supers-échantillons. Débutants acceptés tant que vous restez groupés !
+          </p>
+</div>
+<!-- Squad Tags -->
+<div class="flex flex-wrap gap-space-xs mb-space-md pl-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">mic_off</span> MICRO OPTIONNEL
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-secondary/15 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">diversity_3</span> CHILL &amp; ENTRAIDE
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">school</span> TOUS NIVEAUX
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">smart_toy</span> PVE COOP
+          </span>
+</div>
+<!-- Squad Slots (4 Slots) -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm mb-space-lg pl-space-xs">
+<div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Gamer portrait wearing military armor with a skull insignia on the helmet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu_3ygzr8NP_ZG7-XEbD4D55zOY3e2qd-1N1woxWu1xo7-q1zlxMpFqD8USFAYeYylr-J3fq0ZfZhBP93u6N3TnbdsSVmVdAi5rxfR6kE9ukImjl0njsOVFt50xeudvTH8clYLRlHUUwjB_oKvHPT6_7fSSPM293mAe60gDoI4oTzzb-_cKsk0DfrAUmV_uPrO21bUH7QfHWz5eE_u-Mtlv8wI0Gj3li8tSvUk8T8x8mOIAujqu-_u">
+<div class="flex flex-col truncate">
+<span class="font-label-sm text-label-sm text-on-surface truncate">DemocracyFirst</span>
+<span class="font-label-sm text-[10px] text-secondary">Lv. 74</span>
+</div>
+</div>
+<div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Female gaming character with tactical headgear and orange tint glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOk66zlbrgPrHvauNnxXNxInLaGQmcXrbbLw_Nik3ioyP7fKb8Nzzyukijn-ogYG0ko7k-tefQZou34ofV1tAh0PoAHfEak01dseeoNWeNxszyYhBhtTVKLqUZe_KlNSElLViIGRU36qI2KpdH-_jYMwrSbLOx9skg5Xi4ad_17bqari7xyY1oqHeBGcNUU-RcSFA9-CiUpsyAzjlKKDVitx_fg7hrBssTUMPotTlEvBydlfqRkDzM">
+<div class="flex flex-col truncate">
+<span class="font-label-sm text-label-sm text-on-surface truncate">Sarah_C</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Lv. 38</span>
+</div>
+</div>
+<!-- Empty Slot 3 -->
+<button class="flex items-center justify-center gap-1.5 p-2.5 rounded-lg bg-surface-container hover:bg-secondary/15 text-on-surface-variant hover:text-secondary transition-all cursor-pointer" type="button">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span class="font-label-sm text-label-sm">Slot 3</span>
+</button>
+<!-- Empty Slot 4 -->
+<button class="flex items-center justify-center gap-1.5 p-2.5 rounded-lg bg-surface-container hover:bg-secondary/15 text-on-surface-variant hover:text-secondary transition-all cursor-pointer" type="button">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span class="font-label-sm text-label-sm">Slot 4</span>
+</button>
+</div>
+<!-- Footer / CTA Bar -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-lowest/50 -mx-space-lg -mb-space-lg px-space-lg py-3">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-bold text-secondary">2 / 4</span> Joueurs
+            </div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">En cours de déploiement</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">bookmark</span>
+</button>
+<button class="flex items-center gap-2 px-space-md py-2 bg-secondary-container hover:bg-secondary text-on-secondary-container hover:text-on-secondary font-headline-sm text-label-lg rounded-xl shadow-[0_0_16px_-2px_rgba(99,102,241,0.35)] transition-all" type="button">
+<span class="material-symbols-outlined text-lg">login</span>
+<span class="">Rejoindre la Squad</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TICKET CARD 4: Call of Duty Warzone Resurgence -->
+<article class="flex flex-col rounded-xl bg-surface-container-low p-space-lg hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.25)] transition-all relative overflow-hidden group">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-primary"></div>
+<!-- Header & Host Info -->
+<div class="flex flex-wrap items-start justify-between gap-space-sm mb-space-sm pl-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container-high" data-alt="Modern military tactical operator avatar with balaclava and night vision goggles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_6hv1eTiWBB8SyTAwfdUPYsYX5LtdEd0HsLLmnid5SRA3D5wvs-ChARy28PyakgI9YbB3MMG72CX4XnA46h3i9falRcxtTT4Qp1ktiNk_8ImVc6smMytmVOFoKs2qq8FclFXQN33SdSc81lvsOnKm9Cxs_Tk1XTHzAGmF2-X9ujZS5mNApdDK1bQVeI5wJihOuxRIDJGkG3jzyqrJRXAZfdb3fbGic1Skk7xhzgulJ_O3OPt_lphj">
+<span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-on-primary font-label-sm text-[9px] font-bold">★</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">@Ghost_Recon</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-primary font-bold">HÔTE WARZONE</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-primary font-bold">4.7 / 5 ★</span>
+<span class="">•</span>
+<span class="">K/D Moyen: 2.45</span>
+</div>
+</div>
+</div>
+<!-- Telemetry -->
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-primary text-base">router</span>
+<span class="font-label-sm text-label-sm text-on-surface">London Hub</span>
+<span class="font-label-sm text-label-sm text-primary px-1 rounded bg-primary/10">16ms</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-1">Crossplay</span>
+</div>
+</div>
+<!-- Ticket Title & Description -->
+<div class="flex flex-col gap-1.5 mb-space-md pl-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm uppercase">Warzone 3</span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">RESURGENCE RANKED SQUAD OUVERTE</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Recherche dernier mate pour compléter notre quatuor Resurgence sur Ashika / Rebirth. Communication constante, bonnes rotations et pas de push solo dans le vide.
+          </p>
+</div>
+<!-- Squad Tags -->
+<div class="flex flex-wrap gap-space-xs mb-space-md pl-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-error/15 text-error font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">lock</span> +18 ANS
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">mic</span> MIC OBLIGATOIRE
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-tertiary/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">speed</span> KD &gt; 1.8 MIN
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">flash_on</span> ROTATIONS FAST
+          </span>
+</div>
+<!-- Squad Slots (4 Slots) -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm mb-space-lg pl-space-xs">
+<div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Warzone operator avatar with gas mask and tactical headset in deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM7FYZ1xjpwEsR3DjXl_f8KW0s4hpj0SyJzG_y2okIHr1U2nJeUaiKNZ7GG5qTfNFINv5FWJTStS-kPL9dGoYiuJYkx1NmFAiTGsqa7uPJ9pzJTMxQE2Kw7aydP8x4S65NdvFyiuS3T8moiQ0FG-pyfJTKRrfskx9s4_epMI3tSF0JTJCsvCUae3D2ZWQSqH0bJXhkhSlRSuqzF9GbdTlwCunoGMxRx7rmdrqYSXqvqHQ83lT_1kV_">
+<div class="flex flex-col truncate">
+<span class="font-label-sm text-label-sm text-on-surface truncate">Ghost_Recon</span>
+<span class="font-label-sm text-[10px] text-primary">KD: 2.45</span>
+</div>
+</div>
+<div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Tactical female sniper avatar with camouflage face paint and urban helmet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7HcOHSh3VmRWiKRk_1akIAyM9LJcgXpKk4XgvamWbsaRRwW1alfJH7ApuWuY46-4oEGn7uKoNwwuDM-Ww2HDk_EXrXeKNerK7PDOwuGItPHX3_SiU5cx4J8IPb_O1lUUgQg129wZh7v81ygOxro0ymttnQweggQnj3J8WqSqPX1DMaCtmqZPWk_e7rYqoFoD0WBNDI2DUAoUBYGFkjCL8DhKqmJzANokK2fyoSWl7-c9B2EAoUHPD">
+<div class="flex flex-col truncate">
+<span class="font-label-sm text-label-sm text-on-surface truncate">Viper_99</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">KD: 2.10</span>
+</div>
+</div>
+<div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Cyberpunk gamer profile picture with cybernetic visor in dark blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv9iu8tPDPcpjugncpPX1vLOGtSIEuyJZPh5LY3-TybhRtfwYJ1LmWSdG_5LC-IIr1BzyVL66ZJSeRgaMH7cHXDEqHGCuXefsHb-jEgaEKbUB7I7M1zO5-8fcXTeoNCPQQ3M3RMKFa-9klp7gmIVpaJjiARYBo98GB_f0LOlpryAyWBzW3P2FmsGiyVCGbnkETOV_gBGKFN_YV_gBCHqShoRhuHEHgXIWaT79FEaMqwFDjjD5YEhuO">
+<div class="flex flex-col truncate">
+<span class="font-label-sm text-label-sm text-on-surface truncate">ApexPred</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">KD: 1.95</span>
+</div>
+</div>
+<!-- Empty Slot 4 -->
+<button class="flex items-center justify-center gap-1.5 p-2.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-all cursor-pointer" type="button">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span class="font-label-sm text-label-sm font-bold uppercase">Rejoindre</span>
+</button>
+</div>
+<!-- Footer / CTA Bar -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-lowest/50 -mx-space-lg -mb-space-lg px-space-lg py-3">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-bold text-primary">3 / 4</span> Joueurs
+            </div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Attente dans le hall</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">bookmark</span>
+</button>
+<button class="flex items-center gap-2 px-space-md py-2 bg-primary-container hover:bg-primary text-on-primary-container hover:text-on-primary font-headline-sm text-label-lg rounded-xl shadow-[0_0_16px_-2px_rgba(16,185,129,0.4)] transition-all" type="button">
+<span class="material-symbols-outlined text-lg">login</span>
+<span class="">Rejoindre le Lobby</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- RIGHT: Tactical Side Dock (4 Cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- Active Squad Status Widget -->
+<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-headline-sm text-label-lg text-on-surface uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">group</span>
+            Mon Statut d'Équipe
+          </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">Solo</span>
+</div>
+<div class="flex flex-col items-center justify-center p-space-lg rounded-lg bg-surface-container-lowest text-center">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant mb-space-xs">
+<span class="material-symbols-outlined text-2xl">person_off</span>
+</div>
+<span class="font-headline-sm text-label-lg text-on-surface mb-1">Aucun salon rejoint</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs mb-space-md">
+            Parcourez le flux de tickets à gauche ou créez votre propre escouade pour lancer les invitations.
+          </p>
+<button class="w-full flex items-center justify-center gap-2 py-2.5 px-space-md bg-surface-container-high hover:bg-primary-container text-on-surface hover:text-on-primary-container font-headline-sm text-label-sm rounded-xl transition-all" type="button">
+<span class="material-symbols-outlined text-base">add_box</span>
+<span class="">Créer un Nouveau Salon</span>
+</button>
+</div>
+</div>
+<!-- Quick Banner: Ticket Custom Creator -->
+<div class="relative overflow-hidden p-space-md rounded-xl bg-surface-container-low shadow-sm">
+<div class="relative z-10 flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">tune</span>
+<span class="font-headline-sm text-label-lg text-on-surface">Besoin d'un profil précis ?</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Filtrez vos mates par héros joué, ratio K/D, niveau minimum et micro obligatoire.
+          </p>
+<button class="mt-1 flex items-center justify-center gap-2 py-2 px-space-md bg-tertiary-container hover:bg-tertiary text-on-tertiary-container hover:text-on-tertiary font-headline-sm text-label-sm rounded-lg shadow-[0_0_12px_rgba(6,182,212,0.3)] transition-all" type="button">
+<span class="">Publier un Ticket Personnalisé</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Friends Online & Their Lobbies -->
+<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-headline-sm text-label-lg text-on-surface uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-base">forum</span>
+            Amis en Ligne &amp; Salons
+          </span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">3 en jeu</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Friend 1 -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-2 min-w-0">
+<div class="relative shrink-0">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Portrait of an online gamer with bright turquoise hair and neon gaming headset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMU9DMRNqfuScQ87MbYrWEUFBKFeDzwT4GHVJXiQu2AKALckS9lPh_s2JEgZLpgWHMgu1tLRzWp6rVNMO3weYGlxHoj7xZPVGp7hVITes4YvhZK6NOHYE4FhaiHHRQ2SME7PZESgJpEJnHFDLWWwOtg_1tHXkJ4jqrFjt7TC-ENL4R94AJ3ZxdUoeOCoPtY6k9EmkFrSttv1fWwBDqMAee4hicFeAtu0VbjsXtCw9f1cxKmYJ_ZxvH">
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface truncate">@Kovaks_99</span>
+<span class="font-label-sm text-[10px] text-tertiary truncate">Valorant (Salon 3/5)</span>
+</div>
+</div>
+<button class="shrink-0 px-2 py-1 rounded bg-tertiary/10 hover:bg-tertiary hover:text-on-tertiary text-tertiary font-label-sm text-label-sm transition-all" type="button">
+              Rejoindre
+            </button>
+</div>
+<!-- Friend 2 -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-2 min-w-0">
+<div class="relative shrink-0">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Gamer avatar of a girl with purple hair and high-tech glasses in dark gaming room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4why1stwv-ueCOBqsPfaH-uA4-iQeX3hKssR7qYkqhWZge-ddjSXnwmImsI8OlBCVQ8YIGB12Hj3s-P8o8du6zJNQQgOX2sjCqvTd9l1aQFASdJiIzu659IXj3UcmQ_RNzKpeoy1dGKVATomCzvST16j_BLvlcZxz7vBvHViAVJnz4SuxmDhNaStK4JtsJ3iIpBaeAMy-EtOaXgqro_xfy9L2xdDI_9b2PQPu5UitaeU_nDQGEtCg">
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface truncate">@Cynthia_V</span>
+<span class="font-label-sm text-[10px] text-primary truncate">En ligne • Dans le Menu</span>
+</div>
+</div>
+<button class="shrink-0 px-2 py-1 rounded bg-surface-container-high hover:bg-primary hover:text-on-primary text-on-surface font-label-sm text-label-sm transition-all" type="button">
+              Inviter
+            </button>
+</div>
+<!-- Friend 3 -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-2 min-w-0">
+<div class="relative shrink-0">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Cool anime-style gamer boy avatar wearing black hoodie and cyber headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAToCLxcTYEd56wrIY1TJDKuBDQXaD09XhT8n7ueHOB3ncvHIMCGsjSYiIRShv77M5F4mBH1zsZEelvDb8-P6p3iY6-5QVVPFQ_yLl909Y_Iv7sEYg4dEu3MZUyb2VuOQQaxCtezSkxQ7XghJKqOgnwl1CCX2FGFCf2QVICn92oWW1OTqEzgx47Z2E6OmkEKvXmln7GLUMpL1qY7Jlb2VzmPqHGPKf0y3q__t84-lK3goxzgFU8vfAv">
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface truncate">@Zackary</span>
+<span class="font-label-sm text-[10px] text-secondary truncate">Cherche groupe (Apex)</span>
+</div>
+</div>
+<button class="shrink-0 px-2 py-1 rounded bg-surface-container-high hover:bg-secondary hover:text-on-secondary text-on-surface font-label-sm text-label-sm transition-all" type="button">
+              Proposer
+            </button>
+</div>
+</div>
+</div>
+<!-- Community Fair-Play Trust Charter -->
+<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-2 mb-space-xs">
+<span class="material-symbols-outlined text-primary text-lg">verified_user</span>
+<span class="font-headline-sm text-label-lg text-on-surface uppercase tracking-wider">Charte Fair-Play 4.8★</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">
+          Pour maintenir une expérience optimale sur LobbyGamer, chaque membre s'engage à respecter les 3 piliers :
+        </p>
+<div class="flex flex-col gap-2 font-body-sm text-body-sm">
+<div class="flex items-start gap-2 p-2 rounded bg-surface-container-lowest">
+<span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5">sentiment_satisfied</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-on-surface">Zéro Tolérance Toxicité</span>
+<span class="text-on-surface-variant text-[12px]">Bannissement instantané en cas d'insultes en vocal.</span>
+</div>
+</div>
+<div class="flex items-start gap-2 p-2 rounded bg-surface-container-lowest">
+<span class="material-symbols-outlined text-tertiary text-base shrink-0 mt-0.5">handshake</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-on-surface">Respect des Consignes de l'Hôte</span>
+<span class="text-on-surface-variant text-[12px]">Micro, niveau et rôle requis doivent être honorés.</span>
+</div>
+</div>
+<div class="flex items-start gap-2 p-2 rounded bg-surface-container-lowest">
+<span class="material-symbols-outlined text-secondary text-base shrink-0 mt-0.5">flag</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-on-surface">Signalement Post-Match Rapide</span>
+<span class="text-on-surface-variant text-[12px]">Évaluez vos coéquipiers pour faire monter leur cote de confiance.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive micro-interactions for the LFG dashboard
+  document.addEventListener('DOMContentLoaded', () => {
+    // Quick game filter toggle visual active state
+    const gameButtons = document.querySelectorAll('#gamePicker button');
+    gameButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        gameButtons.forEach(b => {
+          b.className = 'group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface shrink-0 transition-all';
+          const dot = b.querySelector('.bg-primary.ml-1');
+          if (dot) dot.remove();
+        });
+        btn.className = 'group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container text-on-surface shadow-[0_0_0_1px_#10B981,0_0_16px_-2px_rgba(16,185,129,0.35)] shrink-0 transition-all';
+        const activePip = document.createElement('span');
+        activePip.className = 'w-2 h-2 rounded-full bg-primary ml-1';
+        btn.appendChild(activePip);
+      });
+    });
+
+    // Refresh simulation button
+    const refreshBtn = document.getElementById('refreshFeedBtn');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => {
+        const icon = refreshBtn.querySelector('.material-symbols-outlined');
+        icon.classList.add('animate-spin');
+        setTimeout(() => {
+          icon.classList.remove('animate-spin');
+        }, 600);
+      });
+    }
+  });
+</script></main></div></body></html>
