@@ -6,15 +6,60 @@ import { useRouter } from "next/navigation";
 interface CreateTicketModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onCreated?: (newTicket: any) => void;
 }
 
-export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
+const GAME_PRESETS = [
+  {
+    name: "Apex Legends",
+    rawgId: 3498,
+    defaultPlayers: 3,
+    coverUrl: "https://media.rawg.io/media/games/054/054e0b57f0b5d564dfc4a523d45e05a3.jpg",
+  },
+  {
+    name: "Valorant",
+    rawgId: 415171,
+    defaultPlayers: 5,
+    coverUrl: "https://media.rawg.io/media/games/7c4/7c448e89f81219b16ea91436cc5fb644.jpg",
+  },
+  {
+    name: "Helldivers 2",
+    rawgId: 968798,
+    defaultPlayers: 4,
+    coverUrl: "https://media.rawg.io/media/games/283/283e7300b0c83d0ab12521d80e604d92.jpg",
+  },
+  {
+    name: "Warzone 2",
+    rawgId: 422,
+    defaultPlayers: 4,
+    coverUrl: "https://media.rawg.io/media/games/121/1213f000d367190048975e530000ec6d.jpg",
+  },
+  {
+    name: "Rocket League",
+    rawgId: 3272,
+    defaultPlayers: 3,
+    coverUrl: "https://media.rawg.io/media/games/8cc/8cce7c0e99dcc23d30960948bc15107f.jpg",
+  },
+  {
+    name: "Counter-Strike 2",
+    rawgId: 416,
+    defaultPlayers: 5,
+    coverUrl: "https://media.rawg.io/media/games/736/736190961c8777183508137b500d09de.jpg",
+  },
+  {
+    name: "Rainbow Six Siege",
+    rawgId: 58751,
+    defaultPlayers: 5,
+    coverUrl: "https://media.rawg.io/media/games/b49/b491215b572e36845f0d65da70e06815.jpg",
+  },
+];
+
+export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketModalProps) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [gameTitle, setGameTitle] = useState("Apex Legends");
-  const [rawgGameId, setRawgGameId] = useState(3498);
-  const [maxPlayers, setMaxPlayers] = useState(3);
+  const [selectedGameName, setSelectedGameName] = useState(GAME_PRESETS[0].name);
+  const [maxPlayers, setMaxPlayers] = useState(GAME_PRESETS[0].defaultPlayers);
   const [is18Plus, setIs18Plus] = useState(false);
   const [micRequired, setMicRequired] = useState(true);
   const [targetPlatform, setTargetPlatform] = useState("CROSSPLAY");
@@ -24,6 +69,16 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
+
+  const currentPreset = GAME_PRESETS.find((g) => g.name === selectedGameName) || GAME_PRESETS[0];
+
+  const handleGameChange = (gameName: string) => {
+    setSelectedGameName(gameName);
+    const preset = GAME_PRESETS.find((g) => g.name === gameName);
+    if (preset) {
+      setMaxPlayers(preset.defaultPlayers);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,22 +90,21 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-user-id": "alex-user-id", // Id utilisateur pour le TP
         },
         body: JSON.stringify({
           title,
           description,
-          rawgGameId: Number(rawgGameId),
-          gameTitle,
-          gameSlug: gameTitle.toLowerCase().replace(/\s+/g, "-"),
-          gameCoverUrl: "https://media.rawg.io/media/games/054/054e0b57f0b5d564dfc4a523d45e05a3.jpg",
+          rawgGameId: currentPreset.rawgId,
+          gameTitle: currentPreset.name,
+          gameSlug: currentPreset.name.toLowerCase().replace(/\s+/g, "-"),
+          gameCoverUrl: currentPreset.coverUrl,
           maxPlayers: Number(maxPlayers),
           is18Plus,
           micRequired,
           targetPlatform,
           requiredPlayerType,
-          customRules,
-          hostId: "user-default",
+          customRules: customRules || null,
+          language: "FR",
         }),
       });
 
@@ -59,11 +113,15 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
         throw new Error(data.error || "Échec de création du ticket");
       }
 
+      if (onCreated) {
+        onCreated(data.data);
+      }
+
       onClose();
       router.push(`/tickets/${data.data.id}`);
       router.refresh();
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Une erreur est survenue");
     } finally {
       setLoading(false);
     }
@@ -71,7 +129,7 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-surface-container border border-surface-container-high rounded-2xl p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-surface-container border border-surface-container-high rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-2xl">
@@ -104,6 +162,7 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
               type="text"
               required
               minLength={5}
+              maxLength={120}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: TRIO RANKED — GRIND MASTER / DIAMANT II+"
@@ -117,18 +176,15 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
                 Jeu Vidéo *
               </label>
               <select
-                value={gameTitle}
-                onChange={(e) => {
-                  setGameTitle(e.target.value);
-                  setRawgGameId(e.target.value === "Valorant" ? 415171 : 3498);
-                }}
+                value={selectedGameName}
+                onChange={(e) => handleGameChange(e.target.value)}
                 className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-primary focus:outline-none"
               >
-                <option value="Apex Legends">Apex Legends</option>
-                <option value="Valorant">Valorant</option>
-                <option value="Helldivers 2">Helldivers 2</option>
-                <option value="Warzone 2">Warzone 2 / CoD</option>
-                <option value="Rocket League">Rocket League</option>
+                {GAME_PRESETS.map((preset) => (
+                  <option key={preset.name} value={preset.name}>
+                    {preset.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -154,6 +210,7 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
             <textarea
               required
               minLength={10}
+              maxLength={2000}
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -222,6 +279,19 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
             </div>
           </div>
 
+          <div>
+            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              Règles personnalisées / Notes (optionnel)
+            </label>
+            <input
+              type="text"
+              value={customRules}
+              onChange={(e) => setCustomRules(e.target.value)}
+              placeholder="Ex: Pas de rage quit, Discord requis, rotation zone rapide"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
+            />
+          </div>
+
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-surface-container-high">
             <button
               type="button"
@@ -233,7 +303,7 @@ export function CreateTicketModal({ isOpen, onClose }: CreateTicketModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider shadow-[0_0_12px_rgba(78,222,163,0.3)] disabled:opacity-50 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider shadow-[0_0_12px_rgba(78,222,163,0.3)] disabled:opacity-50 transition-all cursor-pointer"
             >
               {loading ? "Création en cours..." : "Publier le Ticket"}
             </button>

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 
 export default function TicketRoomPage() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isReady, setIsReady] = useState(true);
   const [chatTab, setChatTab] = useState<"chat" | "logs" | "map">("chat");
   const [messages, setMessages] = useState([
@@ -70,12 +71,13 @@ export default function TicketRoomPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col">
-      <Navbar />
-      <Sidebar />
+    <div className="min-h-screen bg-surface flex flex-col overflow-x-hidden">
+      <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content */}
-      <main className="ml-72 mt-16 p-6 flex flex-col gap-5">
+      <main className="pt-16 lg:pl-72 w-full min-h-screen p-3 sm:p-4 md:p-6 transition-all">
+        <div className="max-w-7xl mx-auto flex flex-col gap-5 w-full">
         {/* ========================================================================= */}
         {/* TICKET TOP HEADER: Matchmaking Squad Details & Quick Actions */}
         {/* ========================================================================= */}
@@ -516,6 +518,7 @@ export default function TicketRoomPage() {
               </button>
             </form>
           </div>
+        </div>
         </div>
       </main>
     </div>

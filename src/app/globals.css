@@ -12,11 +12,21 @@
     background-color: #10131a;
     color: #e1e2ec;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   h1, h2, h3, h4, h5, h6, .font-display {
     font-family: 'Space Grotesk', sans-serif;
   }
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* Scrollbar invisible gaming */
