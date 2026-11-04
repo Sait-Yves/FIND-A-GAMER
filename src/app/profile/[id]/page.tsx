@@ -4,16 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Monitor, Gamepad2, Edit, Star } from "lucide-react";
+import { Monitor, Gamepad2, Edit, Star, ShieldCheck, Award, Info, CheckCircle2, AlertTriangle, Users } from "lucide-react";
 
 export default function UserProfilePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"games" | "reviews">("games");
 
-  // Données de profil fictives basées sur le schéma Prisma et le seed
+  // Données de profil enrichies et fiabilisées
   const user = {
     username: "AlexVortex",
-    avatarUrl: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=300",
+    avatarUrl: "/avatars/avatar-alex.svg",
     bio: "Joueur compétitif sur Valorant et CS2. Toujours fair-play, focus endgame et communication claire. N'hésitez pas à me ping pour des ranked !",
     age: 24,
     primaryPlatform: "PC",
@@ -26,14 +26,14 @@ export default function UserProfilePage() {
         id: 415171,
         title: "Valorant",
         slug: "valorant",
-        coverUrl: "https://media.rawg.io/media/games/054/054e0b57f0b5d564dfc4a523d45e05a3.jpg",
+        coverUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
         hours: "340h de jeu",
       },
       {
         id: 4200,
         title: "Portal 2",
         slug: "portal-2",
-        coverUrl: "https://media.rawg.io/media/games/328/3283613cb7d75d67257fc58339188742.jpg",
+        coverUrl: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800",
         hours: "85h de jeu",
       },
       {
@@ -64,6 +64,17 @@ export default function UserProfilePage() {
     ],
   };
 
+  const BADGE_DETAILS: Record<string, { label: string; color: string; desc: string }> = {
+    FAIR_PLAY: { label: "Fair-Play Exemplaire", color: "text-primary border-primary/40 bg-primary/10", desc: "Respectueux des règles et coéquipiers" },
+    GOOD_COMMUNICATION: { label: "Bonne Communication", color: "text-tertiary border-tertiary/40 bg-tertiary/10", desc: "Callouts précis, vocal clair" },
+    TEAM_PLAYER: { label: "Esprit d'Équipe", color: "text-secondary border-secondary/40 bg-secondary/10", desc: "Joue l'objectif collectif" },
+    LEADER: { label: "Leader Positif", color: "text-white border-white/40 bg-white/10", desc: "Motive et guide l'escouade" },
+    PATIENT: { label: "Patient & Pédagogue", color: "text-primary border-primary/40 bg-primary/10", desc: "Aide sans jamais rager" },
+    PUNCTUAL: { label: "Ponctuel", color: "text-tertiary border-tertiary/40 bg-tertiary/10", desc: "Présent à l'heure convenue" },
+    RAGE_QUIT: { label: "Rage Quit / Abandon", color: "text-error border-error/40 bg-error/10", desc: "Pénalité pour abandon" },
+    NO_MIC: { label: "Micro Absent", color: "text-error border-error/40 bg-error/10", desc: "Pas de micro malgré consigne" },
+  };
+
   return (
     <div className="min-h-screen bg-surface flex flex-col overflow-x-hidden">
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
@@ -82,7 +93,10 @@ export default function UserProfilePage() {
                   <img
                     src={user.avatarUrl}
                     alt={user.username}
-                    className="w-24 h-24 rounded-2xl object-cover border-2 border-primary/50 shadow-md"
+                    onError={(e) => {
+                      e.currentTarget.src = "/avatars/avatar-default.svg";
+                    }}
+                    className="w-24 h-24 rounded-2xl object-cover border-2 border-primary/50 shadow-md bg-surface-container"
                   />
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-primary border-2 border-surface animate-pulse" />
                 </div>
@@ -92,7 +106,8 @@ export default function UserProfilePage() {
                     <h1 className="text-2xl font-display font-bold text-white tracking-wide">
                       @{user.username}
                     </h1>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-display font-bold bg-primary/15 text-primary border border-primary/30 uppercase">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-display font-bold bg-primary/15 text-primary border border-primary/30 uppercase flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5" />
                       Vérifié Fair-Play
                     </span>
                   </div>
@@ -204,10 +219,13 @@ export default function UserProfilePage() {
                   key={game.id}
                   className="group relative rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high hover:border-primary/50 transition-all shadow-md"
                 >
-                  <div className="h-36 overflow-hidden">
+                  <div className="h-40 overflow-hidden bg-surface-container">
                     <img
                       src={game.coverUrl}
                       alt={game.title}
+                      onError={(e) => {
+                        e.currentTarget.src = "/games/default-game.svg";
+                      }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -222,42 +240,89 @@ export default function UserProfilePage() {
             </div>
           )}
 
-          {/* Tab 2: Reputation Reviews List */}
+          {/* Tab 2: Reputation Reviews & Badges Explanation */}
           {activeTab === "reviews" && (
-            <div className="flex flex-col gap-3">
-              {user.reviews.map((rev) => (
-                <div
-                  key={rev.id}
-                  className="p-4 rounded-xl bg-surface-container-low border border-surface-container-high flex flex-col gap-2.5"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="font-display font-bold text-xs text-white">
-                        @{rev.author}
-                      </span>
-                      <span className="text-[11px] text-on-surface-variant">• {rev.date}</span>
-                    </div>
-                    <div className="flex items-center text-primary text-xs">
-                      {Array.from({ length: rev.rating }).map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
-                      ))}
-                    </div>
+            <div className="flex flex-col gap-5">
+              {/* Educational Card: Comment les badges sont attribués */}
+              <div className="p-5 rounded-2xl bg-surface-container-low border border-surface-container-high flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <Award className="w-5 h-5 text-primary" />
+                  <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
+                    Comment sont attribués les badges de comportement ?
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-on-surface-variant pt-2">
+                  <div className="p-3 bg-surface-container rounded-xl flex flex-col gap-1.5">
+                    <span className="font-display font-bold text-white flex items-center gap-1.5">
+                      <Users className="w-4 h-4 text-primary" /> 1. Match Partagé
+                    </span>
+                    <p className="text-[11px] leading-relaxed">
+                      L'évaluation n'est possible qu'entre coéquipiers ayant joué ensemble dans le même salon de jeu (ticket LFG validé). L'auto-évaluation est impossible.
+                    </p>
                   </div>
 
-                  <p className="text-xs text-on-surface leading-relaxed">{rev.comment}</p>
+                  <div className="p-3 bg-surface-container rounded-xl flex flex-col gap-1.5">
+                    <span className="font-display font-bold text-white flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-tertiary" /> 2. Vote Post-Match
+                    </span>
+                    <p className="text-[11px] leading-relaxed">
+                      À la fin d'une partie, chaque joueur attribue une note (1 à 5 étoiles) et peut cocher jusqu'à 5 badges comportementaux décrivant l'expérience vécue.
+                    </p>
+                  </div>
 
-                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                    {rev.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="px-2 py-0.5 rounded text-[10px] font-display font-bold bg-primary/10 text-primary border border-primary/20"
-                      >
-                        {t.replace("_", " ")}
-                      </span>
-                    ))}
+                  <div className="p-3 bg-surface-container rounded-xl flex flex-col gap-1.5">
+                    <span className="font-display font-bold text-white flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-primary" /> 3. Score de Karma
+                    </span>
+                    <p className="text-[11px] leading-relaxed">
+                      La réputation se met à jour en temps réel. Les profils à 95%+ obtiennent le badge "Vérifié Fair-Play" et grimpent au Classement Élite.
+                    </p>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Reviews List */}
+              <div className="flex flex-col gap-3">
+                {user.reviews.map((rev) => (
+                  <div
+                    key={rev.id}
+                    className="p-4 rounded-xl bg-surface-container-low border border-surface-container-high flex flex-col gap-2.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-display font-bold text-xs text-white">
+                          @{rev.author}
+                        </span>
+                        <span className="text-[11px] text-on-surface-variant">• {rev.date}</span>
+                      </div>
+                      <div className="flex items-center text-primary text-xs">
+                        {Array.from({ length: rev.rating }).map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
+                        ))}
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-on-surface leading-relaxed">{rev.comment}</p>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      {rev.tags.map((t) => {
+                        const info = BADGE_DETAILS[t] || { label: t.replace("_", " "), color: "text-primary border-primary/20 bg-primary/10", desc: "" };
+                        return (
+                          <span
+                            key={t}
+                            title={info.desc}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-display font-bold border ${info.color} flex items-center gap-1`}
+                          >
+                            <Award className="w-3 h-3" />
+                            {info.label}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

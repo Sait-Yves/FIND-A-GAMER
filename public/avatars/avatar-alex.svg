@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgAlex" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16222f"/>
+      <stop offset="100%" stop-color="#0d141d"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4edea3"/>
+      <stop offset="100%" stop-color="#00a86b"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bgAlex)"/>
+  <rect width="124" height="124" x="2" y="2" rx="26" fill="none" stroke="url(#greenGrad)" stroke-width="2.5" stroke-opacity="0.6"/>
+  <!-- Helmet -->
+  <path d="M40 52 C40 32 50 26 64 26 C78 26 88 32 88 52 C88 68 76 74 64 74 C52 74 40 68 40 52 Z" fill="#1f2d3d"/>
+  <!-- Glowing Cyber Eyes / Visor -->
+  <path d="M46 48 L82 48 L76 56 L52 56 Z" fill="url(#greenGrad)"/>
+  <!-- Headset -->
+  <rect x="34" y="44" width="7" height="18" rx="3.5" fill="#4edea3"/>
+  <rect x="87" y="44" width="7" height="18" rx="3.5" fill="#4edea3"/>
+  <path d="M37 44 C37 26 50 18 64 18 C78 18 91 26 91 44" fill="none" stroke="#4edea3" stroke-width="3" stroke-linecap="round"/>
+  <!-- Body Armor -->
+  <path d="M32 108 L38 84 L64 78 L90 84 L96 108 Z" fill="#182230" stroke="#4edea3" stroke-width="1.5" stroke-opacity="0.3"/>
+  <path d="M54 86 L64 96 L74 86" fill="none" stroke="#4edea3" stroke-width="2"/>
+</svg>

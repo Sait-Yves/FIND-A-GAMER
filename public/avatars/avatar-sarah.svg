@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgSarah" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#241a33"/>
+      <stop offset="100%" stop-color="#110d1a"/>
+    </linearGradient>
+    <linearGradient id="cyanPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4cd7f6"/>
+      <stop offset="100%" stop-color="#b388ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bgSarah)"/>
+  <rect width="124" height="124" x="2" y="2" rx="26" fill="none" stroke="url(#cyanPurple)" stroke-width="2.5" stroke-opacity="0.6"/>
+  <!-- Head -->
+  <circle cx="64" cy="48" r="22" fill="#2d223f"/>
+  <!-- Visor -->
+  <rect x="46" y="44" width="36" height="10" rx="5" fill="url(#cyanPurple)"/>
+  <!-- Cat-ear headphones -->
+  <path d="M42 32 L50 20 L56 30 Z" fill="#b388ff"/>
+  <path d="M86 32 L78 20 L72 30 Z" fill="#b388ff"/>
+  <rect x="36" y="42" width="7" height="18" rx="3.5" fill="#4cd7f6"/>
+  <rect x="85" y="42" width="7" height="18" rx="3.5" fill="#4cd7f6"/>
+  <path d="M39 42 C39 26 50 18 64 18 C78 18 89 26 89 42" fill="none" stroke="#4cd7f6" stroke-width="3" stroke-linecap="round"/>
+  <!-- Body -->
+  <path d="M34 108 C34 82 50 76 64 76 C78 76 94 82 94 108 Z" fill="#221833" stroke="#b388ff" stroke-width="1.5" stroke-opacity="0.4"/>
+</svg>

@@ -397,8 +397,11 @@ function ExplorerContent() {
                       <div className="flex items-center gap-3">
                         <div className="relative">
                           <img
-                            src={ticket.host?.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"}
+                            src={ticket.host?.avatarUrl || "/avatars/avatar-default.svg"}
                             alt={ticket.host?.username || "Host"}
+                            onError={(e) => {
+                              e.currentTarget.src = "/avatars/avatar-default.svg";
+                            }}
                             className="w-11 h-11 rounded-xl object-cover bg-surface border border-surface-container-high"
                           />
                           <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-on-primary font-bold text-[9px]">
@@ -482,8 +485,11 @@ function ExplorerContent() {
                       <div className="flex items-center gap-3 text-xs">
                         <div className="flex items-center -space-x-2">
                           <img
-                            src={ticket.host?.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"}
+                            src={ticket.host?.avatarUrl || "/avatars/avatar-default.svg"}
                             alt="Host"
+                            onError={(e) => {
+                              e.currentTarget.src = "/avatars/avatar-default.svg";
+                            }}
                             className="w-7 h-7 rounded-full border-2 border-surface object-cover"
                           />
                           {Array.from({ length: Math.max(0, ticket.currentPlayers - 1) }).map((_, i) => (

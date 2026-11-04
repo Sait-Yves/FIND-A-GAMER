@@ -6,13 +6,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "media.rawg.io",
-        pathname: "/**",
+        hostname: "**",
       },
       {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
+        protocol: "http",
+        hostname: "**",
       },
     ],
   },
@@ -28,7 +26,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-eval' 'unsafe-inline';",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' https://fonts.gstatic.com data:;",
-              "img-src 'self' data: blob: https://media.rawg.io https://images.unsplash.com;",
+              "img-src 'self' data: blob: https: http:;",
               "connect-src 'self' https://api.rawg.io https://*.rawg.io;",
               "frame-ancestors 'none';",
               "base-uri 'self';",

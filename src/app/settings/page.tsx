@@ -99,10 +99,13 @@ export default function SettingsPage() {
                 <img
                   src={
                     currentUser?.avatarUrl ||
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"
+                    "/avatars/avatar-default.svg"
                   }
                   alt="Avatar"
-                  className="w-12 h-12 rounded-xl object-cover border-2 border-primary/50"
+                  onError={(e) => {
+                    e.currentTarget.src = "/avatars/avatar-default.svg";
+                  }}
+                  className="w-12 h-12 rounded-xl object-cover border-2 border-primary/50 bg-surface-container"
                 />
                 <div className="flex flex-col">
                   <span className="font-display font-bold text-sm text-white">

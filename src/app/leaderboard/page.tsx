@@ -126,7 +126,10 @@ export default function LeaderboardPage() {
                           <img
                             src={p.avatar}
                             alt={p.username}
-                            className="w-9 h-9 rounded-xl object-cover bg-surface"
+                            onError={(e) => {
+                              e.currentTarget.src = "/avatars/avatar-default.svg";
+                            }}
+                            className="w-9 h-9 rounded-xl object-cover bg-surface border border-surface-container-high"
                           />
                           <div className="flex flex-col">
                             <span className="font-display font-bold text-white text-xs">

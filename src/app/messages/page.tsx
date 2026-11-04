@@ -45,7 +45,7 @@ export default function MessagesPage() {
       badge: "Vocal Actif",
       members: 3,
       unread: 0,
-      avatar: "https://media.rawg.io/media/games/054/054e0b57f0b5d564dfc4a523d45e05a3.jpg",
+      avatar: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800",
     },
     {
       id: "val-premier",
@@ -54,7 +54,7 @@ export default function MessagesPage() {
       badge: "4/5 Joueurs",
       members: 4,
       unread: 2,
-      avatar: "https://media.rawg.io/media/games/7c4/7c448e89f81219b16ea91436cc5fb644.jpg",
+      avatar: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
     },
     {
       id: "dm-hiroshi",
@@ -136,6 +136,9 @@ export default function MessagesPage() {
                       <img
                         src={chan.avatar}
                         alt={chan.name}
+                        onError={(e) => {
+                          e.currentTarget.src = "/games/default-game.svg";
+                        }}
                         className="w-10 h-10 rounded-lg object-cover bg-surface"
                       />
                       <div className="flex-1 min-w-0">
@@ -203,6 +206,9 @@ export default function MessagesPage() {
                     <img
                       src={m.avatar}
                       alt={m.sender}
+                      onError={(e) => {
+                        e.currentTarget.src = "/avatars/avatar-default.svg";
+                      }}
                       className="w-8 h-8 rounded-lg object-cover shrink-0"
                     />
                     <div

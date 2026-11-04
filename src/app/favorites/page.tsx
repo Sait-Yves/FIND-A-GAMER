@@ -18,7 +18,7 @@ export default function FavoritesPage() {
       rating: 4.8,
       activeRooms: 148,
       genre: "Battle Royale / Compétitif",
-      coverUrl: "https://media.rawg.io/media/games/054/054e0b57f0b5d564dfc4a523d45e05a3.jpg",
+      coverUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800",
       tags: ["Trio", "Classé", "Vocal Requis"],
     },
     {
@@ -28,7 +28,7 @@ export default function FavoritesPage() {
       rating: 4.9,
       activeRooms: 92,
       genre: "Tactical Shooter / FPS",
-      coverUrl: "https://media.rawg.io/media/games/7c4/7c448e89f81219b16ea91436cc5fb644.jpg",
+      coverUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
       tags: ["5v5", "Premier", "Lineups"],
     },
     {
@@ -38,7 +38,7 @@ export default function FavoritesPage() {
       rating: 4.7,
       activeRooms: 64,
       genre: "Coopératif / PvE",
-      coverUrl: "https://media.rawg.io/media/games/283/283e7300b0c83d0ab12521d80e604d92.jpg",
+      coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800",
       tags: ["Suicide 9", "Automaton", "Échantillons"],
     },
     {
@@ -48,7 +48,7 @@ export default function FavoritesPage() {
       rating: 4.5,
       activeRooms: 115,
       genre: "Battle Royale / Extraction",
-      coverUrl: "https://media.rawg.io/media/games/121/1213f000d367190048975e530000ec6d.jpg",
+      coverUrl: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800",
       tags: ["Résurgence", "Nocturne", "Quad"],
     },
     {
@@ -58,7 +58,7 @@ export default function FavoritesPage() {
       rating: 4.8,
       activeRooms: 43,
       genre: "Sport / Arcade",
-      coverUrl: "https://media.rawg.io/media/games/8cc/8cce7c0e99dcc23d30960948bc15107f.jpg",
+      coverUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800",
       tags: ["3v3", "Champion+", "Rotation"],
     },
     {
@@ -68,7 +68,7 @@ export default function FavoritesPage() {
       rating: 4.6,
       activeRooms: 88,
       genre: "Tactical FPS",
-      coverUrl: "https://media.rawg.io/media/games/736/736190961c8777183508137b500d09de.jpg",
+      coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800",
       tags: ["Premier 15k+", "Mirage", "Faceit"],
     },
   ];
@@ -123,6 +123,9 @@ export default function FavoritesPage() {
                   <img
                     src={game.coverUrl}
                     alt={game.name}
+                    onError={(e) => {
+                      e.currentTarget.src = "/games/default-game.svg";
+                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent" />

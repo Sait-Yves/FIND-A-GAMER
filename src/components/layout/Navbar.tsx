@@ -166,10 +166,13 @@ export function Navbar({
                 <img
                   src={
                     currentUser.avatarUrl ||
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"
+                    "/avatars/avatar-default.svg"
                   }
                   alt={currentUser.username}
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover border border-primary/50"
+                  onError={(e) => {
+                    e.currentTarget.src = "/avatars/avatar-default.svg";
+                  }}
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover border border-primary/50 bg-surface-container"
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-primary border-2 border-surface" />
               </div>

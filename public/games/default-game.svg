@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgGame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#151d28"/>
+      <stop offset="50%" stop-color="#0f141d"/>
+      <stop offset="100%" stop-color="#080b10"/>
+    </linearGradient>
+    <linearGradient id="glowBorder" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4edea3"/>
+      <stop offset="100%" stop-color="#4cd7f6"/>
+    </linearGradient>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#232f42" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgGame)"/>
+  <rect width="600" height="350" fill="url(#grid)" opacity="0.6"/>
+  <!-- Gamepad Icon -->
+  <g transform="translate(230, 90)" fill="none" stroke="url(#glowBorder)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 50 C20 30 40 20 70 20 C100 20 120 30 120 50 C120 80 135 120 115 130 C95 140 85 105 70 105 C55 105 45 140 25 130 C5 120 20 80 20 50 Z" fill="#162230" fill-opacity="0.8"/>
+    <!-- D-Pad -->
+    <path d="M45 50 L45 70 M35 60 L55 60" stroke="#4edea3" stroke-width="4"/>
+    <!-- Buttons -->
+    <circle cx="95" cy="55" r="3.5" fill="#4cd7f6"/>
+    <circle cx="105" cy="65" r="3.5" fill="#4edea3"/>
+    <circle cx="85" cy="65" r="3.5" fill="#b388ff"/>
+    <circle cx="95" cy="75" r="3.5" fill="#f87171"/>
+  </g>
+  <text x="300" y="270" font-family="'Space Grotesk', system-ui, sans-serif" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="2">LOBBYGAMER ARCHIVE</text>
+  <text x="300" y="295" font-family="'Inter', system-ui, sans-serif" font-size="12" fill="#7d8b9e" text-anchor="middle">Jeu Multijoueur Officiel</text>
+</svg>

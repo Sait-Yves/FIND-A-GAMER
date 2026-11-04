@@ -179,6 +179,9 @@ export default function TicketRoomPage() {
                 <img
                   src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=100"
                   alt="Host"
+                  onError={(e) => {
+                    e.currentTarget.src = "/avatars/avatar-default.svg";
+                  }}
                   className="w-9 h-9 rounded-xl object-cover border border-primary/50"
                 />
                 <div className="flex flex-col">
@@ -235,6 +238,9 @@ export default function TicketRoomPage() {
                       <img
                         src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=100"
                         alt="Host"
+                        onError={(e) => {
+                          e.currentTarget.src = "/avatars/avatar-default.svg";
+                        }}
                         className="w-11 h-11 rounded-xl object-cover"
                       />
                       <div className="flex flex-col">
@@ -270,6 +276,9 @@ export default function TicketRoomPage() {
                       <img
                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"
                         alt="You"
+                        onError={(e) => {
+                          e.currentTarget.src = "/avatars/avatar-sarah.svg";
+                        }}
                         className="w-11 h-11 rounded-xl object-cover border border-primary/40"
                       />
                       <div className="flex flex-col">

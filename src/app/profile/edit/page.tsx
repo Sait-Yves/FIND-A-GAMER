@@ -18,12 +18,12 @@ import {
 } from "lucide-react";
 
 const AVATAR_PRESETS = [
+  "/avatars/avatar-alex.svg",
+  "/avatars/avatar-sarah.svg",
+  "/avatars/avatar-default.svg",
   "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=200",
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200",
   "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200",
-  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200",
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200",
-  "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200",
 ];
 
 export default function ProfileEditPage() {
@@ -215,9 +215,7 @@ export default function ProfileEditPage() {
                       alt={username}
                       className="w-full h-full object-cover"
                       onError={() =>
-                        setAvatarUrl(
-                          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200"
-                        )
+                        setAvatarUrl("/avatars/avatar-default.svg")
                       }
                     />
                   </div>
