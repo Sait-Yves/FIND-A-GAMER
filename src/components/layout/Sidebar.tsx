@@ -67,7 +67,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       label: "Classements & Fair-Play",
       href: "/leaderboard",
       Icon: Trophy,
-      active: pathname === "/leaderboard",
+      active: pathname.startsWith("/leaderboard"),
     },
     {
       label: "Paramètres",

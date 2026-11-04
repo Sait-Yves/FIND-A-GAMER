@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgApex" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a0808"/>
+      <stop offset="40%" stop-color="#4a1212"/>
+      <stop offset="100%" stop-color="#120505"/>
+    </linearGradient>
+    <linearGradient id="apexRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff3b30"/>
+      <stop offset="100%" stop-color="#ff9500"/>
+    </linearGradient>
+    <pattern id="gridApex" width="25" height="25" patternUnits="userSpaceOnUse">
+      <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#ff3b30" stroke-opacity="0.12" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgApex)"/>
+  <rect width="600" height="350" fill="url(#gridApex)"/>
+  <!-- Apex Chevron Logo -->
+  <g transform="translate(250, 70)" fill="url(#apexRed)">
+    <path d="M 50 15 L 85 95 L 62 95 L 50 65 L 38 95 L 15 95 Z" />
+    <path d="M 50 0 L 100 115 L 75 115 L 50 48 L 25 115 L 0 115 Z" opacity="0.6"/>
+  </g>
+  <text x="300" y="240" font-family="'Space Grotesk', system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">APEX LEGENDS</text>
+  <text x="300" y="270" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="600" fill="#ff9500" text-anchor="middle" letter-spacing="1.5">RESPAWN • BATTLE ROYALE COMPÉTITIF</text>
+</svg>
+

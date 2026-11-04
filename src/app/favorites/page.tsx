@@ -18,7 +18,7 @@ export default function FavoritesPage() {
       rating: 4.8,
       activeRooms: 148,
       genre: "Battle Royale / Compétitif",
-      coverUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800",
+      coverUrl: "/games/apex-legends.svg",
       tags: ["Trio", "Classé", "Vocal Requis"],
     },
     {
@@ -28,7 +28,7 @@ export default function FavoritesPage() {
       rating: 4.9,
       activeRooms: 92,
       genre: "Tactical Shooter / FPS",
-      coverUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
+      coverUrl: "/games/valorant.svg",
       tags: ["5v5", "Premier", "Lineups"],
     },
     {
@@ -38,7 +38,7 @@ export default function FavoritesPage() {
       rating: 4.7,
       activeRooms: 64,
       genre: "Coopératif / PvE",
-      coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800",
+      coverUrl: "/games/helldivers-2.svg",
       tags: ["Suicide 9", "Automaton", "Échantillons"],
     },
     {
@@ -48,7 +48,7 @@ export default function FavoritesPage() {
       rating: 4.5,
       activeRooms: 115,
       genre: "Battle Royale / Extraction",
-      coverUrl: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800",
+      coverUrl: "/games/warzone-2.svg",
       tags: ["Résurgence", "Nocturne", "Quad"],
     },
     {
@@ -58,7 +58,7 @@ export default function FavoritesPage() {
       rating: 4.8,
       activeRooms: 43,
       genre: "Sport / Arcade",
-      coverUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800",
+      coverUrl: "/games/rocket-league.svg",
       tags: ["3v3", "Champion+", "Rotation"],
     },
     {
@@ -68,7 +68,7 @@ export default function FavoritesPage() {
       rating: 4.6,
       activeRooms: 88,
       genre: "Tactical FPS",
-      coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800",
+      coverUrl: "/games/counter-strike-2.svg",
       tags: ["Premier 15k+", "Mirage", "Faceit"],
     },
   ];

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgWz" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141a18"/>
+      <stop offset="50%" stop-color="#1b2923"/>
+      <stop offset="100%" stop-color="#080c0a"/>
+    </linearGradient>
+    <linearGradient id="wzGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4edea3"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgWz)"/>
+  <!-- Crosshair Tactical Logo -->
+  <g transform="translate(255, 75)" stroke="url(#wzGreen)" stroke-width="3" fill="none">
+    <circle cx="45" cy="45" r="40" stroke-opacity="0.4"/>
+    <circle cx="45" cy="45" r="22"/>
+    <line x1="45" y1="0" x2="45" y2="20"/>
+    <line x1="45" y1="70" x2="45" y2="90"/>
+    <line x1="0" y1="45" x2="20" y2="45"/>
+    <line x1="70" y1="45" x2="90" y2="45"/>
+    <circle cx="45" cy="45" r="4" fill="#4edea3"/>
+  </g>
+  <text x="300" y="240" font-family="'Space Grotesk', system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">CALL OF DUTY: WARZONE</text>
+  <text x="300" y="270" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="600" fill="#4edea3" text-anchor="middle" letter-spacing="1.5">ACTIVISION • BATTLE ROYALE &amp; EXTRACTION</text>
+</svg>
+
