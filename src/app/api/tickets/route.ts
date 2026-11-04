@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { CreateTicketSchema } from "@/lib/validations";
 import { Platform, TicketStatus } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 // Démos prédéfinies basées sur les maquettes Stitch
 const DEFAULT_DEMO_TICKETS = [
   {
@@ -161,6 +163,7 @@ export async function GET(req: NextRequest) {
         { gameTitle: { contains: query } },
         { description: { contains: query } },
         { customRules: { contains: query } },
+        { host: { username: { contains: query } } },
       ];
     }
 

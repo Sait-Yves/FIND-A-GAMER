@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgPortal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f"/>
+      <stop offset="50%" stop-color="#112240"/>
+      <stop offset="100%" stop-color="#020c1b"/>
+    </linearGradient>
+    <radialGradient id="portalBlue" cx="40%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00aaff" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#0055ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0055ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="portalOrange" cx="60%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff7700" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#ff4400" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ff4400" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgPortal)"/>
+  <ellipse cx="230" cy="140" rx="60" ry="80" fill="url(#portalBlue)" stroke="#00d4ff" stroke-width="4" transform="rotate(-15 230 140)"/>
+  <ellipse cx="370" cy="140" rx="60" ry="80" fill="url(#portalOrange)" stroke="#ff9900" stroke-width="4" transform="rotate(15 370 140)"/>
+  <!-- Figure walking through -->
+  <circle cx="300" cy="115" r="14" fill="#ffffff"/>
+  <path d="M 292 135 L 308 135 L 314 175 L 302 175 L 298 150 L 294 175 L 282 175 Z" fill="#ffffff"/>
+  <text x="300" y="270" font-family="'Space Grotesk', system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">PORTAL 2</text>
+  <text x="300" y="298" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="600" fill="#94a3b8" text-anchor="middle" letter-spacing="1">VALVE • CO-OP PUZZLE EXPERIENCE</text>
+</svg>
+

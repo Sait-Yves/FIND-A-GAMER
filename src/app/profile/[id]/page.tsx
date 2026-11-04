@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Monitor, Gamepad2, Edit, Star, ShieldCheck, Award, Info, CheckCircle2, AlertTriangle, Users } from "lucide-react";
 
 export default function UserProfilePage() {
+  const params = useParams();
+  const rawId = (params?.id as string) || "AlexVortex";
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"games" | "reviews">("games");
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
-  // Données de profil enrichies et fiabilisées
-  const user = {
-    username: "AlexVortex",
+  // Données de profil enrichies et fiabilisées par défaut
+  const [user, setUser] = useState({
+    username: rawId,
     avatarUrl: "/avatars/avatar-alex.svg",
     bio: "Joueur compétitif sur Valorant et CS2. Toujours fair-play, focus endgame et communication claire. N'hésitez pas à me ping pour des ranked !",
     age: 24,
@@ -26,14 +30,14 @@ export default function UserProfilePage() {
         id: 415171,
         title: "Valorant",
         slug: "valorant",
-        coverUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
+        coverUrl: "/games/valorant.svg",
         hours: "340h de jeu",
       },
       {
         id: 4200,
         title: "Portal 2",
         slug: "portal-2",
-        coverUrl: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800",
+        coverUrl: "/games/portal-2.svg",
         hours: "85h de jeu",
       },
       {
@@ -62,7 +66,51 @@ export default function UserProfilePage() {
         tags: ["TEAM_PLAYER", "PUNCTUAL"],
       },
     ],
-  };
+  });
+
+  // Charger les données réelles du joueur depuis l'API si disponibles
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const res = await fetch(`/api/users/${encodeURIComponent(rawId)}`);
+        const json = await res.json();
+        if (json.success && json.user) {
+          const dbU = json.user;
+          setUser((prev) => ({
+            ...prev,
+            username: dbU.username || rawId,
+            avatarUrl: dbU.avatarUrl || "/avatars/avatar-default.svg",
+            bio: dbU.bio || prev.bio,
+            age: dbU.age || prev.age,
+            primaryPlatform: dbU.primaryPlatform || prev.primaryPlatform,
+            playerType: dbU.playerType || prev.playerType,
+            reputationScore: dbU.reputationScore ?? prev.reputationScore,
+            totalReviews: dbU.totalReviews ?? prev.totalReviews,
+            favoriteGames:
+              dbU.favoriteGames && dbU.favoriteGames.length > 0
+                ? dbU.favoriteGames.map((g: any) => ({
+                    id: g.rawgGameId,
+                    title: g.gameTitle,
+                    slug: g.gameSlug,
+                    coverUrl: g.gameCoverUrl || "/games/default-game.svg",
+                    hours: "Favori",
+                  }))
+                : prev.favoriteGames,
+          }));
+        }
+
+        // Vérifier également qui est connecté pour afficher ou masquer "Modifier le profil"
+        const meRes = await fetch("/api/auth/me");
+        const meJson = await meRes.json();
+        if (meJson.success && meJson.user) {
+          setCurrentUser(meJson.user);
+        }
+      } catch (err) {
+        console.warn("Profil fallback affiché:", err);
+      }
+    }
+    loadUser();
+  }, [rawId]);
 
   const BADGE_DETAILS: Record<string, { label: string; color: string; desc: string }> = {
     FAIR_PLAY: { label: "Fair-Play Exemplaire", color: "text-primary border-primary/40 bg-primary/10", desc: "Respectueux des règles et coéquipiers" },
@@ -132,13 +180,23 @@ export default function UserProfilePage() {
 
               {/* Edit / Action Button */}
               <div className="flex items-center gap-3 w-full sm:w-auto">
-                <Link
-                  href="/profile/edit"
-                  className="flex-1 sm:flex-none text-center px-4 py-2 bg-surface-container hover:bg-surface-container-high text-white text-xs font-display font-bold rounded-xl border border-surface-container-high flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Edit className="w-3.5 h-3.5" />
-                  Modifier le Profil
-                </Link>
+                {!currentUser || currentUser.username === user.username ? (
+                  <Link
+                    href="/profile/edit"
+                    className="flex-1 sm:flex-none text-center px-4 py-2 bg-surface-container hover:bg-surface-container-high text-white text-xs font-display font-bold rounded-xl border border-surface-container-high flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Edit className="w-3.5 h-3.5 text-primary" />
+                    Modifier le Profil
+                  </Link>
+                ) : (
+                  <Link
+                    href="/messages"
+                    className="flex-1 sm:flex-none text-center px-4 py-2 bg-primary hover:bg-primary-fixed text-on-primary text-xs font-display font-bold rounded-xl shadow-[0_0_12px_rgba(78,222,163,0.3)] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    Envoyer un Message
+                  </Link>
+                )}
               </div>
             </div>
 

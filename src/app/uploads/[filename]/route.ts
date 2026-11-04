@@ -51,3 +51,4 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: "Erreur lecture fichier" }, { status: 500 });
   }
 }
+

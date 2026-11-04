@@ -31,11 +31,19 @@ import {
 function ExplorerContent() {
   const searchParams = useSearchParams();
   const initialGame = searchParams.get("game") || "Tous";
+  const initialSearch = searchParams.get("search") || searchParams.get("q") || "";
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(initialGame);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  useEffect(() => {
+    const q = searchParams.get("search") || searchParams.get("q");
+    if (q !== null && q !== undefined) {
+      setSearchQuery(q);
+    }
+  }, [searchParams]);
 
   // Filters state
   const [platformFilter, setPlatformFilter] = useState("ALL");
