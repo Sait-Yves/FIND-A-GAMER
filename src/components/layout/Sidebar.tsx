@@ -1,7 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  Ticket,
+  MessageSquare,
+  Gamepad2,
+  Trophy,
+  Settings,
+  LogOut,
+  Globe,
+  Radio,
+} from "lucide-react";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -10,44 +21,58 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      onClose?.();
+      router.push("/login");
+      router.refresh();
+    } catch (e) {
+      console.error("Erreur déconnexion:", e);
+    }
+  };
 
   const navItems = [
     {
       label: "Explorer les Salons",
       href: "/",
-      icon: "dashboard",
-      active: pathname === "/" || (pathname.startsWith("/tickets") && !pathname.includes("my-tickets")),
+      Icon: LayoutDashboard,
+      active:
+        pathname === "/" ||
+        (pathname.startsWith("/tickets") && !pathname.includes("my-tickets")),
     },
     {
       label: "Mes Tickets",
       href: "/my-tickets",
-      icon: "confirmation_number",
+      Icon: Ticket,
       badge: "2",
       active: pathname === "/my-tickets",
     },
     {
       label: "Messagerie & Voc",
       href: "/messages",
-      icon: "chat",
+      Icon: MessageSquare,
       badge: "3",
       active: pathname === "/messages",
     },
     {
       label: "Jeux Favoris",
       href: "/favorites",
-      icon: "sports_esports",
+      Icon: Gamepad2,
       active: pathname === "/favorites",
     },
     {
       label: "Classements & Fair-Play",
       href: "/leaderboard",
-      icon: "military_tech",
+      Icon: Trophy,
       active: pathname === "/leaderboard",
     },
     {
       label: "Paramètres",
       href: "/settings",
-      icon: "tune",
+      Icon: Settings,
       active: pathname === "/settings" || pathname === "/profile/edit",
     },
   ];
@@ -71,6 +96,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => {
             const isActive = item.active;
+            const Icon = item.Icon;
             return (
               <Link
                 key={item.label}
@@ -83,13 +109,11 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <span
-                    className={`material-symbols-outlined text-lg ${
+                  <Icon
+                    className={`w-4 h-4 ${
                       isActive ? "text-primary" : "text-on-surface-variant"
                     }`}
-                  >
-                    {item.icon}
-                  </span>
+                  />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
@@ -100,6 +124,15 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
               </Link>
             );
           })}
+
+          {/* Bouton Déconnexion dans la Sidebar */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-display font-medium tracking-wide text-error/80 hover:text-error hover:bg-error/10 transition-colors mt-2 border border-transparent hover:border-error/20 cursor-pointer text-left"
+          >
+            <LogOut className="w-4 h-4 text-error" />
+            <span>Déconnexion</span>
+          </button>
         </nav>
 
         {/* Connected Platforms Widget */}
@@ -134,7 +167,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
             <div className="flex items-center justify-between text-xs pt-1.5 border-t border-surface-container-high/60">
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <Radio className="w-3.5 h-3.5 text-primary animate-pulse" />
                 <span className="text-on-surface-variant">Europe (Frankfurt)</span>
               </div>
               <span className="text-[11px] font-mono text-primary font-bold">18ms</span>

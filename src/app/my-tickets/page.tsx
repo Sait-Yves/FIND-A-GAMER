@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { CreateTicketModal } from "@/components/tickets/CreateTicketModal";
+import { Ticket, PlusCircle, Trophy, Users, Mic, ArrowRight, Gamepad2 } from "lucide-react";
 
 export default function MyTicketsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -40,15 +41,13 @@ export default function MyTicketsPage() {
       />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-16 lg:pl-72 w-full min-h-screen p-4 md:p-6 transition-all">
+      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
           {/* Top Banner */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 sm:p-6 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-lg">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-xl">
-                  confirmation_number
-                </span>
+                <Ticket className="w-5 h-5 text-primary" />
                 <span className="text-xs font-display font-bold uppercase tracking-wider text-primary">
                   Gestion d'Escouade & Salons
                 </span>
@@ -65,7 +64,7 @@ export default function MyTicketsPage() {
               onClick={() => setIsCreateModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_14px_rgba(78,222,163,0.3)] transition-all cursor-pointer shrink-0"
             >
-              <span className="material-symbols-outlined text-base">add_circle</span>
+              <PlusCircle className="w-4 h-4" />
               Créer un Salon
             </button>
           </div>
@@ -80,7 +79,7 @@ export default function MyTicketsPage() {
                   : "text-on-surface-variant hover:text-white"
               }`}
             >
-              <span className="material-symbols-outlined text-base">military_tech</span>
+              <Trophy className="w-4 h-4" />
               <span>Mes Salons Hébergés (Hôte)</span>
               <span className="px-1.5 py-0.5 rounded text-[10px] bg-surface-container font-mono">
                 {tickets.length}
@@ -95,7 +94,7 @@ export default function MyTicketsPage() {
                   : "text-on-surface-variant hover:text-white"
               }`}
             >
-              <span className="material-symbols-outlined text-base">group</span>
+              <Users className="w-4 h-4" />
               <span>Salons Rejoints</span>
               <span className="px-1.5 py-0.5 rounded text-[10px] bg-surface-container font-mono">
                 1
@@ -111,9 +110,7 @@ export default function MyTicketsPage() {
             </div>
           ) : tickets.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12 bg-surface-container-low rounded-2xl border border-surface-container-high text-center">
-              <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-2">
-                sports_esports
-              </span>
+              <Gamepad2 className="w-10 h-10 text-on-surface-variant mb-2" />
               <h3 className="text-sm font-display font-bold text-white mb-1">
                 Aucun ticket actif pour l'instant
               </h3>
@@ -122,7 +119,7 @@ export default function MyTicketsPage() {
               </p>
               <button
                 onClick={() => setIsCreateModalOpen(true)}
-                className="px-4 py-2 bg-primary text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl"
+                className="px-4 py-2 bg-primary text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer"
               >
                 Créer un Salon
               </button>
@@ -156,7 +153,7 @@ export default function MyTicketsPage() {
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       {ticket.micRequired && (
                         <span className="px-2 py-0.5 rounded bg-surface-container text-primary text-[10px] font-semibold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-xs">mic</span> Micro Requis
+                          <Mic className="w-3 h-3" /> Micro Requis
                         </span>
                       )}
                       {ticket.is18Plus && (
@@ -172,7 +169,7 @@ export default function MyTicketsPage() {
 
                   <div className="flex items-center justify-between pt-4 mt-4 border-t border-surface-container-high/60 pl-2">
                     <div className="flex items-center gap-2 text-xs text-tertiary font-display font-semibold">
-                      <span className="material-symbols-outlined text-base">group</span>
+                      <Users className="w-4 h-4" />
                       <span>
                         {ticket.currentPlayers} / {ticket.maxPlayers} Joueurs
                       </span>
@@ -183,7 +180,7 @@ export default function MyTicketsPage() {
                       className="flex items-center gap-1.5 px-3.5 py-1.5 bg-primary/20 hover:bg-primary text-primary hover:text-on-primary rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all"
                     >
                       <span>Gérer le salon</span>
-                      <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </article>

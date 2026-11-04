@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Award, X } from "lucide-react";
 
 interface SubmitReviewModalProps {
   isOpen: boolean;
@@ -90,9 +91,7 @@ export function SubmitReviewModal({
       <div className="relative w-full max-w-lg bg-surface-container border border-surface-container-high rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
         <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-xl">
-              verified
-            </span>
+            <Award className="w-5 h-5 text-primary" />
             <h3 className="text-base font-display font-bold text-white tracking-wide">
               Évaluer @{targetUsername}
             </h3>
@@ -101,7 +100,7 @@ export function SubmitReviewModal({
             onClick={onClose}
             className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-white flex items-center justify-center transition-colors"
           >
-            <span className="material-symbols-outlined text-lg">close</span>
+            <X className="w-5 h-5" />
           </button>
         </div>
 

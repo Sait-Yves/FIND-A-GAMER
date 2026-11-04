@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PlusCircle, X, AlertCircle } from "lucide-react";
 
 interface CreateTicketModalProps {
   isOpen: boolean;
@@ -132,9 +133,7 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
       <div className="relative w-full max-w-2xl bg-surface-container border border-surface-container-high rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-2xl">
-              add_circle
-            </span>
+            <PlusCircle className="w-6 h-6 text-primary" />
             <h2 className="text-lg font-display font-bold text-white tracking-wide">
               Créer un Salon de Jeu (Ticket LFG)
             </h2>
@@ -143,7 +142,7 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
             onClick={onClose}
             className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-white flex items-center justify-center transition-colors"
           >
-            <span className="material-symbols-outlined text-lg">close</span>
+            <X className="w-5 h-5" />
           </button>
         </div>
 

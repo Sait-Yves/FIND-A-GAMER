@@ -10,6 +10,8 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    volumes:
+      - lobbygamer_uploads:/app/public/uploads
     environment:
       - NODE_ENV=production
       - DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@db:3306/${DB_NAME}
@@ -50,6 +52,8 @@ services:
 volumes:
   lobbygamer_db_data:
     name: lobbygamer_mysql_data
+  lobbygamer_uploads:
+    name: lobbygamer_app_uploads
 
 networks:
   lobby_network:

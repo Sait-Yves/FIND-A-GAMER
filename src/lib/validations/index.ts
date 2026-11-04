@@ -55,7 +55,7 @@ export const UpdateProfileSchema = z.object({
     .max(120, "Âge invalide")
     .optional()
     .nullable(),
-  avatarUrl: z.string().url("URL d'avatar invalide").optional().nullable(),
+  avatarUrl: z.string().max(512, "L'URL d'avatar ne doit pas dépasser 512 caractères").optional().nullable(),
   primaryPlatform: PlatformSchema.default("PC"),
   playerType: PlayerTypeSchema.default("CHILL"),
   favoriteGames: z.array(FavoriteGameInputSchema).max(10, "Vous pouvez choisir jusqu'à 10 jeux favoris").optional(),

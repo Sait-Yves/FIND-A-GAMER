@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { Gamepad2, ArrowRight, Search, Star } from "lucide-react";
 
 export default function FavoritesPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -81,15 +82,13 @@ export default function FavoritesPage() {
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-16 lg:pl-72 w-full min-h-screen p-4 md:p-6 transition-all">
+      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 sm:p-6 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-lg">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-xl">
-                  sports_esports
-                </span>
+                <Gamepad2 className="w-5 h-5 text-primary" />
                 <span className="text-xs font-display font-bold uppercase tracking-wider text-primary">
                   Bibliothèque Gaming RAWG
                 </span>
@@ -127,8 +126,8 @@ export default function FavoritesPage() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent" />
-                  <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-surface/80 backdrop-blur-md text-[10px] font-bold text-primary border border-primary/30">
-                    ★ {game.rating}
+                  <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-surface/80 backdrop-blur-md text-[10px] font-bold text-primary border border-primary/30 flex items-center gap-1">
+                    <Star className="w-3 h-3 fill-primary text-primary" /> {game.rating}
                   </span>
                 </div>
 
@@ -160,7 +159,7 @@ export default function FavoritesPage() {
                     className="mt-2 w-full py-2 bg-primary/20 hover:bg-primary text-primary hover:text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl text-center transition-all flex items-center justify-center gap-1.5"
                   >
                     <span>Explorer les Salons</span>
-                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>

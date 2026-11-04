@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { MessageSquare, Mic, ExternalLink, Send } from "lucide-react";
 
 export default function MessagesPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -89,13 +90,13 @@ export default function MessagesPage() {
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-16 lg:pl-72 w-full min-h-screen p-4 md:p-6 transition-all">
+      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
         <div className="max-w-7xl mx-auto flex flex-col gap-5">
           {/* Top Banner */}
           <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex items-center justify-between shadow-lg">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-xl">chat</span>
+                <MessageSquare className="w-5 h-5 text-primary" />
                 <span className="text-xs font-display font-bold uppercase tracking-wider text-primary">
                   Communications & Escouades
                 </span>
@@ -177,7 +178,7 @@ export default function MessagesPage() {
 
                 <div className="flex items-center gap-2">
                   <button className="px-3 py-1.5 rounded-xl bg-primary/20 hover:bg-primary text-primary hover:text-on-primary text-xs font-display font-bold transition-all flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-sm">mic</span>
+                    <Mic className="w-3.5 h-3.5" />
                     <span>Rejoindre Vocal</span>
                   </button>
                   <Link
@@ -185,7 +186,7 @@ export default function MessagesPage() {
                     className="p-2 rounded-xl bg-surface-container-high hover:bg-surface text-on-surface-variant hover:text-white transition-colors"
                     title="Voir le ticket"
                   >
-                    <span className="material-symbols-outlined text-lg">open_in_new</span>
+                    <ExternalLink className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -235,10 +236,10 @@ export default function MessagesPage() {
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-1.5"
+                  className="px-4 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>Envoyer</span>
-                  <span className="material-symbols-outlined text-sm">send</span>
+                  <Send className="w-3.5 h-3.5" />
                 </button>
               </form>
             </div>

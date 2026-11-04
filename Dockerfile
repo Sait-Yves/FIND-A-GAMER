@@ -55,12 +55,14 @@ ENV HOME=/home/nextjs
 ENV npm_config_cache=/home/nextjs/.npm
 
 # Assets publics statiques et artefacts Prisma (incluant la CLI prisma locale)
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/.bin ./node_modules/.bin
+
+RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public
 
 # Fichiers compilés par Next.js standalone
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

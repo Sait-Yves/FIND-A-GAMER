@@ -6,6 +6,27 @@ import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { CreateTicketModal } from "@/components/tickets/CreateTicketModal";
+import {
+  Radio,
+  RefreshCw,
+  Gamepad2,
+  Trophy,
+  Shield,
+  Rocket,
+  Crosshair,
+  CircleDot,
+  Swords,
+  Mic,
+  ShieldCheck,
+  Users,
+  ArrowRight,
+  Plus,
+  AlertCircle,
+  Activity,
+  Layers,
+  Sparkles,
+  CheckCircle2,
+} from "lucide-react";
 
 function ExplorerContent() {
   const searchParams = useSearchParams();
@@ -29,14 +50,14 @@ function ExplorerContent() {
   const [loading, setLoading] = useState(true);
 
   const games = [
-    { name: "Tous", activeRooms: 589, icon: "all_inclusive" },
-    { name: "Apex Legends", activeRooms: 148, icon: "military_tech" },
-    { name: "Valorant", activeRooms: 92, icon: "shield" },
-    { name: "Helldivers 2", activeRooms: 64, icon: "rocket_launch" },
-    { name: "Warzone 2", activeRooms: 115, icon: "radar" },
-    { name: "Rocket League", activeRooms: 43, icon: "sports_soccer" },
-    { name: "Counter-Strike 2", activeRooms: 88, icon: "crisis_alert" },
-    { name: "Rainbow Six Siege", activeRooms: 39, icon: "security" },
+    { name: "Tous", activeRooms: 589, Icon: Layers },
+    { name: "Apex Legends", activeRooms: 148, Icon: Trophy },
+    { name: "Valorant", activeRooms: 92, Icon: Shield },
+    { name: "Helldivers 2", activeRooms: 64, Icon: Rocket },
+    { name: "Warzone 2", activeRooms: 115, Icon: Crosshair },
+    { name: "Rocket League", activeRooms: 43, Icon: CircleDot },
+    { name: "Counter-Strike 2", activeRooms: 88, Icon: Swords },
+    { name: "Rainbow Six Siege", activeRooms: 39, Icon: ShieldCheck },
   ];
 
   const fetchTickets = useCallback(async () => {
@@ -65,8 +86,9 @@ function ExplorerContent() {
       if (json.success && Array.isArray(json.data)) {
         let sorted = [...json.data];
         if (sortBy === "fast") {
-          // Sort by nearest to full (maxPlayers - currentPlayers ascending)
-          sorted.sort((a, b) => (a.maxPlayers - a.currentPlayers) - (b.maxPlayers - b.currentPlayers));
+          sorted.sort(
+            (a, b) => a.maxPlayers - a.currentPlayers - (b.maxPlayers - b.currentPlayers)
+          );
         }
         setTickets(sorted);
       }
@@ -104,17 +126,18 @@ function ExplorerContent() {
       />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      {/* Main Content Area */}
-      <main className="pt-16 lg:pl-72 w-full min-h-screen p-3 sm:p-4 md:p-6 transition-all">
-        <div className="max-w-7xl mx-auto flex flex-col gap-5 w-full">
+      {/* Main Content Area avec pt-24 et pb-12 pour dégager la navbar fixe sans conflit de padding */}
+      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+        <div className="max-w-7xl mx-auto flex flex-col gap-6 w-full">
           {/* ========================================================================= */}
           {/* 1. Live Telemetry Strip */}
           {/* ========================================================================= */}
-          <section className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-sm">
+          <section className="flex flex-wrap items-center justify-between gap-3 p-4 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-md">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-primary animate-ping" />
-                <span className="font-display font-bold text-white tracking-wider uppercase text-[11px]">
+                <span className="font-display font-bold text-white tracking-wider uppercase text-[11px] flex items-center gap-1.5">
+                  <Radio className="w-4 h-4 text-primary" />
                   RADAR DE RECHERCHE
                 </span>
               </div>
@@ -133,8 +156,8 @@ function ExplorerContent() {
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30">
-                <span className="material-symbols-outlined text-sm text-primary">wifi_tethering</span>
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30">
+                <Radio className="w-3.5 h-3.5 text-primary" />
                 <span className="text-[10px] font-bold tracking-wider text-primary uppercase">
                   Flux Temps-Réel
                 </span>
@@ -142,9 +165,9 @@ function ExplorerContent() {
               <button
                 onClick={() => fetchTickets()}
                 title="Actualiser les salons"
-                className="p-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all cursor-pointer"
+                className="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all cursor-pointer"
               >
-                <span className="material-symbols-outlined text-base">sync</span>
+                <RefreshCw className="w-4 h-4" />
               </button>
             </div>
           </section>
@@ -156,6 +179,7 @@ function ExplorerContent() {
             <div className="flex items-center gap-2.5 shrink-0">
               {games.map((game) => {
                 const isSelected = selectedGame === game.name;
+                const Icon = game.Icon;
                 return (
                   <button
                     key={game.name}
@@ -166,13 +190,11 @@ function ExplorerContent() {
                         : "bg-surface-container-low text-on-surface-variant hover:text-white hover:bg-surface-container border border-surface-container-high"
                     }`}
                   >
-                    <span
-                      className={`material-symbols-outlined text-base ${
+                    <Icon
+                      className={`w-4 h-4 ${
                         isSelected ? "text-primary" : "text-on-surface-variant"
                       }`}
-                    >
-                      {game.icon}
-                    </span>
+                    />
                     <span>{game.name}</span>
                     <span
                       className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
@@ -192,7 +214,7 @@ function ExplorerContent() {
           {/* ========================================================================= */}
           {/* 3. Filter Controls & Quick Chips */}
           {/* ========================================================================= */}
-          <section className="flex flex-col gap-3 p-4 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-sm">
+          <section className="flex flex-col gap-3 p-4 sm:p-5 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
                 <label className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
@@ -262,7 +284,7 @@ function ExplorerContent() {
                       : "bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-white border border-surface-container-high"
                   }`}
                 >
-                  <span className="material-symbols-outlined text-sm">mic</span>
+                  <Mic className="w-3.5 h-3.5" />
                   <span>+ Micro requis</span>
                 </button>
 
@@ -288,7 +310,7 @@ function ExplorerContent() {
                       : "bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-white border border-surface-container-high"
                   }`}
                 >
-                  <span className="material-symbols-outlined text-sm">verified</span>
+                  <ShieldCheck className="w-3.5 h-3.5 text-tertiary" />
                   <span>Fair-play 4.5+ ★</span>
                 </button>
               </div>
@@ -347,9 +369,7 @@ function ExplorerContent() {
                 </div>
               ) : tickets.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-16 bg-surface-container-low rounded-2xl border border-surface-container-high text-center gap-3">
-                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/60">
-                    sports_esports
-                  </span>
+                  <Gamepad2 className="w-12 h-12 text-on-surface-variant/60" />
                   <h3 className="font-display font-bold text-base text-white">
                     Aucun salon ne correspond à vos filtres
                   </h3>
@@ -358,9 +378,10 @@ function ExplorerContent() {
                   </p>
                   <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="mt-2 px-5 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_14px_rgba(78,222,163,0.3)] transition-all cursor-pointer"
+                    className="mt-2 flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_14px_rgba(78,222,163,0.3)] transition-all cursor-pointer"
                   >
-                    Créer un Salon Maintenant
+                    <Plus className="w-4 h-4" />
+                    <span>Créer un Salon Maintenant</span>
                   </button>
                 </div>
               ) : (
@@ -408,7 +429,7 @@ function ExplorerContent() {
                       </div>
 
                       <div className="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-xl border border-surface-container-high/60 text-xs">
-                        <span className="material-symbols-outlined text-primary text-base">sensors</span>
+                        <Activity className="w-3.5 h-3.5 text-primary" />
                         <span className="text-white font-medium">EU Frankfurt</span>
                         <span className="text-primary font-mono font-bold bg-primary/10 px-1.5 py-0.5 rounded">
                           19ms
@@ -437,17 +458,17 @@ function ExplorerContent() {
                     {/* Squad Tags */}
                     <div className="flex flex-wrap gap-2 mb-4 pl-2">
                       {ticket.micRequired && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/15 text-primary text-xs font-semibold">
-                          <span className="material-symbols-outlined text-xs">mic</span> MICRO OBLIGATOIRE
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/15 text-primary text-xs font-semibold">
+                          <Mic className="w-3.5 h-3.5" /> MICRO OBLIGATOIRE
                         </span>
                       )}
                       {ticket.is18Plus && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-error/15 text-error text-xs font-semibold">
-                          <span className="material-symbols-outlined text-xs">explicit</span> +18 ANS
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-error/15 text-error text-xs font-semibold">
+                          <AlertCircle className="w-3.5 h-3.5" /> +18 ANS
                         </span>
                       )}
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-tertiary/15 text-tertiary text-xs font-semibold">
-                        <span className="material-symbols-outlined text-xs">verified</span> FAIR-PLAY 4.5+
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-tertiary/15 text-tertiary text-xs font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5" /> FAIR-PLAY 4.5+
                       </span>
                       {ticket.customRules && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface-variant text-xs">
@@ -494,7 +515,7 @@ function ExplorerContent() {
                         className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_12px_rgba(78,222,163,0.3)] hover:shadow-[0_0_18px_rgba(78,222,163,0.45)] transition-all cursor-pointer"
                       >
                         <span>Rejoindre le Lobby</span>
-                        <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
                   </article>
@@ -517,7 +538,7 @@ function ExplorerContent() {
 
                 <div className="p-4 rounded-xl bg-surface-container/60 border border-surface-container-high/80 text-center flex flex-col items-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-on-surface-variant">
-                    <span className="material-symbols-outlined text-xl">groups</span>
+                    <Users className="w-5 h-5" />
                   </div>
                   <span className="text-xs font-semibold text-white">
                     Aucun salon actif
@@ -529,15 +550,16 @@ function ExplorerContent() {
                     onClick={() => setIsCreateModalOpen(true)}
                     className="w-full mt-2 py-2.5 px-3 bg-surface hover:bg-surface-container-high text-white font-display font-semibold text-xs rounded-xl border border-surface-container-high flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-sm text-primary">add</span>
-                    Créer un Nouveau Salon
+                    <Plus className="w-4 h-4 text-primary" />
+                    <span>Créer un Nouveau Salon</span>
                   </button>
                 </div>
               </div>
 
               {/* Widget 2: Préférences de profil */}
               <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-2 shadow-sm">
-                <span className="text-xs font-display font-bold text-white">
+                <span className="text-xs font-display font-bold text-white flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-tertiary" />
                   Besoin de mates précis ?
                 </span>
                 <p className="text-[11px] text-on-surface-variant leading-relaxed">
@@ -604,9 +626,7 @@ function ExplorerContent() {
               {/* Widget 4: Charte Fair-Play */}
               <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-3 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-base">
-                    verified_user
-                  </span>
+                  <ShieldCheck className="w-4 h-4 text-primary" />
                   <span className="text-xs font-display font-bold text-white">
                     Charte Fair-Play 4.8★
                   </span>
@@ -616,15 +636,15 @@ function ExplorerContent() {
                 </p>
                 <ul className="text-[11px] flex flex-col gap-2 text-on-surface">
                   <li className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
                     <span><strong>Zéro Tolérance Toxicité</strong> : Bannissement immédiat en cas d'insultes.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
                     <span><strong>Respect des Consignes</strong> : Micro requis lorsque l'hôte le stipule.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
                     <span><strong>Évaluation Post-Match</strong> : Notez vos coéquipiers après chaque partie.</span>
                   </li>
                 </ul>

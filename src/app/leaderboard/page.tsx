@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { Trophy, ShieldCheck, Award } from "lucide-react";
 
 export default function LeaderboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -66,15 +67,13 @@ export default function LeaderboardPage() {
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-16 lg:pl-72 w-full min-h-screen p-4 md:p-6 transition-all">
+      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
           {/* Banner */}
           <div className="p-5 sm:p-6 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-xl">
-                  military_tech
-                </span>
+                <Trophy className="w-5 h-5 text-primary" />
                 <span className="text-xs font-display font-bold uppercase tracking-wider text-primary">
                   Système de Karma & Réputation
                 </span>
@@ -87,7 +86,8 @@ export default function LeaderboardPage() {
               </p>
             </div>
 
-            <div className="px-4 py-2 rounded-xl bg-tertiary/10 border border-tertiary/30 text-xs font-display font-bold text-tertiary">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-tertiary/10 border border-tertiary/30 text-xs font-display font-bold text-tertiary">
+              <ShieldCheck className="w-4 h-4 text-tertiary" />
               Algorithme Anti-Toxicité Actif
             </div>
           </div>
