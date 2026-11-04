@@ -15,6 +15,7 @@ import {
   ChevronDown,
   LogIn,
 } from "lucide-react";
+import { CreateTicketModal } from "@/components/tickets/CreateTicketModal";
 
 interface NavbarProps {
   onOpenCreateModal?: () => void;
@@ -34,6 +35,15 @@ export function Navbar({
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMicActive, setIsMicActive] = useState(true);
+  const [internalCreateModalOpen, setInternalCreateModalOpen] = useState(false);
+
+  const handleCreateTicketClick = () => {
+    if (onOpenCreateModal) {
+      onOpenCreateModal();
+    } else {
+      setInternalCreateModalOpen(true);
+    }
+  };
 
   // Charger la session utilisateur
   useEffect(() => {
@@ -125,7 +135,7 @@ export function Navbar({
       {/* Right Controls & Profile */}
       <div className="flex items-center gap-2 sm:gap-3">
         <button
-          onClick={onOpenCreateModal}
+          onClick={handleCreateTicketClick}
           className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs tracking-wider uppercase rounded-xl shadow-[0_0_14px_rgba(78,222,163,0.25)] hover:shadow-[0_0_20px_rgba(78,222,163,0.4)] active:scale-95 transition-all shrink-0 cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
@@ -237,6 +247,16 @@ export function Navbar({
           </Link>
         )}
       </div>
+
+      <CreateTicketModal
+        isOpen={internalCreateModalOpen}
+        onClose={() => setInternalCreateModalOpen(false)}
+        onCreated={(newTicket) => {
+          setInternalCreateModalOpen(false);
+          router.push(`/tickets/${newTicket.id}`);
+          router.refresh();
+        }}
+      />
     </header>
   );
 }

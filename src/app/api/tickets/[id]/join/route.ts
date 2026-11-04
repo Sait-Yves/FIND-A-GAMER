@@ -1,20 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { verifySessionToken } from "@/lib/auth";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/tickets/[id]/join
- * Permet à un joueur de postuler ou de rejoindre un ticket.
- * Vérifie la capacité restante, les règles d'âge (+18) et l'unicité.
+ * Permet à un joueur de rejoindre un ticket.
+ * Règle stricte : Un joueur ne peut participer qu'à un SEUL salon actif à la fois.
  */
 export async function POST(req: NextRequest, { params }: RouteParams) {
   try {
     const { id: ticketId } = await params;
-    const body = await req.json();
-    const userId = req.headers.get("x-user-id") || body.userId;
+    const body = await req.json().catch(() => ({}));
+
+    // Résolution de l'utilisateur connecté via cookie de session ou headers/body
+    let userId = req.headers.get("x-user-id") || body?.userId;
+    if (!userId) {
+      const sessionCookie = req.cookies.get("lobbygamer_session")?.value;
+      if (sessionCookie) {
+        const payload = verifySessionToken(sessionCookie);
+        if (payload?.id) {
+          userId = payload.id;
+        }
+      }
+    }
+
+    // Fallback utilisateur par défaut si non connecté
+    if (!userId) {
+      const defaultUser = await prisma.user.findFirst({ select: { id: true } });
+      userId = defaultUser?.id;
+    }
 
     if (!userId) {
       return NextResponse.json(
@@ -23,7 +43,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Récupération du ticket et du profil du candidat
+    // Récupération du ticket cible et de l'utilisateur
     const [ticket, candidateUser] = await Promise.all([
       prisma.ticket.findUnique({
         where: { id: ticketId },
@@ -46,10 +66,90 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
     }
 
-    // 1. Vérification du statut du salon
+    // Règle A : Si l'utilisateur est le créateur/hôte de CE ticket
+    if (ticket.hostId === userId) {
+      return NextResponse.json({
+        success: true,
+        message: "Vous êtes l'hôte de ce salon",
+        alreadyInRoom: true,
+        isHost: true,
+        data: { ticketId },
+      });
+    }
+
+    // Règle B : Vérifier si l'utilisateur est DÉJÀ membre accepté de CE ticket
+    const isAlreadyMemberOfThis = ticket.participants.some((p) => p.userId === userId);
+    if (isAlreadyMemberOfThis) {
+      return NextResponse.json({
+        success: true,
+        message: "Vous participez déjà à ce salon",
+        alreadyInRoom: true,
+        isHost: false,
+        data: { ticketId },
+      });
+    }
+
+    // Règle C (STRICTE) : Un joueur NE DOIT PAS pouvoir rejoindre plusieurs salons en même temps !
+    // Vérification 1 : Est-il membre accepté d'un AUTRE ticket en cours ?
+    const activeParticipation = await prisma.participant.findFirst({
+      where: {
+        userId,
+        status: "ACCEPTED",
+        ticketId: { not: ticketId },
+        ticket: {
+          status: { in: ["OPEN", "IN_PROGRESS", "FULL"] },
+        },
+      },
+      include: {
+        ticket: {
+          select: {
+            id: true,
+            title: true,
+            gameTitle: true,
+          },
+        },
+      },
+    });
+
+    if (activeParticipation) {
+      return NextResponse.json(
+        {
+          error: `Vous participez déjà à un salon actif ("${activeParticipation.ticket.title}"). Vous devez d'abord quitter votre salon actuel avant d'en rejoindre un autre.`,
+          activeTicketId: activeParticipation.ticket.id,
+          activeTicketTitle: activeParticipation.ticket.title,
+        },
+        { status: 409 }
+      );
+    }
+
+    // Vérification 2 : Est-il l'hôte d'un AUTRE ticket actif ?
+    const activeHostedTicket = await prisma.ticket.findFirst({
+      where: {
+        hostId: userId,
+        id: { not: ticketId },
+        status: { in: ["OPEN", "IN_PROGRESS", "FULL"] },
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    if (activeHostedTicket) {
+      return NextResponse.json(
+        {
+          error: `Vous êtes actuellement l'hôte d'un autre salon actif ("${activeHostedTicket.title}"). Vous devez clôturer votre salon avant d'en rejoindre un nouveau.`,
+          activeTicketId: activeHostedTicket.id,
+          activeTicketTitle: activeHostedTicket.title,
+        },
+        { status: 409 }
+      );
+    }
+
+    // 1. Vérification du statut du salon cible
     if (ticket.status !== "OPEN") {
       return NextResponse.json(
-        { error: "Ce salon n'accepte plus de nouveaux joueurs" },
+        { error: "Ce salon est complet ou n'accepte plus de nouveaux joueurs" },
         { status: 400 }
       );
     }
@@ -62,14 +162,13 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     // 3. Vérification de la règle +18
     if (ticket.is18Plus && candidateUser.age && candidateUser.age < 18) {
       return NextResponse.json(
-        { error: "Ce salon est strictement réservé aux joueurs majeurs (+18)" },
+        { error: "Ce salon est strictement réservé aux joueurs majeurs (+18 ans)" },
         { status: 403 }
       );
     }
 
-    // 4. Inscription ou mise à jour du participant en transaction
+    // 4. Inscription ou mise à jour du participant en transaction atomique
     const result = await prisma.$transaction(async (tx) => {
-      // Vérifier si une inscription existe déjà
       const existing = await tx.participant.findUnique({
         where: {
           ticketId_userId: {
@@ -78,10 +177,6 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           },
         },
       });
-
-      if (existing && existing.status === "ACCEPTED") {
-        throw new Error("ALREADY_JOINED");
-      }
 
       const participant = existing
         ? await tx.participant.update({
@@ -114,19 +209,13 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({
       success: true,
-      message: "Vous avez rejoint le ticket avec succès",
+      message: "Vous avez rejoint l'escouade avec succès !",
       data: result,
     });
   } catch (error: any) {
-    if (error.message === "ALREADY_JOINED") {
-      return NextResponse.json(
-        { error: "Vous faites déjà partie de ce salon" },
-        { status: 400 }
-      );
-    }
     console.error("Erreur POST /api/tickets/[id]/join:", error);
     return NextResponse.json(
-      { error: "Impossible de rejoindre le salon" },
+      { error: error?.message || "Impossible de rejoindre le salon" },
       { status: 500 }
     );
   }

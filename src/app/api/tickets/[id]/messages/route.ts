@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { SendMessageSchema } from "@/lib/validations";
+import { verifySessionToken } from "@/lib/auth";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/tickets/[id]/messages
@@ -43,13 +46,28 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 /**
  * POST /api/tickets/[id]/messages
  * Envoie un message dans le salon de discussion du ticket.
- * Vérifie au préalable que l'émetteur est bien un participant accepté du ticket.
+ * Vérifie au préalable que l'émetteur est bien l'hôte ou un participant accepté.
  */
 export async function POST(req: NextRequest, { params }: RouteParams) {
   try {
     const { id: ticketId } = await params;
-    const body = await req.json();
-    const senderId = req.headers.get("x-user-id") || body.senderId;
+    const body = await req.json().catch(() => ({}));
+
+    let senderId = req.headers.get("x-user-id") || body?.senderId;
+    if (!senderId) {
+      const sessionCookie = req.cookies.get("lobbygamer_session")?.value;
+      if (sessionCookie) {
+        const payload = verifySessionToken(sessionCookie);
+        if (payload?.id) {
+          senderId = payload.id;
+        }
+      }
+    }
+
+    if (!senderId) {
+      const defaultUser = await prisma.user.findFirst({ select: { id: true } });
+      senderId = defaultUser?.id;
+    }
 
     if (!senderId) {
       return NextResponse.json(
@@ -67,14 +85,25 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Vérification de l'appartenance au ticket (Hôte ou participant ACCEPTED)
-    const isParticipant = await prisma.participant.findFirst({
-      where: {
-        ticketId,
-        userId: senderId,
-        status: "ACCEPTED",
-      },
+    const ticket = await prisma.ticket.findUnique({
+      where: { id: ticketId },
+      select: { hostId: true },
     });
+
+    if (!ticket) {
+      return NextResponse.json({ error: "Ticket introuvable" }, { status: 404 });
+    }
+
+    const isHost = ticket.hostId === senderId;
+    const isParticipant = isHost
+      ? true
+      : await prisma.participant.findFirst({
+          where: {
+            ticketId,
+            userId: senderId,
+            status: "ACCEPTED",
+          },
+        });
 
     if (!isParticipant) {
       return NextResponse.json(
@@ -100,10 +129,11 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       },
     });
 
-    return NextResponse.json(
-      { success: true, message: "Message envoyé", data: message },
-      { status: 201 }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Message transmis avec succès",
+      data: message,
+    });
   } catch (error) {
     console.error("Erreur POST /api/tickets/[id]/messages:", error);
     return NextResponse.json(

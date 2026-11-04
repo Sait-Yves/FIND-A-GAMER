@@ -95,10 +95,32 @@ export default function ProfileEditPage() {
       }
 
       setAvatarUrl(data.url);
+      setSavedSuccess(true);
+
+      // Sauvegarde immédiate de l'avatar en base de données
+      await fetch(`/api/users/${userId || "me"}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatarUrl: data.url }),
+      });
     } catch (err: any) {
       setUploadError(err.message || "Erreur lors de l'upload de l'image");
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleSelectPreset = async (preset: string) => {
+    setAvatarUrl(preset);
+    setSavedSuccess(true);
+    try {
+      await fetch(`/api/users/${userId || "me"}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatarUrl: preset }),
+      });
+    } catch (err: any) {
+      console.warn("Échec sauvegarde preset avatar:", err);
     }
   };
 
@@ -297,7 +319,7 @@ export default function ProfileEditPage() {
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => setAvatarUrl(preset)}
+                      onClick={() => handleSelectPreset(preset)}
                       className={`w-11 h-11 rounded-xl overflow-hidden border-2 transition-all p-0.5 cursor-pointer ${
                         avatarUrl === preset
                           ? "border-primary scale-110 shadow-[0_0_10px_rgba(78,222,163,0.4)]"

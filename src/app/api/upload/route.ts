@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -25,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: "Format non supporté. Veuillez envoyer une image JPG, PNG, WEBP ou GIF." },
+        { error: "Format non supporté. Veuillez envoyer une image JPG, PNG, WEBP, GIF ou SVG." },
         { status: 400 }
       );
     }
@@ -49,14 +51,32 @@ export async function POST(req: NextRequest) {
     else if (file.type === "image/svg+xml") ext = "svg";
 
     const fileName = `avatar-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    
+    // Essai 1 : Écriture dans public/uploads
+    // Essai 2 (Fallback si droits restreints) : Écriture dans /tmp/uploads
+    let saved = false;
+    const targetDirs = [
+      path.join(process.cwd(), "public", "uploads"),
+      path.join("/tmp", "uploads"),
+    ];
 
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    for (const dir of targetDirs) {
+      try {
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+        const filePath = path.join(dir, fileName);
+        fs.writeFileSync(filePath, buffer);
+        saved = true;
+        break;
+      } catch (err) {
+        console.warn(`Échec écriture dans ${dir}, essai du répertoire suivant:`, err);
+      }
     }
 
-    const filePath = path.join(uploadDir, fileName);
-    fs.writeFileSync(filePath, buffer);
+    if (!saved) {
+      throw new Error("Impossible d'écrire le fichier sur le disque (droits d'accès insuffisants)");
+    }
 
     const publicUrl = `/uploads/${fileName}`;
 
@@ -65,12 +85,11 @@ export async function POST(req: NextRequest) {
       message: "Image téléversée avec succès",
       url: publicUrl,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Erreur POST /api/upload:", error);
     return NextResponse.json(
-      { error: "Échec du téléversement de l'image." },
+      { error: error?.message || "Échec du téléversement de l'image." },
       { status: 500 }
     );
   }
 }
-
