@@ -64,3 +64,4 @@ test.describe("Accessibilité WCAG 2.2 & Lighthouse Audits", () => {
     await expect(modalDialog).not.toBeVisible();
   });
 });
+

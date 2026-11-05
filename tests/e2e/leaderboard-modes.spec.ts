@@ -46,3 +46,4 @@ test.describe("Classement & Multi-Rendering Next.js (CSR, SSR, SSG, Web Vitals)"
     await expect(page.locator("text=SSG (Static HTML)").first()).toBeVisible();
   });
 });
+

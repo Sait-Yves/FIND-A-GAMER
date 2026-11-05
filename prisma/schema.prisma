@@ -55,6 +55,12 @@ enum ParticipantStatus {
   KICKED
 }
 
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
 // ----------------------------------------------------
 // USER & PROFILE
 // ----------------------------------------------------
@@ -89,6 +95,10 @@ model User {
   // Relations Messagerie
   sentMessages     Message[]          @relation("MessageSender")
   conversations    ConversationMember[]
+
+  // Relations Amis
+  friends          Friendship[]       @relation("UserFriends")
+  friendOf         Friendship[]       @relation("UserFriendOf")
 
   @@index([username])
   @@index([reputationScore])
@@ -253,4 +263,24 @@ model Message {
   @@index([ticketId, createdAt])
   @@index([conversationId, createdAt])
   @@map("messages")
+}
+
+// ----------------------------------------------------
+// AMIS & RELATIONS SOCIALES (FRIENDS)
+// ----------------------------------------------------
+
+model Friendship {
+  id         String           @id @default(cuid())
+  userId     String
+  friendId   String
+  status     FriendshipStatus @default(ACCEPTED)
+  createdAt  DateTime         @default(now())
+
+  user       User             @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  friend     User             @relation("UserFriendOf", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+  @@map("friendships")
 }

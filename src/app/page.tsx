@@ -26,6 +26,9 @@ import {
   Layers,
   Sparkles,
   CheckCircle2,
+  UserPlus,
+  UserMinus,
+  X,
 } from "lucide-react";
 
 function ExplorerContent() {
@@ -121,6 +124,73 @@ function ExplorerContent() {
       if (chip === "mic") setMicFilter(true);
       if (chip === "18plus") setIs18PlusFilter(true);
       if (chip === "fairplay") setMicFilter(null);
+    }
+  };
+
+  // Gestion des amis
+  const [friends, setFriends] = useState<any[]>([]);
+  const [isAddFriendOpen, setIsAddFriendOpen] = useState(false);
+  const [friendInput, setFriendInput] = useState("");
+  const [friendError, setFriendError] = useState<string | null>(null);
+  const [friendSuccess, setFriendSuccess] = useState<string | null>(null);
+
+  const loadFriends = async () => {
+    try {
+      const res = await fetch("/api/friends");
+      const json = await res.json();
+      if (json.success && Array.isArray(json.friends)) {
+        setFriends(json.friends);
+      }
+    } catch (err) {
+      console.error("Erreur chargement amis:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadFriends();
+  }, []);
+
+  const handleAddFriend = async (pseudoToAdd?: string) => {
+    const target = (pseudoToAdd || friendInput).trim();
+    if (!target) return;
+    setFriendError(null);
+    setFriendSuccess(null);
+
+    try {
+      const res = await fetch("/api/friends", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: target }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Impossible d'ajouter cet ami");
+      }
+
+      setFriendSuccess(json.message);
+      setFriendInput("");
+      loadFriends();
+      setTimeout(() => {
+        setFriendSuccess(null);
+        setIsAddFriendOpen(false);
+      }, 1500);
+    } catch (err: any) {
+      setFriendError(err.message || "Erreur d'ajout");
+    }
+  };
+
+  const handleRemoveFriend = async (friendIdOrUsername: string) => {
+    try {
+      await fetch("/api/friends", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: friendIdOrUsername }),
+      });
+      setFriends((prev) =>
+        prev.filter((f) => f.username !== friendIdOrUsername && f.id !== friendIdOrUsername)
+      );
+    } catch (err) {
+      console.error("Erreur suppression ami:", err);
     }
   };
 
@@ -610,53 +680,88 @@ function ExplorerContent() {
                 </Link>
               </div>
 
-              {/* Widget 3: Amis en Ligne */}
+              {/* Widget 3: Amis & Relations */}
               <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-display font-bold tracking-wider text-on-surface-variant uppercase">
-                    Amis en Ligne
-                  </span>
-                  <span className="text-[10px] font-bold text-secondary bg-secondary/15 px-2 py-0.5 rounded-full">
-                    3 en ligne
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <Users className="w-4 h-4 text-primary" />
+                    <span className="text-[11px] font-display font-bold tracking-wider text-on-surface-variant uppercase">
+                      Mes Amis ({friends.length})
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsAddFriendOpen(true)}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-display font-bold border border-primary/30 transition-colors cursor-pointer"
+                    title="Ajouter un nouvel ami"
+                  >
+                    <UserPlus className="w-3 h-3" />
+                    <span>Ajouter</span>
+                  </button>
                 </div>
 
-                <div className="flex flex-col gap-2.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center font-display font-bold text-xs text-primary border border-primary/40">
-                        H8
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-white">@Hiroshi_89</span>
-                        <span className="text-[10px] text-primary">Valorant • En partie</span>
-                      </div>
+                <div className="flex flex-col gap-2">
+                  {friends.length === 0 ? (
+                    <div className="text-center py-4 text-xs text-on-surface-variant">
+                      <span>Aucun ami pour l'instant.</span>
+                      <button
+                        onClick={() => setIsAddFriendOpen(true)}
+                        className="block mt-1 text-primary font-bold hover:underline mx-auto"
+                      >
+                        + Ajouter un premier ami
+                      </button>
                     </div>
-                    <Link
-                      href="/messages"
-                      className="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface text-[10px] font-display font-bold text-white border border-surface-container-high transition-colors"
-                    >
-                      Vocal
-                    </Link>
-                  </div>
+                  ) : (
+                    friends.slice(0, 5).map((friend) => (
+                      <div
+                        key={friend.id || friend.username}
+                        className="flex items-center justify-between text-xs p-2 rounded-xl bg-surface-container/40 hover:bg-surface-container/70 border border-surface-container-high/40 transition-colors group"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="relative shrink-0">
+                            <img
+                              src={friend.avatarUrl || "/avatars/avatar-default.svg"}
+                              alt={friend.username}
+                              onError={(e) => {
+                                e.currentTarget.src = "/avatars/avatar-default.svg";
+                              }}
+                              className="w-8 h-8 rounded-lg object-cover bg-surface border border-surface-container-high"
+                            />
+                            {friend.isOnline && (
+                              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-primary border-2 border-surface animate-pulse" />
+                            )}
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <Link
+                              href={`/profile/${encodeURIComponent(friend.username)}`}
+                              className="font-semibold text-white truncate hover:text-primary transition-colors"
+                            >
+                              @{friend.username}
+                            </Link>
+                            <span className="text-[10px] text-on-surface-variant truncate">
+                              {friend.currentGame || (friend.isOnline ? "En ligne" : "Hors ligne")}
+                            </span>
+                          </div>
+                        </div>
 
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center font-display font-bold text-xs text-secondary border border-secondary/40">
-                        CF
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <Link
+                            href="/messages"
+                            className="px-2 py-1 rounded-lg bg-surface-container hover:bg-surface text-[10px] font-display font-bold text-white border border-surface-container-high transition-colors"
+                          >
+                            Vocal
+                          </Link>
+                          <button
+                            onClick={() => handleRemoveFriend(friend.username)}
+                            className="p-1 rounded-lg text-on-surface-variant hover:text-error hover:bg-error/15 transition-all opacity-60 group-hover:opacity-100 cursor-pointer"
+                            title={`Retirer @${friend.username} des amis`}
+                            aria-label={`Retirer @${friend.username} des amis`}
+                          >
+                            <UserMinus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-white">@Cynthia_F</span>
-                        <span className="text-[10px] text-on-surface-variant">En ligne • Dans le menu</span>
-                      </div>
-                    </div>
-                    <Link
-                      href="/messages"
-                      className="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface text-[10px] font-display font-bold text-white border border-surface-container-high transition-colors"
-                    >
-                      Inviter
-                    </Link>
-                  </div>
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -696,6 +801,100 @@ function ExplorerContent() {
         onClose={() => setIsCreateModalOpen(false)}
         onCreated={() => fetchTickets()}
       />
+
+      {/* Modale Ajouter un Ami */}
+      {isAddFriendOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in"
+        >
+          <div className="bg-surface-container border border-surface-container-high rounded-2xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
+              <div className="flex items-center gap-2">
+                <UserPlus className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-bold text-base text-white">
+                  Ajouter un Ami
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsAddFriendOpen(false)}
+                className="p-1 rounded-lg text-on-surface-variant hover:text-white hover:bg-surface-container-high cursor-pointer"
+                aria-label="Fermer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {friendError && (
+              <div className="p-3 rounded-xl bg-error/15 border border-error/30 text-error text-xs font-medium flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{friendError}</span>
+              </div>
+            )}
+
+            {friendSuccess && (
+              <div className="p-3 rounded-xl bg-primary/15 border border-primary/30 text-primary text-xs font-medium flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span>{friendSuccess}</span>
+              </div>
+            )}
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddFriend();
+              }}
+              className="flex flex-col gap-3"
+            >
+              <div>
+                <label
+                  htmlFor="add-friend-input"
+                  className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5"
+                >
+                  Pseudo du Joueur
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="add-friend-input"
+                    type="text"
+                    required
+                    value={friendInput}
+                    onChange={(e) => setFriendInput(e.target.value)}
+                    placeholder="Ex: SarahChill, AlexVortex..."
+                    className="flex-1 bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md cursor-pointer"
+                  >
+                    Ajouter
+                  </button>
+                </div>
+              </div>
+
+              {/* Suggestions rapides */}
+              <div className="flex flex-col gap-1.5 pt-2">
+                <span className="text-[11px] text-on-surface-variant">
+                  Joueurs recommandés :
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["SarahChill", "AlexVortex", "Valkyrie_FR", "Noxis_FPS"].map((pseudo) => (
+                    <button
+                      key={pseudo}
+                      type="button"
+                      onClick={() => handleAddFriend(pseudo)}
+                      className="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface border border-surface-container-high/60 text-[11px] font-medium text-white hover:text-primary transition-colors cursor-pointer"
+                    >
+                      + @{pseudo}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

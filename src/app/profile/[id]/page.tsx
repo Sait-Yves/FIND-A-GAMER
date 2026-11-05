@@ -5,7 +5,22 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Monitor, Gamepad2, Edit, Star, ShieldCheck, Award, Info, CheckCircle2, AlertTriangle, Users } from "lucide-react";
+import {
+  Monitor,
+  Gamepad2,
+  Edit,
+  Star,
+  ShieldCheck,
+  Award,
+  Info,
+  CheckCircle2,
+  AlertTriangle,
+  Users,
+  UserPlus,
+  UserMinus,
+  UserCheck,
+  Loader2,
+} from "lucide-react";
 
 export default function UserProfilePage() {
   const params = useParams();
@@ -112,6 +127,61 @@ export default function UserProfilePage() {
     loadUser();
   }, [rawId]);
 
+  // État et gestion de la relation d'amitié
+  const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [isFriendLoading, setIsFriendLoading] = useState<boolean>(false);
+  const [friendFeedback, setFriendFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkFriendStatus() {
+      try {
+        const res = await fetch(`/api/friends/status?username=${encodeURIComponent(user.username)}`);
+        const json = await res.json();
+        setIsFriend(!!json.isFriend);
+      } catch {
+        setIsFriend(false);
+      }
+    }
+    if (user.username) {
+      checkFriendStatus();
+    }
+  }, [user.username]);
+
+  const toggleFriendship = async () => {
+    setIsFriendLoading(true);
+    setFriendFeedback(null);
+    try {
+      if (isFriend) {
+        const res = await fetch("/api/friends", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: user.username }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          setIsFriend(false);
+          setFriendFeedback(`@${user.username} a été retiré de vos amis.`);
+        }
+      } else {
+        const res = await fetch("/api/friends", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: user.username }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          setIsFriend(true);
+          setFriendFeedback(`@${user.username} a été ajouté à vos amis !`);
+        }
+      }
+    } catch (e) {
+      console.error("Erreur amitié:", e);
+    } finally {
+      setIsFriendLoading(false);
+      setTimeout(() => setFriendFeedback(null), 3000);
+    }
+  };
+
   const BADGE_DETAILS: Record<string, { label: string; color: string; desc: string }> = {
     FAIR_PLAY: { label: "Fair-Play Exemplaire", color: "text-primary border-primary/40 bg-primary/10", desc: "Respectueux des règles et coéquipiers" },
     GOOD_COMMUNICATION: { label: "Bonne Communication", color: "text-tertiary border-tertiary/40 bg-tertiary/10", desc: "Callouts précis, vocal clair" },
@@ -182,9 +252,9 @@ export default function UserProfilePage() {
                 </div>
               </div>
 
-              {/* Edit / Action Button */}
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                {!currentUser || currentUser.username === user.username ? (
+              {/* Edit / Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+                {currentUser?.username === user.username || (!currentUser && (rawId === "AlexVortex" || rawId === "me")) ? (
                   <Link
                     href="/profile/edit"
                     className="flex-1 sm:flex-none text-center px-4 py-2 bg-surface-container hover:bg-surface-container-high text-white text-xs font-display font-bold rounded-xl border border-surface-container-high flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
@@ -193,16 +263,61 @@ export default function UserProfilePage() {
                     Modifier le Profil
                   </Link>
                 ) : (
-                  <Link
-                    href="/messages"
-                    className="flex-1 sm:flex-none text-center px-4 py-2 bg-primary hover:bg-primary-fixed text-on-primary text-xs font-display font-bold rounded-xl shadow-[0_0_12px_rgba(78,222,163,0.3)] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Users className="w-3.5 h-3.5" />
-                    Envoyer un Message
-                  </Link>
+                  <>
+                    <button
+                      type="button"
+                      onClick={toggleFriendship}
+                      disabled={isFriendLoading}
+                      aria-label={isFriend ? `Retirer ${user.username} de vos amis` : `Ajouter ${user.username} en ami`}
+                      className={`group flex-1 sm:flex-none px-4 py-2 text-xs font-display font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 ${
+                        isFriend
+                          ? "bg-secondary/15 hover:bg-error/20 text-secondary hover:text-error border border-secondary/30 hover:border-error/40"
+                          : "bg-primary hover:bg-primary-fixed text-on-primary shadow-[0_0_12px_rgba(78,222,163,0.3)]"
+                      }`}
+                    >
+                      {isFriendLoading ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : isFriend ? (
+                        <>
+                          <UserCheck className="w-3.5 h-3.5 group-hover:hidden" />
+                          <UserMinus className="w-3.5 h-3.5 hidden group-hover:inline-block" />
+                        </>
+                      ) : (
+                        <UserPlus className="w-3.5 h-3.5" />
+                      )}
+                      {isFriend ? (
+                        <>
+                          <span className="group-hover:hidden">Ami ✓</span>
+                          <span className="hidden group-hover:inline">Retirer</span>
+                        </>
+                      ) : (
+                        "Ajouter en ami"
+                      )}
+                    </button>
+
+                    <Link
+                      href={`/messages?user=${encodeURIComponent(user.username)}`}
+                      className="flex-1 sm:flex-none text-center px-4 py-2 bg-surface-container hover:bg-surface-container-high text-white text-xs font-display font-bold rounded-xl border border-surface-container-high flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      aria-label={`Envoyer un message à ${user.username}`}
+                    >
+                      <Users className="w-3.5 h-3.5 text-primary" />
+                      Envoyer un Message
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
+
+            {/* Friend action feedback notification */}
+            {friendFeedback && (
+              <div
+                role="status"
+                className="mt-3 text-xs text-primary bg-primary/10 border border-primary/20 px-3.5 py-2 rounded-xl flex items-center gap-2 animate-fade-in"
+              >
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-primary" />
+                <span>{friendFeedback}</span>
+              </div>
+            )}
 
             {/* Bio text */}
             <p className="mt-5 text-xs text-on-surface leading-relaxed max-w-3xl">
