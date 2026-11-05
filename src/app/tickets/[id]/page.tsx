@@ -29,6 +29,8 @@ import {
   ArrowRight,
   ShieldAlert,
 } from "lucide-react";
+import { VoiceRoomWidget } from "@/components/voice/VoiceRoomWidget";
+import { VoiceParticipant } from "@/hooks/useVoiceCall";
 
 export default function TicketRoomPage() {
   const router = useRouter();
@@ -574,59 +576,36 @@ export default function TicketRoomPage() {
                 </div>
               </div>
 
-              {/* WebRTC Squad Voice Chat Card */}
-              <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    <h3 className="font-display font-bold text-xs text-white uppercase tracking-wider">
-                      Vocal d'Escouade WebRTC
-                    </h3>
-                    <span className="text-[10px] font-mono text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
-                      Frankfurt RTC-04
-                    </span>
-                  </div>
-                  <button className="text-[11px] font-medium text-primary hover:underline flex items-center gap-1 cursor-pointer">
-                    <Sliders className="w-3.5 h-3.5" />
-                    Tester les périphériques audio
-                  </button>
-                </div>
-
-                {/* Audio Controls Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container border border-surface-container-high">
-                    <div className="flex items-center gap-2.5">
-                      <Volume2 className="w-5 h-5 text-primary animate-pulse" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-semibold text-white">@{ticket.host?.username}</span>
-                        <span className="text-[10px] text-primary">Micro ouvert</span>
-                      </div>
-                    </div>
-                    <input
-                      type="range"
-                      defaultValue={85}
-                      className="w-20 accent-primary cursor-pointer"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container border border-surface-container-high">
-                    <div className="flex items-center gap-2.5">
-                      <Mic className="w-5 h-5 text-primary" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-semibold text-white">
-                          @{currentUser?.username || "Vous"}
-                        </span>
-                        <span className="text-[10px] text-on-surface-variant">Détection vocale</span>
-                      </div>
-                    </div>
-                    <input
-                      type="range"
-                      defaultValue={90}
-                      className="w-20 accent-primary cursor-pointer"
-                    />
-                  </div>
-                </div>
-              </div>
+              {/* WebRTC Squad Voice Chat Widget Fonctionnel */}
+              <VoiceRoomWidget
+                roomName={ticket.title}
+                defaultMembers={[
+                  ...(ticket.host && ticket.host.id !== currentUser?.id
+                    ? [
+                        {
+                          id: ticket.host.id,
+                          username: ticket.host.username,
+                          avatarUrl: ticket.host.avatarUrl || "/avatars/avatar-default.svg",
+                          isSpeaking: false,
+                          isMuted: false,
+                          volume: 85,
+                        },
+                      ]
+                    : []),
+                  ...((ticket.participants || [])
+                    .filter((p: any) => p.user?.id !== currentUser?.id && p.user?.id !== ticket.host?.id)
+                    .map((p: any) => ({
+                      id: p.user?.id || p.id,
+                      username: p.user?.username || "Membre",
+                      avatarUrl: p.user?.avatarUrl || "/avatars/avatar-default.svg",
+                      isSpeaking: false,
+                      isMuted: false,
+                      volume: 80,
+                    }))),
+                ]}
+                currentUsername={currentUser?.username || "Vous"}
+                currentUserAvatar={currentUser?.avatarUrl || "/avatars/avatar-default.svg"}
+              />
             </div>
 
             {/* Right Column (Squad Chat) - 5 cols */}
