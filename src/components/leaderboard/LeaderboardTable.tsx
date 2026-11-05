@@ -46,16 +46,18 @@ export function LeaderboardTable({ players, loading = false }: LeaderboardTableP
   return (
     <div className="bg-surface-container-low rounded-2xl border border-surface-container-high overflow-hidden shadow-md">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+        <table className="w-full text-left text-xs" aria-label="Tableau du classement fair-play des joueurs">
           <thead className="bg-surface-container border-b border-surface-container-high text-[11px] font-display font-bold uppercase text-on-surface-variant tracking-wider">
             <tr>
-              <th className="py-3 px-4 w-16 text-center">Rang</th>
-              <th className="py-3 px-4">Joueur & Profil</th>
-              <th className="py-3 px-4 hidden sm:table-cell">Jeu & Plateforme</th>
-              <th className="py-3 px-4 hidden md:table-cell">Badges Communauté</th>
-              <th className="py-3 px-4 text-center">Parties</th>
-              <th className="py-3 px-4 text-right">Score Karma</th>
-              <th className="py-3 px-4 w-12 text-center"></th>
+              <th scope="col" className="py-3 px-4 w-16 text-center">Rang</th>
+              <th scope="col" className="py-3 px-4">Joueur & Profil</th>
+              <th scope="col" className="py-3 px-4 hidden sm:table-cell">Jeu & Plateforme</th>
+              <th scope="col" className="py-3 px-4 hidden md:table-cell">Badges Communauté</th>
+              <th scope="col" className="py-3 px-4 text-center">Parties</th>
+              <th scope="col" className="py-3 px-4 text-right">Score Karma</th>
+              <th scope="col" className="py-3 px-4 w-12 text-center">
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-surface-container-high">
@@ -172,9 +174,10 @@ export function LeaderboardTable({ players, loading = false }: LeaderboardTableP
                     <Link
                       href={`/profile/${encodeURIComponent(player.username)}`}
                       className="p-1.5 rounded-lg text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-colors inline-block"
-                      title="Voir le profil"
+                      title={`Voir le profil de ${player.username}`}
+                      aria-label={`Voir le profil de ${player.username}`}
                     >
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </td>
                 </tr>

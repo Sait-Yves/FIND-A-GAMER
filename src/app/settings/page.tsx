@@ -59,7 +59,11 @@ export default function SettingsPage() {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Container avec espacement supérieur correct (pt-24) pour ne pas être masqué par la navbar */}
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-4xl mx-auto flex flex-col gap-6">
           {/* Header */}
           <div className="p-5 sm:p-6 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">

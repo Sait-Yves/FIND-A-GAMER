@@ -173,7 +173,11 @@ export default function ProfileEditPage() {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Container avec espacement supérieur correct (pt-24) pour ne jamais masquer le haut sous la navbar */}
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-3xl mx-auto flex flex-col gap-6">
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-surface-container-high">

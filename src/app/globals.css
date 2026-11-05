@@ -63,3 +63,26 @@
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+/* ========================================================================= */
+/* Accessibilité WCAG 2.2 (Focus Visible & Prefers Reduced Motion)          */
+/* ========================================================================= */
+
+/* SC 2.4.7 Focus Visible & SC 2.4.11 Focus Appearance */
+:focus-visible {
+  outline: 2px solid #4edea3 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 10px rgba(78, 222, 163, 0.4);
+}
+
+/* SC 2.2.2 Pause, Stop, Hide (Respect des préférences de réduction d'animation) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

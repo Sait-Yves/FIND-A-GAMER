@@ -231,9 +231,13 @@ export default function TicketRoomPage() {
       <div className="min-h-screen bg-surface flex flex-col overflow-x-hidden">
         <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen flex items-center justify-center">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen flex items-center justify-center focus:outline-none"
+        >
           <div className="flex flex-col items-center gap-3">
-            <RefreshCw className="w-8 h-8 text-primary animate-spin" />
+            <RefreshCw className="w-8 h-8 text-primary animate-spin" aria-hidden="true" />
             <p className="text-xs font-display font-bold text-white tracking-wider uppercase">
               Connexion au Salon LFG...
             </p>
@@ -248,9 +252,13 @@ export default function TicketRoomPage() {
       <div className="min-h-screen bg-surface flex flex-col overflow-x-hidden">
         <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen flex items-center justify-center">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen flex items-center justify-center focus:outline-none"
+        >
           <div className="p-8 max-w-md w-full bg-surface-container-low rounded-2xl border border-surface-container-high text-center flex flex-col items-center gap-4">
-            <AlertCircle className="w-12 h-12 text-error" />
+            <AlertCircle className="w-12 h-12 text-error" aria-hidden="true" />
             <h1 className="text-lg font-display font-bold text-white">Salon Introuvable</h1>
             <p className="text-xs text-on-surface-variant leading-relaxed">
               {error || "Ce ticket n'existe plus ou a été clôturé par son hôte."}
@@ -273,7 +281,11 @@ export default function TicketRoomPage() {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content */}
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-7xl mx-auto flex flex-col gap-5 w-full">
           {/* ========================================================================= */}
           {/* TICKET TOP HEADER: Matchmaking Squad Details & Quick Actions */}

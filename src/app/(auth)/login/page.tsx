@@ -68,12 +68,13 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="login-email" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Adresse Email
             </label>
             <div className="relative flex items-center">
-              <Mail className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" />
+              <Mail className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" aria-hidden="true" />
               <input
+                id="login-email"
                 type="email"
                 required
                 value={email}
@@ -85,12 +86,13 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="login-password" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Mot de passe
             </label>
             <div className="relative flex items-center">
-              <Lock className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" />
+              <Lock className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" aria-hidden="true" />
               <input
+                id="login-password"
                 type="password"
                 required
                 value={password}

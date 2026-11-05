@@ -135,7 +135,11 @@ function ExplorerContent() {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content Area avec pt-24 et pb-12 pour dégager la navbar fixe sans conflit de padding */}
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-7xl mx-auto flex flex-col gap-6 w-full">
           {/* ========================================================================= */}
           {/* 1. Live Telemetry Strip */}
@@ -143,21 +147,21 @@ function ExplorerContent() {
           <section className="flex flex-wrap items-center justify-between gap-3 p-4 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-md">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-ping" />
-                <span className="font-display font-bold text-white tracking-wider uppercase text-[11px] flex items-center gap-1.5">
-                  <Radio className="w-4 h-4 text-primary" />
+                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-ping" aria-hidden="true" />
+                <h1 className="font-display font-bold text-white tracking-wider uppercase text-[11px] flex items-center gap-1.5 m-0">
+                  <Radio className="w-4 h-4 text-primary" aria-hidden="true" />
                   RADAR DE RECHERCHE
-                </span>
+                </h1>
               </div>
-              <span className="text-on-surface-variant hidden sm:inline">•</span>
+              <span className="text-on-surface-variant hidden sm:inline" aria-hidden="true">•</span>
               <span className="text-on-surface text-[11px] sm:text-xs">
                 <strong className="text-primary font-bold">3 842</strong> Joueurs en ligne
               </span>
-              <span className="text-on-surface-variant hidden sm:inline">•</span>
+              <span className="text-on-surface-variant hidden sm:inline" aria-hidden="true">•</span>
               <span className="text-on-surface text-[11px] sm:text-xs">
                 <strong className="text-tertiary font-bold">{tickets.length}</strong> Salons actifs
               </span>
-              <span className="text-on-surface-variant hidden md:inline">•</span>
+              <span className="text-on-surface-variant hidden md:inline" aria-hidden="true">•</span>
               <span className="text-on-surface text-[11px] sm:text-xs hidden md:inline">
                 <strong className="text-secondary font-mono">~42s</strong> Matchmaking médian
               </span>
@@ -165,7 +169,7 @@ function ExplorerContent() {
 
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30">
-                <Radio className="w-3.5 h-3.5 text-primary" />
+                <Radio className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
                 <span className="text-[10px] font-bold tracking-wider text-primary uppercase">
                   Flux Temps-Réel
                 </span>
@@ -173,9 +177,10 @@ function ExplorerContent() {
               <button
                 onClick={() => fetchTickets()}
                 title="Actualiser les salons"
+                aria-label="Actualiser la liste des salons"
                 className="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all cursor-pointer"
               >
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           </section>
@@ -183,7 +188,7 @@ function ExplorerContent() {
           {/* ========================================================================= */}
           {/* 2. Quick Game Selector Strip */}
           {/* ========================================================================= */}
-          <div className="w-full overflow-x-auto pb-1 scrollbar-none">
+          <div className="w-full overflow-x-auto pb-1 scrollbar-none" role="toolbar" aria-label="Filtrer par jeu">
             <div className="flex items-center gap-2.5 shrink-0">
               {games.map((game) => {
                 const isSelected = selectedGame === game.name;
@@ -192,6 +197,7 @@ function ExplorerContent() {
                   <button
                     key={game.name}
                     onClick={() => setSelectedGame(game.name)}
+                    aria-pressed={isSelected}
                     className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-display font-semibold transition-all shrink-0 cursor-pointer ${
                       isSelected
                         ? "bg-surface-container-high text-white border-2 border-primary shadow-[0_0_14px_rgba(78,222,163,0.25)]"
@@ -202,6 +208,7 @@ function ExplorerContent() {
                       className={`w-4 h-4 ${
                         isSelected ? "text-primary" : "text-on-surface-variant"
                       }`}
+                      aria-hidden="true"
                     />
                     <span>{game.name}</span>
                     <span
@@ -222,13 +229,14 @@ function ExplorerContent() {
           {/* ========================================================================= */}
           {/* 3. Filter Controls & Quick Chips */}
           {/* ========================================================================= */}
-          <section className="flex flex-col gap-3 p-4 sm:p-5 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-md">
+          <section className="flex flex-col gap-3 p-4 sm:p-5 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-md" aria-label="Options de filtrage avancé">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
-                <label className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
+                <label htmlFor="filter-mode-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Mode de Jeu
                 </label>
                 <select
+                  id="filter-mode-select"
                   value={modeFilter}
                   onChange={(e) => setModeFilter(e.target.value)}
                   className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
@@ -241,10 +249,11 @@ function ExplorerContent() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
+                <label htmlFor="filter-platform-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Plateforme
                 </label>
                 <select
+                  id="filter-platform-select"
                   value={platformFilter}
                   onChange={(e) => setPlatformFilter(e.target.value)}
                   className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
@@ -257,10 +266,14 @@ function ExplorerContent() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
+                <label htmlFor="filter-region-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Langue & Région
                 </label>
-                <select className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary">
+                <select
+                  id="filter-region-select"
+                  aria-label="Langue et région"
+                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
+                >
                   <option>Français & Anglais (Europe)</option>
                   <option>Français uniquement (100% FR)</option>
                   <option>Anglais (Global EU)</option>
@@ -268,10 +281,14 @@ function ExplorerContent() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
+                <label htmlFor="filter-rank-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Niveau / Rang
                 </label>
-                <select className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary">
+                <select
+                  id="filter-rank-select"
+                  aria-label="Niveau ou rang minimum"
+                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
+                >
                   <option>Tous niveaux acceptés</option>
                   <option>Diamant II+ Minimum</option>
                   <option>Platine / Master</option>
@@ -282,52 +299,56 @@ function ExplorerContent() {
 
             {/* Quick Chips & Sorting */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-surface-container-high/60">
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtres rapides">
                 <button
                   type="button"
                   onClick={() => toggleChip("mic")}
+                  aria-pressed={activeChip === "mic"}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-medium transition-all cursor-pointer ${
                     activeChip === "mic"
                       ? "bg-primary/20 text-primary border border-primary shadow-[0_0_8px_rgba(78,222,163,0.3)]"
                       : "bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-white border border-surface-container-high"
                   }`}
                 >
-                  <Mic className="w-3.5 h-3.5" />
+                  <Mic className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>+ Micro requis</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => toggleChip("18plus")}
+                  aria-pressed={activeChip === "18plus"}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-medium transition-all cursor-pointer ${
                     activeChip === "18plus"
                       ? "bg-error/20 text-error border border-error shadow-[0_0_8px_rgba(255,180,171,0.3)]"
                       : "bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-white border border-surface-container-high"
                   }`}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-error" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true" />
                   <span>+18 Seulement</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => toggleChip("fairplay")}
+                  aria-pressed={activeChip === "fairplay"}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-medium transition-all cursor-pointer ${
                     activeChip === "fairplay"
                       ? "bg-tertiary/20 text-tertiary border border-tertiary shadow-[0_0_8px_rgba(76,215,246,0.3)]"
                       : "bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-white border border-surface-container-high"
                   }`}
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-tertiary" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-tertiary" aria-hidden="true" />
                   <span>Fair-play 4.5+ ★</span>
                 </button>
               </div>
 
               {/* Sorter */}
-              <div className="flex items-center gap-2 text-xs text-on-surface-variant">
+              <div className="flex items-center gap-2 text-xs text-on-surface-variant" role="group" aria-label="Trier par">
                 <span>Trier par :</span>
                 <button
                   onClick={() => setSortBy("recent")}
+                  aria-pressed={sortBy === "recent"}
                   className={`px-2 py-1 rounded transition-colors cursor-pointer ${
                     sortBy === "recent"
                       ? "bg-surface-container-high text-primary font-bold"
@@ -336,9 +357,10 @@ function ExplorerContent() {
                 >
                   Plus récents
                 </button>
-                <span>•</span>
+                <span aria-hidden="true">•</span>
                 <button
                   onClick={() => setSortBy("fast")}
+                  aria-pressed={sortBy === "fast"}
                   className={`px-2 py-1 rounded transition-colors cursor-pointer ${
                     sortBy === "fast"
                       ? "bg-surface-container-high text-primary font-bold"
@@ -347,9 +369,10 @@ function ExplorerContent() {
                 >
                   Remplissage rapide
                 </button>
-                <span>•</span>
+                <span aria-hidden="true">•</span>
                 <button
                   onClick={() => setSortBy("ping")}
+                  aria-pressed={sortBy === "ping"}
                   className={`px-2 py-1 rounded transition-colors cursor-pointer ${
                     sortBy === "ping"
                       ? "bg-surface-container-high text-primary font-bold"

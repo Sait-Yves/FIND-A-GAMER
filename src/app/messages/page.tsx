@@ -280,7 +280,11 @@ export default function MessagesPage() {
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-7xl mx-auto flex flex-col gap-5">
           {/* Top Banner */}
           <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
@@ -571,6 +575,7 @@ export default function MessagesPage() {
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                   placeholder={`Envoyer un message dans ${activeChannel.name}...`}
+                  aria-label="Rédiger un message pour ce salon"
                   className="flex-1 bg-surface-container-low border border-surface-container-high rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
                 />
                 <button

@@ -81,17 +81,25 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          onKeyDown={(e) => {
+            if (e.key === "Escape" || e.key === "Enter") onClose?.();
+          }}
+          tabIndex={0}
+          role="button"
+          aria-label="Fermer le menu latéral"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity cursor-pointer"
         />
       )}
 
       <aside
+        role="navigation"
+        aria-label="Navigation principale"
         className={`fixed left-0 top-16 bottom-0 w-72 bg-surface-container-lowest border-r border-surface-container-high/80 z-40 flex flex-col justify-between py-4 px-3 transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         {/* Navigation Links */}
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-1" aria-label="Rubriques">
           {navItems.map((item) => {
             const isActive = item.active;
             const Icon = item.Icon;
@@ -100,6 +108,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 key={item.label}
                 href={item.href}
                 onClick={onClose}
+                aria-current={isActive ? "page" : undefined}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-display font-medium tracking-wide transition-all ${
                   isActive
                     ? "bg-primary-container/20 text-primary border border-primary/40 shadow-[0_0_12px_rgba(78,222,163,0.15)]"
@@ -111,6 +120,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                     className={`w-4 h-4 ${
                       isActive ? "text-primary" : "text-on-surface-variant"
                     }`}
+                    aria-hidden="true"
                   />
                   <span>{item.label}</span>
                 </div>
@@ -126,9 +136,10 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           {/* Bouton Déconnexion dans la Sidebar */}
           <button
             onClick={handleLogout}
+            aria-label="Se déconnecter de votre compte"
             className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-display font-medium tracking-wide text-error/80 hover:text-error hover:bg-error/10 transition-colors mt-2 border border-transparent hover:border-error/20 cursor-pointer text-left"
           >
-            <LogOut className="w-4 h-4 text-error" />
+            <LogOut className="w-4 h-4 text-error" aria-hidden="true" />
             <span>Déconnexion</span>
           </button>
         </nav>

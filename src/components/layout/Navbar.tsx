@@ -249,9 +249,9 @@ export function Navbar({
       </div>
 
       {/* Center Search Bar with Autocomplete Dropdown */}
-      <div className="flex-1 max-w-xl mx-2 sm:mx-4 relative" ref={searchContainerRef}>
+      <div className="flex-1 max-w-xl mx-2 sm:mx-4 relative" ref={searchContainerRef} role="search">
         <div className="relative flex items-center w-full">
-          <Search className="w-4 h-4 absolute left-3 text-on-surface-variant/70 pointer-events-none" />
+          <Search className="w-4 h-4 absolute left-3 text-on-surface-variant/70 pointer-events-none" aria-hidden="true" />
           <input
             ref={searchInputRef}
             type="text"
@@ -262,22 +262,27 @@ export function Navbar({
             }}
             onKeyDown={handleSearchKeyDown}
             placeholder="Rechercher un salon, un joueur... [Ctrl+K]"
+            aria-label="Rechercher un salon ou un joueur"
+            role="combobox"
+            aria-expanded={isDropdownOpen}
+            aria-autocomplete="list"
             className="w-full bg-surface-container-low hover:bg-surface-container text-xs sm:text-sm text-on-surface placeholder:text-on-surface-variant/60 rounded-xl pl-9 sm:pl-10 pr-16 sm:pr-20 py-2 border border-surface-container-high focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/40 transition-all font-sans"
           />
 
           <div className="absolute right-2.5 flex items-center gap-1">
             {isSearching ? (
-              <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" aria-hidden="true" />
             ) : localQuery ? (
               <button
                 onClick={handleClearSearch}
                 className="p-1 text-on-surface-variant hover:text-white rounded-md transition-colors"
                 title="Effacer la recherche"
+                aria-label="Effacer la recherche"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             ) : null}
-            <kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] font-mono text-on-surface-variant/70 bg-surface-container border border-surface-container-high rounded pointer-events-none">
+            <kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] font-mono text-on-surface-variant/70 bg-surface-container border border-surface-container-high rounded pointer-events-none" aria-hidden="true">
               ⌘K
             </kbd>
           </div>
@@ -285,7 +290,12 @@ export function Navbar({
 
         {/* Live Search Autocomplete Dropdown */}
         {isDropdownOpen && localQuery.trim().length > 0 && (
-          <div className="absolute top-full mt-2.5 left-0 right-0 bg-[#121620] border border-[#2b3140] rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] p-3 z-[100] max-h-[75vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150">
+          <div
+            id="search-results-dropdown"
+            role="listbox"
+            aria-label="Résultats de recherche"
+            className="absolute top-full mt-2.5 left-0 right-0 bg-[#121620] border border-[#2b3140] rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] p-3 z-[100] max-h-[75vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150"
+          >
             {isSearching && !hasResults ? (
               <div className="py-6 px-4 text-center flex flex-col items-center justify-center gap-2 text-xs text-on-surface-variant">
                 <Loader2 className="w-5 h-5 text-primary animate-spin" />
@@ -445,22 +455,24 @@ export function Navbar({
         <button
           onClick={() => setIsMicActive(!isMicActive)}
           title={isMicActive ? "Microphone actif" : "Microphone muet"}
+          aria-label={isMicActive ? "Couper le microphone" : "Activer le microphone"}
           className={`hidden sm:flex w-9 h-9 rounded-xl border items-center justify-center transition-colors cursor-pointer ${
             isMicActive
               ? "bg-surface-container-low text-primary border-surface-container-high"
               : "bg-error/20 text-error border-error/40"
           }`}
         >
-          <Mic className="w-4 h-4" />
+          <Mic className="w-4 h-4" aria-hidden="true" />
         </button>
 
         {/* Notification Bell */}
         <Link
           href="/messages"
           title="Messagerie & Alertes"
+          aria-label="Accéder à la messagerie et aux alertes"
           className="relative w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container border border-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-white transition-colors"
         >
-          <Bell className="w-4 h-4" />
+          <Bell className="w-4 h-4" aria-hidden="true" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary" />
         </Link>
 
@@ -469,6 +481,9 @@ export function Navbar({
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menu du profil joueur"
+              aria-haspopup="menu"
+              aria-expanded={isMenuOpen}
               className="flex items-center gap-2 pl-1.5 sm:pl-2 border-l border-surface-container-high hover:opacity-90 transition-opacity cursor-pointer"
             >
               <div className="relative">
@@ -491,12 +506,16 @@ export function Navbar({
                 </span>
                 <span className="text-[10px] font-medium text-primary">En Ligne</span>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-on-surface-variant hidden sm:block" />
+              <ChevronDown className="w-3.5 h-3.5 text-on-surface-variant hidden sm:block" aria-hidden="true" />
             </button>
 
             {/* Dropdown Menu */}
             {isMenuOpen && (
-              <div className="absolute right-0 top-12 w-56 bg-surface-container border border-surface-container-high rounded-2xl shadow-2xl p-2 z-50 flex flex-col gap-1 animate-in fade-in duration-150">
+              <div
+                role="menu"
+                aria-label="Options du profil"
+                className="absolute right-0 top-12 w-56 bg-surface-container border border-surface-container-high rounded-2xl shadow-2xl p-2 z-50 flex flex-col gap-1 animate-in fade-in duration-150"
+              >
                 <div className="p-2.5 border-b border-surface-container-high flex flex-col">
                   <span className="font-display font-bold text-xs text-white">
                     @{currentUser.username}

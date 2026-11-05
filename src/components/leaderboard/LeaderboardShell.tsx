@@ -12,7 +12,11 @@ export function LeaderboardShell({ children }: { children: React.ReactNode }) {
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
           {children}
         </div>

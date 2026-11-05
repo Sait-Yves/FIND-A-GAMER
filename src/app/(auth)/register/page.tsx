@@ -76,12 +76,13 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="reg-username" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Pseudo Gamer *
             </label>
             <div className="relative flex items-center">
-              <User className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" />
+              <User className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" aria-hidden="true" />
               <input
+                id="reg-username"
                 type="text"
                 required
                 minLength={3}
@@ -94,12 +95,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="reg-email" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Adresse Email *
             </label>
             <div className="relative flex items-center">
-              <Mail className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" />
+              <Mail className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" aria-hidden="true" />
               <input
+                id="reg-email"
                 type="email"
                 required
                 value={email}
@@ -111,12 +113,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="reg-password" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Mot de passe * (min. 6 caractères)
             </label>
             <div className="relative flex items-center">
-              <Lock className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" />
+              <Lock className="w-4 h-4 absolute left-3.5 text-on-surface-variant/60 pointer-events-none" aria-hidden="true" />
               <input
+                id="reg-password"
                 type="password"
                 required
                 minLength={6}
@@ -130,10 +133,11 @@ export default function RegisterPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <label htmlFor="reg-platform" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Plateforme
               </label>
               <select
+                id="reg-platform"
                 value={primaryPlatform}
                 onChange={(e) => setPrimaryPlatform(e.target.value)}
                 className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
@@ -147,10 +151,11 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <label htmlFor="reg-player-type" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Style de jeu
               </label>
               <select
+                id="reg-player-type"
                 value={playerType}
                 onChange={(e) => setPlayerType(e.target.value)}
                 className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"

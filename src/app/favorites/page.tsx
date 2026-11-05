@@ -82,13 +82,17 @@ export default function FavoritesPage() {
       <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:pl-80 w-full min-h-screen transition-all focus:outline-none"
+      >
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 sm:p-6 bg-surface-container-low rounded-2xl border border-surface-container-high shadow-lg">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <Gamepad2 className="w-5 h-5 text-primary" />
+                <Gamepad2 className="w-5 h-5 text-primary" aria-hidden="true" />
                 <span className="text-xs font-display font-bold uppercase tracking-wider text-primary">
                   Bibliothèque Gaming RAWG
                 </span>
@@ -107,6 +111,7 @@ export default function FavoritesPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Filtrer un jeu..."
+                aria-label="Filtrer un jeu par son titre"
                 className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
               />
             </div>

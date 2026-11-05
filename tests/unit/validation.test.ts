@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { CreateTicketSchema, CreateReviewSchema } from "@/lib/validations";
+import {
+  CreateTicketSchema,
+  CreateReviewSchema,
+  UpdateProfileSchema,
+  SendMessageSchema,
+  PlatformSchema,
+} from "@/lib/validations";
 
 describe("Validation Zod - Tickets & Reviews", () => {
   it("valide la création d'un ticket avec des données correctes", () => {
@@ -68,5 +74,45 @@ describe("Validation Zod - Tickets & Reviews", () => {
     };
     const resultLow = CreateReviewSchema.safeParse(tooLowReview);
     expect(resultLow.success).toBe(false);
+  });
+
+  it("valide la mise à jour de profil utilisateur et les plateformes", () => {
+    const validProfile = {
+      bio: "Joueur compétitif Valorant & CS2",
+      age: 24,
+      primaryPlatform: "PC",
+      playerType: "COMPETITIVE",
+    };
+    const result = UpdateProfileSchema.safeParse(validProfile);
+    expect(result.success).toBe(true);
+
+    const invalidAge = {
+      age: 10, // Minimum 13 ans
+    };
+    const resultInvalid = UpdateProfileSchema.safeParse(invalidAge);
+    expect(resultInvalid.success).toBe(false);
+
+    expect(PlatformSchema.safeParse("PC").success).toBe(true);
+    expect(PlatformSchema.safeParse("GAME_BOY").success).toBe(false);
+  });
+
+  it("valide l'envoi d'un message d'escouade", () => {
+    const validMsg = {
+      content: "Prêt à drop sur Olympus !",
+      ticketId: "ticket-42",
+    };
+    const result = SendMessageSchema.safeParse(validMsg);
+    expect(result.success).toBe(true);
+
+    const emptyMsg = {
+      content: "",
+      ticketId: "ticket-42",
+    };
+    expect(SendMessageSchema.safeParse(emptyMsg).success).toBe(false);
+
+    const noTargetMsg = {
+      content: "Hello monde",
+    };
+    expect(SendMessageSchema.safeParse(noTargetMsg).success).toBe(false);
   });
 });

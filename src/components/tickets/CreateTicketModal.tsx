@@ -135,35 +135,45 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="create-ticket-modal-title"
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+    >
       <div className="relative w-full max-w-2xl bg-surface-container border border-surface-container-high rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
           <div className="flex items-center gap-2">
-            <PlusCircle className="w-6 h-6 text-primary" />
-            <h2 className="text-lg font-display font-bold text-white tracking-wide">
+            <PlusCircle className="w-6 h-6 text-primary" aria-hidden="true" />
+            <h2 id="create-ticket-modal-title" className="text-lg font-display font-bold text-white tracking-wide">
               Créer un Salon de Jeu (Ticket LFG)
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-white flex items-center justify-center transition-colors"
+            aria-label="Fermer la boîte de création de salon"
+            className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-error/10 border border-error/30 text-error text-xs font-medium">
+          <div className="p-3 rounded-xl bg-error/10 border border-error/30 text-error text-xs font-medium" role="alert">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="create-ticket-title" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Titre du Salon *
             </label>
             <input
+              id="create-ticket-title"
               type="text"
               required
               minLength={5}
@@ -177,10 +187,11 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <label htmlFor="create-ticket-game" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Jeu Vidéo *
               </label>
               <select
+                id="create-ticket-game"
                 value={selectedGameName}
                 onChange={(e) => handleGameChange(e.target.value)}
                 className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-primary focus:outline-none"
@@ -194,10 +205,11 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
             </div>
 
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <label htmlFor="create-ticket-maxplayers" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Capacité Max (Joueurs) *
               </label>
               <input
+                id="create-ticket-maxplayers"
                 type="number"
                 min={2}
                 max={32}
@@ -209,10 +221,11 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
           </div>
 
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="create-ticket-desc" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Description & Objectifs *
             </label>
             <textarea
+              id="create-ticket-desc"
               required
               minLength={10}
               maxLength={2000}
@@ -226,10 +239,11 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <label htmlFor="create-ticket-platform" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Plateforme
               </label>
               <select
+                id="create-ticket-platform"
                 value={targetPlatform}
                 onChange={(e) => setTargetPlatform(e.target.value)}
                 className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:border-primary focus:outline-none"
@@ -242,10 +256,11 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
             </div>
 
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <label htmlFor="create-ticket-playertype" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Style Recherché
               </label>
               <select
+                id="create-ticket-playertype"
                 value={requiredPlayerType}
                 onChange={(e) => setRequiredPlayerType(e.target.value)}
                 className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:border-primary focus:outline-none"
@@ -258,9 +273,9 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
             </div>
 
             <div>
-              <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+              <span className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Règles de salon
-              </label>
+              </span>
               <div className="flex flex-col gap-2 pt-1">
                 <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
                   <input
@@ -285,10 +300,11 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
           </div>
 
           <div>
-            <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+            <label htmlFor="create-ticket-rules" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
               Règles personnalisées / Notes (optionnel)
             </label>
             <input
+              id="create-ticket-rules"
               type="text"
               value={customRules}
               onChange={(e) => setCustomRules(e.target.value)}
