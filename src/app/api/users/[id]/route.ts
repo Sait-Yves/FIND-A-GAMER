@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { UpdateProfileSchema } from "@/lib/validations";
-import { verifySessionToken, createSessionToken } from "@/lib/auth";
+import { verifySessionToken, createSessionToken, SESSION_COOKIE_OPTIONS } from "@/lib/auth";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -206,13 +206,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
       playerType: updatedUser.playerType,
     };
 
-    response.cookies.set("lobbygamer_session", createSessionToken(newSessionPayload), {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 14 * 24 * 60 * 60,
-    });
+    response.cookies.set("lobbygamer_session", createSessionToken(newSessionPayload), SESSION_COOKIE_OPTIONS);
 
     return response;
   } catch (error) {

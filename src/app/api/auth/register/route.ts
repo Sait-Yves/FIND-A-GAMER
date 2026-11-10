@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { hashPassword, createSessionToken } from "@/lib/auth";
+import { hashPassword, createSessionToken, SESSION_COOKIE_OPTIONS } from "@/lib/auth";
+import { sanitizeUsername } from "@/lib/security/sanitize";
 import { Platform, PlayerType } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
@@ -30,7 +31,14 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanEmail = email.trim().toLowerCase();
-    const cleanUsername = username.trim();
+    const cleanUsername = sanitizeUsername(username.trim());
+
+    if (cleanUsername.length < 3) {
+      return NextResponse.json(
+        { error: "Le pseudo doit comporter au moins 3 caractères alphanumériques valides." },
+        { status: 400 }
+      );
+    }
 
     // Vérifier doublon email
     const existingEmail = await prisma.user.findUnique({
@@ -93,13 +101,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
 
-    response.cookies.set("lobbygamer_session", token, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 14 * 24 * 60 * 60,
-    });
+    response.cookies.set("lobbygamer_session", token, SESSION_COOKIE_OPTIONS);
 
     return response;
   } catch (error) {

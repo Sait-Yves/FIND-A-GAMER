@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { sanitizeText } from "@/lib/security/sanitize";
 
 // ----------------------------------------------------
 // ENUMS DE VALIDATION
@@ -47,7 +48,12 @@ export const FavoriteGameInputSchema = z.object({
 });
 
 export const UpdateProfileSchema = z.object({
-  bio: z.string().max(1000, "La biographie ne peut excéder 1000 caractères").optional().nullable(),
+  bio: z
+    .string()
+    .max(1000, "La biographie ne peut excéder 1000 caractères")
+    .optional()
+    .nullable()
+    .transform((val) => (val ? sanitizeText(val) : val)),
   age: z
     .number()
     .int("L'âge doit être un entier")
@@ -69,11 +75,13 @@ export const CreateTicketSchema = z.object({
   title: z
     .string()
     .min(5, "Le titre doit comporter au moins 5 caractères")
-    .max(120, "Le titre ne doit pas dépasser 120 caractères"),
+    .max(120, "Le titre ne doit pas dépasser 120 caractères")
+    .transform((val) => sanitizeText(val)),
   description: z
     .string()
     .min(10, "La description doit contenir au moins 10 caractères")
-    .max(2000, "La description est trop longue"),
+    .max(2000, "La description est trop longue")
+    .transform((val) => sanitizeText(val)),
   rawgGameId: z.number().int().positive("ID de jeu RAWG invalide"),
   gameTitle: z.string().min(1, "Le titre du jeu est requis"),
   gameSlug: z.string().min(1, "Le slug du jeu est requis"),
@@ -85,7 +93,12 @@ export const CreateTicketSchema = z.object({
   targetPlatform: PlatformSchema.default("CROSSPLAY"),
   requiredPlayerType: PlayerTypeSchema.optional().nullable(),
   language: z.string().min(2).max(10).default("FR"),
-  customRules: z.string().max(1000).optional().nullable(),
+  customRules: z
+    .string()
+    .max(1000)
+    .optional()
+    .nullable()
+    .transform((val) => (val ? sanitizeText(val) : val)),
   
   // Places & Planification
   maxPlayers: z
@@ -126,7 +139,8 @@ export const CreateReviewSchema = z.object({
     .string()
     .max(500, "Le commentaire ne doit pas dépasser 500 caractères")
     .optional()
-    .nullable(),
+    .nullable()
+    .transform((val) => (val ? sanitizeText(val) : val)),
   tags: z.array(ReputationTagSchema).max(5, "Maximum 5 badges sélectionnés").optional(),
 });
 
@@ -138,7 +152,8 @@ export const SendMessageSchema = z.object({
   content: z
     .string()
     .min(1, "Le message ne peut être vide")
-    .max(2000, "Le message est trop long"),
+    .max(2000, "Le message est trop long")
+    .transform((val) => sanitizeText(val)),
   ticketId: z.string().optional().nullable(),
   conversationId: z.string().optional().nullable(),
 }).refine((data) => data.ticketId || data.conversationId, {

@@ -251,19 +251,47 @@ LobbyGamer est une **Progressive Web App (PWA)** installable sur mobile et ordin
 
 ---
 
-## 🔒 8. Sécurité & En-têtes HTTP Stricts (Phase 4)
+## 🔒 8. Sécurité Applicative & Infrastructure (Phase 4)
 
-La sécurité est configurée au niveau applicatif et serveur dans [next.config.mjs](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/next.config.mjs) :
+LobbyGamer intègre une architecture de défense en profondeur conforme aux standards **OWASP Top 10** :
 
-- **Content Security Policy (CSP) stricte :** Restriction des sources de scripts, styles et polices Google Fonts, et limitation stricte des domaines d'images aux jaquettes RAWG (`media.rawg.io`) et Unsplash.
+### 1. Content Security Policy (CSP) & En-têtes HTTP de Sécurité
+Configurés au niveau du moteur [next.config.mjs](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/next.config.mjs) et injectés dynamiquement par le middleware Edge [src/middleware.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/middleware.ts) :
+- **CSP Stricte :**
+  - `default-src 'self'`
+  - `script-src 'self' 'unsafe-eval' 'unsafe-inline'`
+  - `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`
+  - `font-src 'self' https://fonts.gstatic.com data:`
+  - `img-src 'self' data: blob: https: http:`
+  - `media-src 'self' blob: data:` (support audio WebRTC vocal HD)
+  - `connect-src 'self' https://api.rawg.io https://*.rawg.io wss: ws:` (support WebSockets / vocaux)
+  - `object-src 'none'` & `frame-ancestors 'none'` (anti-clickjacking)
+  - `base-uri 'self'` & `form-action 'self'`
 - **Protection Anti-Clickjacking :** `X-Frame-Options: DENY` et `frame-ancestors 'none'`.
-- **Protection MIME-type :** `X-Content-Type-Options: nosniff`.
-- **Confidentialité des référents :** `Referrer-Policy: strict-origin-when-cross-origin`.
-- **Permissions Policy :** Désactivation des capteurs inutiles (`camera=(), geolocation=()`).
-- **Protection CSRF & XSS :**
-  - Validation Zod exhaustive éliminant les charges utiles malveillantes.
-  - Server Actions Next.js avec validation automatique de l'origine de requête.
-  - Hachage sécurisé des mots de passe avec `bcryptjs` (salt rounds = 10).
+- **Protection Renforcée MIME & XSS :** `X-Content-Type-Options: nosniff` et `X-XSS-Protection: 1; mode=block`.
+- **Politique de Référents :** `Referrer-Policy: strict-origin-when-cross-origin`.
+- **Permissions Policy :** Restriction des capteurs (`camera=(), microphone=(self), geolocation=(), browsing-topics=()`).
+- **HSTS :** `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload`.
+
+### 2. Gestion Sécurisée des Secrets d'Environnement
+- **Validation Zod au démarrage (`src/lib/env.ts`) :** Vérification stricte des variables (`DATABASE_URL`, `NEXTAUTH_SECRET`, `RAWG_API_KEY`). En production, l'application bloque immédiatement tout démarrage si un secret critique est manquant ou trop faible (< 16 caractères).
+- **Masquage dans les logs :** La fonction `maskSecret()` empêche toute fuite accidentelle de tokens dans les consoles et diagnostics (`abc...xyz`).
+- **Aucune fuite client :** Les clés privées (`RAWG_API_KEY`, `SESSION_SECRET`) ne portent aucun préfixe `NEXT_PUBLIC_` et ne transitent jamais dans le bundle navigateur.
+
+### 3. Protections Anti-XSS (Cross-Site Scripting)
+- **Assainissement des données (`src/lib/security/sanitize.ts`) :**
+  - Élimination automatique des balises `<script>`, `<iframe>`, `<object>`, `<embed>`.
+  - Suppression des gestionnaires d'événements inline (`onerror=`, `onload=`, `onclick=`).
+  - Blocage des protocoles suspects (`javascript:`, `vbscript:`, `data:text/html`).
+  - Encodage des entités HTML avec `escapeHtml()` et validation stricte des pseudos avec `sanitizeUsername()`.
+- **Intégration directe dans Zod (`src/lib/validations/index.ts`) :** Tous les champs de formulaire (titres de ticket, bios, descriptions, avis, messages) sont automatiquement désinfectés avant persistance en base.
+- **Cookies de Session Inviolables :** Le cookie `lobbygamer_session` est configuré en `httpOnly: true`. Même en cas de tentative d'injection, JavaScript côté navigateur est dans l'incapacité totale de lire ou voler le token de session.
+
+### 4. Protection Anti-CSRF (Cross-Site Request Forgery)
+- **Vérification d'Origine dans le Middleware (`src/middleware.ts`) :** Sur chaque requête mutante (`POST`, `PUT`, `DELETE`, `PATCH`) à destination des routes `/api/*`, le middleware vérifie l'en-tête `Origin` ou `Referer`. Toute requête provenant d'un domaine externe non autorisé est immédiatement bloquée avec un code **HTTP 403 Forbidden**.
+- **Attributs de Cookies Sécurisés :**
+  - `sameSite: "lax"` : Empêche le navigateur d'envoyer le cookie lors de requêtes transverses intersites forgées.
+  - `secure: true` en production (transmission chiffrée sur HTTPS uniquement).
 
 ---
 
@@ -271,7 +299,8 @@ La sécurité est configurée au niveau applicatif et serveur dans [next.config.
 
 La qualité et la non-régression de LobbyGamer sont garanties par une pyramide de tests complète :
 
-### 1. Tests Unitaires & Fonctionnels (Vitest - 27 tests validés) :
+### 1. Tests Unitaires & Fonctionnels (Vitest - 39 tests validés) :
+- **Sécurité, XSS, CSRF & Secrets :** [tests/unit/security.test.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/tests/unit/security.test.ts) (12 tests dédiés à la sanitization XSS, blocage CSRF 403, masquage de secret et cookies HttpOnly).
 - **Validation Zod & Métier :** [tests/unit/validation.test.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/tests/unit/validation.test.ts) (quotas de joueurs, barème d'âge, badges fair-play).
 - **Calculs & Classements :** [tests/unit/leaderboard.test.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/tests/unit/leaderboard.test.ts) (reconstitution du score de fair-play et tri).
 - **Sécurité & Authentification :** [tests/unit/auth.test.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/tests/unit/auth.test.ts) (hachage bcrypt, vérification de session).

@@ -27,7 +27,9 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' https://fonts.gstatic.com data:;",
               "img-src 'self' data: blob: https: http:;",
-              "connect-src 'self' https://api.rawg.io https://*.rawg.io;",
+              "media-src 'self' blob: data:;",
+              "connect-src 'self' https://api.rawg.io https://*.rawg.io wss: ws:;",
+              "object-src 'none';",
               "frame-ancestors 'none';",
               "base-uri 'self';",
               "form-action 'self';",
@@ -43,6 +45,10 @@ const nextConfig = {
           {
             key: "X-Content-Type-Options",
             value: "nosniff",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
           },
           {
             key: "Referrer-Policy",

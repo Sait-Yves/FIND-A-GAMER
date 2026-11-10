@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { verifyPassword, createSessionToken } from "@/lib/auth";
+import { verifyPassword, createSessionToken, SESSION_COOKIE_OPTIONS } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -81,14 +81,8 @@ export async function POST(req: NextRequest) {
       user: sessionPayload,
     });
 
-    // Enregistrement du cookie de session sécurisé
-    response.cookies.set("lobbygamer_session", token, {
-      httpOnly: false, // accessible par le client pour la Navbar/Sidebar
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 14 * 24 * 60 * 60, // 14 jours
-    });
+    // Enregistrement du cookie de session sécurisé (HttpOnly, SameSite, Secure)
+    response.cookies.set("lobbygamer_session", token, SESSION_COOKIE_OPTIONS);
 
     return response;
   } catch (error) {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { SESSION_COOKIE_OPTIONS } from "@/lib/auth";
 
 export async function POST() {
   const response = NextResponse.json({
@@ -6,12 +7,9 @@ export async function POST() {
     message: "Déconnexion réussie",
   });
 
-  // Suppression du cookie de session
+  // Suppression sécurisée du cookie de session
   response.cookies.set("lobbygamer_session", "", {
-    httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
+    ...SESSION_COOKIE_OPTIONS,
     expires: new Date(0),
     maxAge: 0,
   });

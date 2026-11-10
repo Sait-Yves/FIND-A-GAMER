@@ -17,6 +17,18 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 const SESSION_SECRET =
   process.env.NEXTAUTH_SECRET || "lobbygamer_production_secure_secret_token_2026";
 
+/**
+ * Options sécurisées pour le cookie de session de LobbyGamer
+ * Conformes aux recommandations OWASP : HttpOnly, SameSite, Secure
+ */
+export const SESSION_COOKIE_OPTIONS = {
+  httpOnly: true, // Protection absolue contre le vol de session via injection XSS
+  secure: process.env.NODE_ENV === "production", // Transmis uniquement sur HTTPS en production
+  sameSite: "lax" as const, // Protection anti-CSRF sur les formulaires intersites
+  path: "/",
+  maxAge: 14 * 24 * 60 * 60, // 14 jours en secondes
+};
+
 export interface SessionPayload {
   id: string;
   email: string;
