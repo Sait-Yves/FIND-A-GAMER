@@ -255,6 +255,17 @@ LobbyGamer est une **Progressive Web App (PWA)** installable sur mobile et ordin
 
 LobbyGamer intègre une architecture de défense en profondeur conforme aux standards **OWASP Top 10** :
 
+### 📊 Synthèse des Mesures de Sécurité (Executive Summary)
+
+| Axe de Sécurité | Mécanisme Technique Implémenté | Fichiers Clés | Risque Neutralisé |
+| :--- | :--- | :--- | :--- |
+| **Content Security Policy (CSP)** | Directives strictes (`default-src 'self'`, `media-src` WebRTC, `connect-src` WebSockets, `frame-ancestors 'none'`, `X-Frame-Options: DENY`, HSTS) | [next.config.mjs](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/next.config.mjs), [src/middleware.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/middleware.ts) | Injections de scripts externes, détournement de clic (Clickjacking), exfiltration de données |
+| **Gestion des Secrets** | Validation Zod au démarrage (`DATABASE_URL`, `NEXTAUTH_SECRET` ≥ 16 car.), masquage dans les logs (`maskSecret`), aucune variable privée exposée côté client | [src/lib/env.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/lib/env.ts), [.env.production.example](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/.env.production.example) | Fuite d'identifiants, token de chiffrement faible, déploiement mal configuré |
+| **Protection Anti-XSS** | Assainissement systématique des balises/scripts (`sanitizeText`), encodage HTML (`escapeHtml`), restriction des pseudos, intégration Zod et cookies de session `HttpOnly: true` | [src/lib/security/sanitize.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/lib/security/sanitize.ts), [src/lib/validations/index.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/lib/validations/index.ts), [src/lib/auth.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/lib/auth.ts) | Vol de cookies de session via `document.cookie`, exécution de code malveillant injecté |
+| **Protection Anti-CSRF** | Middleware Edge avec validation stricte de l'en-tête `Origin`/`Referer` sur toutes les mutations HTTP (`POST`, `PUT`, `DELETE`, `PATCH` ➔ blocage 403), cookies `SameSite: "lax"` | [src/middleware.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/middleware.ts), [src/app/api/auth/login/route.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/app/api/auth/login/route.ts) | Forgerie de requêtes intersites, soumission non sollicitée d'actions au nom d'un joueur |
+
+---
+
 ### 1. Content Security Policy (CSP) & En-têtes HTTP de Sécurité
 Configurés au niveau du moteur [next.config.mjs](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/next.config.mjs) et injectés dynamiquement par le middleware Edge [src/middleware.ts](file:///c:/Users/styve/OneDrive/Bureau/boulo/informatique%20electronique/WEB%20DEV/School%20project/TIQUET%20PLAY/src/middleware.ts) :
 - **CSP Stricte :**
