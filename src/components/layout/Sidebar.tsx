@@ -10,6 +10,7 @@ import {
   Trophy,
   Settings,
   LogOut,
+  Users,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -54,6 +55,12 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       Icon: MessageSquare,
       badge: "3",
       active: pathname === "/messages",
+    },
+    {
+      label: "Mes Amis",
+      href: "/friends",
+      Icon: Users,
+      active: pathname === "/friends",
     },
     {
       label: "Jeux Favoris",

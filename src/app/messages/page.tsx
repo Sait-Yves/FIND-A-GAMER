@@ -676,11 +676,12 @@ export default function MessagesPage() {
                       {/* Bouton de suppression dans le header */}
                       <button
                         onClick={() => setChannelToDelete(activeChannel)}
-                        className="p-2 rounded-xl bg-surface-container-high hover:bg-error/20 text-on-surface-variant hover:text-error transition-colors cursor-pointer"
+                        className="px-2.5 py-2 rounded-xl bg-surface-container-high hover:bg-error/20 text-on-surface-variant hover:text-error border border-surface-container-highest hover:border-error/40 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-display font-semibold"
                         title="Supprimer cette conversation"
                         aria-label="Supprimer cette conversation"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Supprimer</span>
                       </button>
                     </div>
                   </div>
