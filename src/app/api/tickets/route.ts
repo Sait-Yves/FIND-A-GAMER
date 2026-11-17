@@ -248,6 +248,33 @@ export async function GET(req: NextRequest) {
       take: 50,
     });
 
+    // S'assurer que le salon de ToxicGamer_99 est toujours présent pour la démonstration
+    const hasToxicInDb = tickets.some(
+      (t) => t.host?.username === "ToxicGamer_99" || t.title.includes("CS2")
+    );
+    if (
+      !hasToxicInDb &&
+      (!game || game === "Tous" || game.toLowerCase().includes("counter") || game.toLowerCase().includes("cs"))
+    ) {
+      const toxicDemo = DEFAULT_DEMO_TICKETS.find((t) => t.host?.username === "ToxicGamer_99");
+      if (toxicDemo) {
+        tickets.push({
+          ...toxicDemo,
+          id: "demo-ticket-toxic-cs2",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          host: toxicDemo.host as any,
+          participants: [
+            {
+              id: "demo-p-toxic",
+              role: "HOST",
+              user: toxicDemo.host,
+            },
+          ],
+        } as any);
+      }
+    }
+
     return NextResponse.json({ success: true, count: tickets.length, data: tickets });
   } catch (error) {
     console.error("Erreur GET /api/tickets (mode hors-ligne actif):", error);

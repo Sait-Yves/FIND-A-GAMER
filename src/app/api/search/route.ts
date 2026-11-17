@@ -103,14 +103,45 @@ export async function GET(req: NextRequest) {
           reputationScore: 98.0,
           totalReviews: 19,
         },
+        {
+          id: "user-toxic-demo",
+          username: "ToxicGamer_99",
+          avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+          playerType: "COMPETITIVE",
+          primaryPlatform: "PC",
+          reputationScore: 18.5,
+          totalReviews: 3,
+        },
       ];
 
       const lowerQ = q.toLowerCase();
       users = mockUsers.filter(
         (u) =>
           u.username.toLowerCase().includes(lowerQ) ||
-          u.playerType.toLowerCase().includes(lowerQ)
+          u.playerType.toLowerCase().includes(lowerQ) ||
+          lowerQ.includes("toxic") ||
+          lowerQ.includes("joueur")
       ) as any;
+
+      if (lowerQ.includes("cs") || lowerQ.includes("toxic") || lowerQ.includes("solo") || lowerQ.includes("tryhard")) {
+        tickets = [
+          {
+            id: "demo-ticket-toxic-cs2",
+            title: "[SOLO] CS2 PREMIER TRYHARD — NO NOOBS OR KICK",
+            gameTitle: "Counter-Strike 2",
+            gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+            currentPlayers: 1,
+            maxPlayers: 5,
+            targetPlatform: "PC",
+            micRequired: true,
+            host: {
+              id: "user-toxic-demo",
+              username: "ToxicGamer_99",
+              avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+            },
+          } as any,
+        ];
+      }
     }
 
     return NextResponse.json({

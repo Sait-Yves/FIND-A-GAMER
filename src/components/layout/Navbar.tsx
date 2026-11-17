@@ -232,9 +232,11 @@ export function Navbar({
         </button>
 
         <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-tertiary flex items-center justify-center font-display font-bold text-on-primary text-base shadow-[0_0_12px_rgba(78,222,163,0.3)] group-hover:scale-105 transition-transform">
-            LG
-          </div>
+          <img
+            src="/logo.svg"
+            alt="LobbyGamer Logo"
+            className="w-8 h-8 rounded-lg shadow-[0_0_12px_rgba(78,222,163,0.35)] group-hover:scale-105 transition-transform object-contain"
+          />
           <span className="font-display font-bold text-base sm:text-lg tracking-wider text-white hidden sm:inline">
             LOBBY<span className="text-primary">GAMER</span>
           </span>

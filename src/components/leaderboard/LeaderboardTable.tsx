@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Trophy, Star, ShieldCheck, ArrowRight, Award } from "lucide-react";
+import { Trophy, Star, ShieldCheck, ArrowRight, Award, AlertTriangle } from "lucide-react";
 import { LeaderboardPlayer } from "@/lib/leaderboard";
 
 interface LeaderboardTableProps {
@@ -16,6 +16,9 @@ const BADGE_CONFIG: Record<string, { label: string; color: string }> = {
   TEAM_PLAYER: { label: "Teamplayer", color: "text-secondary border-secondary/40 bg-secondary/10" },
   PATIENT: { label: "Patient", color: "text-primary border-primary/40 bg-primary/10" },
   GOOD_COMMUNICATION: { label: "Bonne Comm", color: "text-tertiary border-tertiary/40 bg-tertiary/10" },
+  TOXIC: { label: "Toxique", color: "text-error border-error/50 bg-error/15" },
+  RAGE_QUIT: { label: "Rage Quit", color: "text-error border-error/50 bg-error/15" },
+  NO_MIC: { label: "Pas de micro", color: "text-error border-error/50 bg-error/15" },
 };
 
 export function LeaderboardTable({ players, loading = false }: LeaderboardTableProps) {
@@ -65,11 +68,16 @@ export function LeaderboardTable({ players, loading = false }: LeaderboardTableP
               const isTop1 = player.rank === 1;
               const isTop2 = player.rank === 2;
               const isTop3 = player.rank === 3;
+              const isToxic = player.reputationScore < 50;
 
               return (
                 <tr
                   key={player.id || player.username}
-                  className="hover:bg-surface-container/60 transition-colors group"
+                  className={`transition-colors group ${
+                    isToxic
+                      ? "bg-error/5 hover:bg-error/10 border-l-2 border-l-error"
+                      : "hover:bg-surface-container/60"
+                  }`}
                 >
                   {/* Rank */}
                   <td className="py-3.5 px-4 text-center">
@@ -104,18 +112,32 @@ export function LeaderboardTable({ players, loading = false }: LeaderboardTableP
                         onError={(e) => {
                           e.currentTarget.src = "/avatars/avatar-default.svg";
                         }}
-                        className="w-9 h-9 rounded-xl object-cover border border-surface-container-high bg-surface group-hover/link:border-primary/50 transition-colors"
+                        className={`w-9 h-9 rounded-xl object-cover bg-surface transition-colors ${
+                          isToxic
+                            ? "border border-error shadow-sm shadow-error/20"
+                            : "border border-surface-container-high group-hover/link:border-primary/50"
+                        }`}
                       />
                       <div className="flex flex-col">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-display font-bold text-sm text-white group-hover/link:text-primary transition-colors">
+                          <span
+                            className={`font-display font-bold text-sm transition-colors ${
+                              isToxic
+                                ? "text-white group-hover/link:text-error"
+                                : "text-white group-hover/link:text-primary"
+                            }`}
+                          >
                             @{player.username}
                           </span>
-                          {player.reputationScore >= 98 && (
+                          {isToxic ? (
+                            <span title="Signalé : Comportement toxique">
+                              <AlertTriangle className="w-3.5 h-3.5 text-error shrink-0" />
+                            </span>
+                          ) : player.reputationScore >= 98 ? (
                             <span title="Vérifié Élite">
                               <ShieldCheck className="w-3.5 h-3.5 text-primary shrink-0" />
                             </span>
-                          )}
+                          ) : null}
                         </div>
                         <span className="text-[10px] text-on-surface-variant">
                           {player.playerType}
@@ -163,8 +185,18 @@ export function LeaderboardTable({ players, loading = false }: LeaderboardTableP
 
                   {/* Reputation Score */}
                   <td className="py-3.5 px-4 text-right">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-primary/10 border border-primary/30 text-primary font-display font-bold text-xs shadow-[0_0_10px_rgba(78,222,163,0.15)]">
-                      <Star className="w-3 h-3 fill-primary text-primary" />
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl font-display font-bold text-xs ${
+                        isToxic
+                          ? "bg-error/15 border border-error/40 text-error shadow-[0_0_10px_rgba(239,68,68,0.25)]"
+                          : "bg-primary/10 border border-primary/30 text-primary shadow-[0_0_10px_rgba(78,222,163,0.15)]"
+                      }`}
+                    >
+                      <Star
+                        className={`w-3 h-3 ${
+                          isToxic ? "fill-error text-error" : "fill-primary text-primary"
+                        }`}
+                      />
                       {player.reputationScore}%
                     </span>
                   </td>

@@ -487,12 +487,18 @@ function ExplorerContent() {
                   </button>
                 </div>
               ) : (
-                tickets.map((ticket) => (
-                  <article
-                    key={ticket.id}
-                    className="flex flex-col rounded-2xl bg-surface-container-low p-5 sm:p-6 hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.25)] transition-all relative overflow-hidden group border border-surface-container-high hover:border-primary/50"
-                  >
-                    <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-primary" />
+                tickets.map((ticket) => {
+                  const isToxic = (ticket.host?.reputationScore ?? 100) < 50;
+                  return (
+                    <article
+                      key={ticket.id}
+                      className={`flex flex-col rounded-2xl bg-surface-container-low p-5 sm:p-6 transition-all relative overflow-hidden group border ${
+                        isToxic
+                          ? "border-error/40 hover:border-error hover:shadow-[0_0_24px_-4px_rgba(239,68,68,0.3)]"
+                          : "border-surface-container-high hover:border-primary/50 hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.25)]"
+                      }`}
+                    >
+                      <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${isToxic ? "bg-error" : "bg-primary"}`} />
 
                     {/* Header: Host & Telemetry */}
                     <div className="flex flex-wrap items-start justify-between gap-3 mb-3 pl-2">
@@ -646,15 +652,20 @@ function ExplorerContent() {
 
                       <Link
                         href={`/tickets/${ticket.id}`}
-                        className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_12px_rgba(78,222,163,0.3)] hover:shadow-[0_0_18px_rgba(78,222,163,0.45)] transition-all cursor-pointer"
+                        className={`flex items-center gap-2 px-4 py-2 font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+                          isToxic
+                            ? "bg-error/20 hover:bg-error/30 text-error border border-error/40 shadow-[0_0_12px_rgba(239,68,68,0.25)]"
+                            : "bg-primary hover:bg-primary-fixed text-on-primary shadow-[0_0_12px_rgba(78,222,163,0.3)] hover:shadow-[0_0_18px_rgba(78,222,163,0.45)]"
+                        }`}
                       >
-                        <span>Rejoindre le Lobby</span>
+                        <span>{isToxic ? "Observer le Salon" : "Rejoindre le Lobby"}</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
                   </article>
-                ))
-              )}
+                );
+              })
+            )}
             </div>
 
             {/* RIGHT: Widgets (4 Cols) */}
@@ -906,12 +917,16 @@ function ExplorerContent() {
                   Joueurs recommandés :
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {["SarahChill", "AlexVortex", "Valkyrie_FR", "Noxis_FPS"].map((pseudo) => (
+                  {["SarahChill", "AlexVortex", "Valkyrie_FR", "Noxis_FPS", "ToxicGamer_99"].map((pseudo) => (
                     <button
                       key={pseudo}
                       type="button"
                       onClick={() => handleAddFriend(pseudo)}
-                      className="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface border border-surface-container-high/60 text-[11px] font-medium text-white hover:text-primary transition-colors cursor-pointer"
+                      className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium transition-colors cursor-pointer ${
+                        pseudo === "ToxicGamer_99"
+                          ? "bg-error/15 border-error/40 text-error hover:bg-error/25"
+                          : "bg-surface-container-low hover:bg-surface border-surface-container-high/60 text-white hover:text-primary"
+                      }`}
                     >
                       + @{pseudo}
                     </button>

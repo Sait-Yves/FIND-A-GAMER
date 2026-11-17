@@ -110,6 +110,18 @@ export const FALLBACK_LEADERBOARD_PLAYERS: LeaderboardPlayer[] = [
     primaryGame: "Apex Legends",
     badges: ["FAIR_PLAY", "LEADER"],
   },
+  {
+    rank: 9,
+    id: "user-toxic-demo",
+    username: "ToxicGamer_99",
+    avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+    reputationScore: 18.5,
+    matchesFinished: 34,
+    playerType: "COMPETITIVE",
+    primaryPlatform: "PC",
+    primaryGame: "Counter-Strike 2",
+    badges: ["TOXIC", "RAGE_QUIT", "NO_MIC"],
+  },
 ];
 
 /**
@@ -151,11 +163,17 @@ export async function getLeaderboardData(): Promise<LeaderboardPlayer[]> {
 
     const players: LeaderboardPlayer[] = users.map((u, index) => {
       const badges: string[] = [];
-      if (u.reputationScore >= 98) badges.push("LEADER", "FAIR_PLAY");
-      else if (u.reputationScore >= 95) badges.push("FAIR_PLAY", "TEAM_PLAYER");
-      else badges.push("PUNCTUAL");
+      if (u.reputationScore < 50) {
+        badges.push("TOXIC", "RAGE_QUIT", "NO_MIC");
+      } else if (u.reputationScore >= 98) {
+        badges.push("LEADER", "FAIR_PLAY");
+      } else if (u.reputationScore >= 95) {
+        badges.push("FAIR_PLAY", "TEAM_PLAYER");
+      } else {
+        badges.push("PUNCTUAL");
+      }
 
-      if (u.playerType === "STRATEGIST" || u.playerType === "COMPETITIVE") {
+      if (u.reputationScore >= 50 && (u.playerType === "STRATEGIST" || u.playerType === "COMPETITIVE")) {
         badges.push("GOOD_COMMUNICATION");
       }
 
@@ -186,6 +204,18 @@ export async function getLeaderboardData(): Promise<LeaderboardPlayer[]> {
             rank: players.length + 1,
           });
         }
+      }
+    }
+
+    // Toujours s'assurer que ToxicGamer_99 est visible pour la démonstration des badges négatifs
+    const hasToxic = players.some((p) => p.username === "ToxicGamer_99");
+    if (!hasToxic) {
+      const toxicFallback = FALLBACK_LEADERBOARD_PLAYERS.find((p) => p.username === "ToxicGamer_99");
+      if (toxicFallback) {
+        players.push({
+          ...toxicFallback,
+          rank: players.length + 1,
+        });
       }
     }
 

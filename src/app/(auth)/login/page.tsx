@@ -43,10 +43,12 @@ export default function LoginPage() {
     <div className="min-h-screen bg-surface flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-surface-container-low border border-surface-container-high rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col gap-6">
         <div className="flex flex-col items-center text-center gap-2">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-tertiary flex items-center justify-center font-display font-bold text-on-primary text-lg shadow-[0_0_14px_rgba(78,222,163,0.3)] group-hover:scale-105 transition-transform">
-              LG
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <img
+              src="/logo.svg"
+              alt="LobbyGamer Logo"
+              className="w-10 h-10 rounded-xl shadow-[0_0_14px_rgba(78,222,163,0.35)] group-hover:scale-105 transition-transform object-contain"
+            />
             <span className="font-display font-bold text-xl text-white">
               LOBBY<span className="text-primary">GAMER</span>
             </span>
