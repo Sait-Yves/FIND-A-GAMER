@@ -25,6 +25,7 @@ import {
   Smile,
   Send,
   AlertCircle,
+  AlertTriangle,
   LogIn,
   ArrowRight,
   ShieldAlert,
@@ -379,19 +380,41 @@ export default function TicketRoomPage() {
                   onError={(e) => {
                     e.currentTarget.src = "/avatars/avatar-default.svg";
                   }}
-                  className="w-10 h-10 rounded-xl object-cover border border-primary/50 bg-surface"
+                  className={`w-10 h-10 rounded-xl object-cover bg-surface border ${
+                    (ticket.host?.reputationScore ?? 100) < 50
+                      ? "border-error shadow-sm shadow-error/20"
+                      : "border-primary/50"
+                  }`}
                 />
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="font-display font-bold text-xs text-white">
+                    <Link
+                      href={`/profile/${ticket.host?.username || "AlexVortex"}`}
+                      className="font-display font-bold text-xs text-white hover:text-primary transition-colors underline-offset-2 hover:underline"
+                    >
                       @{ticket.host?.username}
-                    </span>
-                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                      HÔTE
-                    </span>
+                    </Link>
+                    {(ticket.host?.reputationScore ?? 100) < 50 ? (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-error bg-error/15 px-1.5 py-0.5 rounded border border-error/30">
+                        <AlertTriangle className="w-3 h-3" />
+                        RISQUE COMPORTEMENT
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                        HÔTE
+                      </span>
+                    )}
                   </div>
                   <span className="text-[11px] text-on-surface-variant">
-                    Karma : {ticket.host?.reputationScore || 100}% ★ • {ticket.host?.primaryPlatform || "PC"}
+                    Karma :{" "}
+                    <span
+                      className={`font-bold ${
+                        (ticket.host?.reputationScore ?? 100) < 50 ? "text-error" : "text-primary"
+                      }`}
+                    >
+                      {ticket.host?.reputationScore ? `${ticket.host.reputationScore}% ★` : "100% ★"}
+                    </span>{" "}
+                    • {ticket.host?.primaryPlatform || "PC"}
                   </span>
                 </div>
               </div>
@@ -490,19 +513,42 @@ export default function TicketRoomPage() {
                         onError={(e) => {
                           e.currentTarget.src = "/avatars/avatar-default.svg";
                         }}
-                        className="w-11 h-11 rounded-xl object-cover bg-surface"
+                        className={`w-11 h-11 rounded-xl object-cover bg-surface border ${
+                          (ticket.host?.reputationScore ?? 100) < 50
+                            ? "border-error"
+                            : "border-transparent"
+                        }`}
                       />
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                          <span className="font-display font-bold text-sm text-white">
+                          <Link
+                            href={`/profile/${ticket.host?.username || "AlexVortex"}`}
+                            className="font-display font-bold text-sm text-white hover:text-primary transition-colors underline-offset-2 hover:underline"
+                          >
                             @{ticket.host?.username}
-                          </span>
-                          <span className="text-[10px] text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10">
-                            HÔTE
-                          </span>
+                          </Link>
+                          {(ticket.host?.reputationScore ?? 100) < 50 ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] text-error font-bold px-1.5 py-0.5 rounded bg-error/15 border border-error/30">
+                              <AlertTriangle className="w-3 h-3" />
+                              RISQUE
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10">
+                              HÔTE
+                            </span>
+                          )}
                         </div>
                         <span className="text-xs text-on-surface-variant">
-                          {ticket.host?.playerType || "COMPETITIVE"} • {ticket.host?.primaryPlatform || "PC"}
+                          {ticket.host?.playerType || "COMPETITIVE"} • {ticket.host?.primaryPlatform || "PC"} •{" "}
+                          <span
+                            className={
+                              (ticket.host?.reputationScore ?? 100) < 50
+                                ? "text-error font-bold"
+                                : "text-primary font-semibold"
+                            }
+                          >
+                            {ticket.host?.reputationScore ? `${ticket.host.reputationScore}% ★` : "100% ★"}
+                          </span>
                         </span>
                       </div>
                     </div>

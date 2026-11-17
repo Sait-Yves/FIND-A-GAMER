@@ -25,62 +25,104 @@ import {
 export default function UserProfilePage() {
   const params = useParams();
   const rawId = (params?.id as string) || "AlexVortex";
+  const isToxicDemo = rawId === "ToxicGamer_99" || rawId.toLowerCase().includes("toxic");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"games" | "reviews">("games");
   const [currentUser, setCurrentUser] = useState<any>(null);
 
   // Données de profil enrichies et fiabilisées par défaut
   const [user, setUser] = useState({
-    username: rawId,
-    avatarUrl: "/avatars/avatar-alex.svg",
-    bio: "Joueur compétitif sur Valorant et CS2. Toujours fair-play, focus endgame et communication claire. N'hésitez pas à me ping pour des ranked !",
-    age: 24,
+    username: isToxicDemo ? "ToxicGamer_99" : rawId,
+    avatarUrl: isToxicDemo
+      ? "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+      : "/avatars/avatar-alex.svg",
+    bio: isToxicDemo
+      ? "Hardstuck Platine. Marre des noobs qui savent pas jouer. Si vous écoutez pas mes ordres et mes strats, je déco direct de la ranked."
+      : "Joueur compétitif sur Valorant et CS2. Toujours fair-play, focus endgame et communication claire. N'hésitez pas à me ping pour des ranked !",
+    age: isToxicDemo ? 19 : 24,
     primaryPlatform: "PC",
     playerType: "COMPETITIVE",
-    reputationScore: 96.5,
-    totalReviews: 12,
-    lastActive: "Il y a 3 minutes",
-    favoriteGames: [
-      {
-        id: 415171,
-        title: "Valorant",
-        slug: "valorant",
-        coverUrl: "/games/valorant.svg",
-        hours: "340h de jeu",
-      },
-      {
-        id: 4200,
-        title: "Portal 2",
-        slug: "portal-2",
-        coverUrl: "/games/portal-2.svg",
-        hours: "85h de jeu",
-      },
-      {
-        id: 3498,
-        title: "Grand Theft Auto V",
-        slug: "grand-theft-auto-v",
-        coverUrl: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg",
-        hours: "210h de jeu",
-      },
-    ],
-    reviews: [
-      {
-        id: "1",
-        author: "SarahChill",
-        rating: 5,
-        date: "Hier",
-        comment: "Super lead d'équipe, très calme et d'excellents callouts en situation de clutch !",
-        tags: ["FAIR_PLAY", "GOOD_COMMUNICATION", "LEADER"],
-      },
-      {
-        id: "2",
-        author: "DemocratieFirst",
-        rating: 5,
-        date: "Il y a 3 jours",
-        comment: "Ponctuel, micro parfait et teamplayer. Je recommande !",
-        tags: ["TEAM_PLAYER", "PUNCTUAL"],
-      },
-    ],
+    reputationScore: isToxicDemo ? 18.5 : 96.5,
+    totalReviews: isToxicDemo ? 3 : 12,
+    lastActive: isToxicDemo ? "Il y a 12 minutes" : "Il y a 3 minutes",
+    favoriteGames: isToxicDemo
+      ? [
+          {
+            id: 4200,
+            title: "Counter-Strike 2",
+            slug: "counter-strike-2",
+            coverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+            hours: "1 250h de jeu",
+          },
+        ]
+      : [
+          {
+            id: 415171,
+            title: "Valorant",
+            slug: "valorant",
+            coverUrl: "/games/valorant.svg",
+            hours: "340h de jeu",
+          },
+          {
+            id: 4200,
+            title: "Portal 2",
+            slug: "portal-2",
+            coverUrl: "/games/portal-2.svg",
+            hours: "85h de jeu",
+          },
+          {
+            id: 3498,
+            title: "Grand Theft Auto V",
+            slug: "grand-theft-auto-v",
+            coverUrl: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg",
+            hours: "210h de jeu",
+          },
+        ],
+    reviews: isToxicDemo
+      ? [
+          {
+            id: "t1",
+            author: "SarahChill",
+            rating: 1,
+            date: "Hier",
+            comment: "Insulte ses coéquipiers dès le round 2, refuse d'écouter les callouts et rage quit dès sa première mort en pleine ranked !",
+            tags: ["RAGE_QUIT", "TOXIC"],
+          },
+          {
+            id: "t2",
+            author: "AlexVortex",
+            rating: 1,
+            date: "Il y a 2 jours",
+            comment: "Micro coupé tout le match puis hurle au micro quand il meurt en solo. Attitude toxique et aucun esprit d'équipe.",
+            tags: ["TOXIC", "NO_MIC", "RAGE_QUIT"],
+          },
+          {
+            id: "t3",
+            author: "Valkyrie_FR",
+            rating: 1,
+            date: "Il y a 4 jours",
+            comment: "Comportement inacceptable. Zéro esprit d'équipe, blame les autres et insulte tout le lobby en vocal.",
+            tags: ["TOXIC", "RAGE_QUIT"],
+          },
+        ]
+      : [
+          {
+            id: "1",
+            author: "SarahChill",
+            rating: 5,
+            date: "Hier",
+            comment: "Super lead d'équipe, très calme et d'excellents callouts en situation de clutch !",
+            tags: ["FAIR_PLAY", "GOOD_COMMUNICATION", "LEADER"],
+          },
+          {
+            id: "2",
+            author: "DemocratieFirst",
+            rating: 5,
+            date: "Il y a 3 jours",
+            comment: "Ponctuel, micro parfait et teamplayer. Je recommande !",
+            tags: ["TEAM_PLAYER", "PUNCTUAL"],
+          },
+        ],
   });
 
   // Charger les données réelles du joueur depuis l'API si disponibles
@@ -111,6 +153,21 @@ export default function UserProfilePage() {
                     hours: "Favori",
                   }))
                 : prev.favoriteGames,
+            reviews:
+              dbU.reviewsReceived && dbU.reviewsReceived.length > 0
+                ? dbU.reviewsReceived.map((r: any) => ({
+                    id: r.id,
+                    author: r.reviewer?.username || "Anonyme",
+                    rating: r.rating,
+                    date: new Date(r.createdAt).toLocaleDateString("fr-FR"),
+                    comment: r.comment || "Aucun commentaire.",
+                    tags: Array.isArray(r.tags)
+                      ? r.tags
+                      : typeof r.tags === "string"
+                      ? JSON.parse(r.tags)
+                      : [],
+                  }))
+                : prev.reviews,
           }));
         }
 
@@ -189,8 +246,9 @@ export default function UserProfilePage() {
     LEADER: { label: "Leader Positif", color: "text-white border-white/40 bg-white/10", desc: "Motive et guide l'escouade" },
     PATIENT: { label: "Patient & Pédagogue", color: "text-primary border-primary/40 bg-primary/10", desc: "Aide sans jamais rager" },
     PUNCTUAL: { label: "Ponctuel", color: "text-tertiary border-tertiary/40 bg-tertiary/10", desc: "Présent à l'heure convenue" },
-    RAGE_QUIT: { label: "Rage Quit / Abandon", color: "text-error border-error/40 bg-error/10", desc: "Pénalité pour abandon" },
-    NO_MIC: { label: "Micro Absent", color: "text-error border-error/40 bg-error/10", desc: "Pas de micro malgré consigne" },
+    RAGE_QUIT: { label: "Rage Quit / Abandon", color: "text-error border-error/50 bg-error/15 shadow-[0_0_8px_rgba(239,68,68,0.25)]", desc: "A quitté la partie en cours de jeu" },
+    TOXIC: { label: "Comportement Toxique / Flame", color: "text-error border-error/50 bg-error/15 shadow-[0_0_8px_rgba(239,68,68,0.25)]", desc: "Insultes ou attitude nocive en partie" },
+    NO_MIC: { label: "Micro Absent / Coupé", color: "text-error border-error/50 bg-error/15 shadow-[0_0_8px_rgba(239,68,68,0.25)]", desc: "Pas de micro malgré consigne obligatoire" },
   };
 
   return (
@@ -228,10 +286,17 @@ export default function UserProfilePage() {
                     <h1 className="text-2xl font-display font-bold text-white tracking-wide">
                       @{user.username}
                     </h1>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-display font-bold bg-primary/15 text-primary border border-primary/30 uppercase flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      Vérifié Fair-Play
-                    </span>
+                    {user.reputationScore < 50 ? (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-display font-bold bg-error/15 text-error border border-error/30 uppercase flex items-center gap-1 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                        <AlertTriangle className="w-3.5 h-3.5 text-error" />
+                        Signalé — Comportement Négatif
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-display font-bold bg-primary/15 text-primary border border-primary/30 uppercase flex items-center gap-1">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        Vérifié Fair-Play
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-on-surface-variant">
@@ -330,7 +395,7 @@ export default function UserProfilePage() {
                 <span className="text-[10px] font-display font-bold text-on-surface-variant uppercase">
                   Score Karma / Réputation
                 </span>
-                <span className="text-lg font-display font-bold text-primary mt-1">
+                <span className={`text-lg font-display font-bold mt-1 ${user.reputationScore < 50 ? "text-error" : "text-primary"}`}>
                   {user.reputationScore}% ★
                 </span>
               </div>
@@ -348,8 +413,8 @@ export default function UserProfilePage() {
                 <span className="text-[10px] font-display font-bold text-on-surface-variant uppercase">
                   Taux de Complétion
                 </span>
-                <span className="text-lg font-display font-bold text-secondary mt-1">
-                  98% sans abandon
+                <span className={`text-lg font-display font-bold mt-1 ${user.reputationScore < 50 ? "text-error" : "text-secondary"}`}>
+                  {user.reputationScore < 50 ? "35% (Abandons fréquents)" : "98% sans abandon"}
                 </span>
               </div>
 
@@ -358,7 +423,7 @@ export default function UserProfilePage() {
                   Salons Hébergés
                 </span>
                 <span className="text-lg font-display font-bold text-tertiary mt-1">
-                  24 tickets créés
+                  {user.reputationScore < 50 ? "1 salon (Solo)" : "24 tickets créés"}
                 </span>
               </div>
             </div>

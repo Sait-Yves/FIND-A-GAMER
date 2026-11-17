@@ -49,6 +49,60 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     const resolvedUser = await resolveTargetUser(req, id);
 
     if (!resolvedUser) {
+      if (id.toLowerCase().includes("toxic")) {
+        const toxicMock = {
+          id: "user-toxic-demo",
+          username: "ToxicGamer_99",
+          email: "toxic@gamer.fr",
+          avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+          bio: "Hardstuck Platine. Marre des noobs qui savent pas jouer. Si vous écoutez pas mes ordres et mes strats, je déco direct de la ranked.",
+          age: 19,
+          primaryPlatform: "PC",
+          playerType: "COMPETITIVE",
+          reputationScore: 18.5,
+          totalReviews: 3,
+          lastActiveAt: new Date(),
+          createdAt: new Date(),
+          favoriteGames: [
+            {
+              id: "fav-cs2",
+              rawgGameId: 4200,
+              gameTitle: "Counter-Strike 2",
+              gameSlug: "counter-strike-2",
+              gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+            },
+          ],
+          reviewsReceived: [
+            {
+              id: "rev-toxic-1",
+              rating: 1,
+              comment: "Insulte ses coéquipiers dès le round 2, refuse d'écouter les callouts et rage quit dès sa première mort en pleine ranked !",
+              tags: ["RAGE_QUIT", "TOXIC"],
+              createdAt: new Date(),
+              reviewer: { id: "rev-1", username: "SarahChill", avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" },
+            },
+            {
+              id: "rev-toxic-2",
+              rating: 1,
+              comment: "Micro coupé tout le match puis hurle au micro quand il meurt en solo. Attitude toxique et aucun esprit d'équipe.",
+              tags: ["TOXIC", "NO_MIC", "RAGE_QUIT"],
+              createdAt: new Date(),
+              reviewer: { id: "rev-2", username: "AlexVortex", avatarUrl: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150" },
+            },
+            {
+              id: "rev-toxic-3",
+              rating: 1,
+              comment: "Comportement inacceptable. Zéro esprit d'équipe et insulte tout le lobby en vocal.",
+              tags: ["TOXIC", "RAGE_QUIT"],
+              createdAt: new Date(),
+              reviewer: { id: "rev-3", username: "Valkyrie_FR", avatarUrl: "/avatars/avatar-default.svg" },
+            },
+          ],
+          hostedTickets: [],
+        };
+        return NextResponse.json({ success: true, data: toxicMock, user: toxicMock });
+      }
+
       return NextResponse.json(
         { error: "Utilisateur introuvable" },
         { status: 404 }
@@ -114,7 +168,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       },
     });
 
-    return NextResponse.json({ success: true, data: user });
+    return NextResponse.json({ success: true, data: user, user });
   } catch (error) {
     console.error("Erreur GET /api/users/[id]:", error);
     return NextResponse.json(

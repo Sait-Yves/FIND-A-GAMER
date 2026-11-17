@@ -18,6 +18,14 @@ function loadEnvFile(file) {
 loadEnvFile(path.join(__dirname, "../.env.local"));
 loadEnvFile(path.join(__dirname, "../.env"));
 
+if (!process.env.DATABASE_URL) {
+  if (process.env.DB_USER && process.env.DB_PASSWORD && process.env.DB_NAME) {
+    process.env.DATABASE_URL = `mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:3306/${process.env.DB_NAME}`;
+  } else {
+    process.env.DATABASE_URL = "mysql://root:@localhost:3306/lobbygamer";
+  }
+}
+
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -90,7 +98,33 @@ async function main() {
     },
   });
 
-  // 2. Création d'un Ticket LFG (Groupe de jeu)
+  // 1.3 Joueur exemple avec de très mauvaises notes (Badges négatifs)
+  const user3 = await prisma.user.create({
+    data: {
+      email: "toxic@gamer.fr",
+      username: "ToxicGamer_99",
+      passwordHash: "$2a$10$wT8fSgY6oN.G8sQ61nQGheK1Z.8p9R5D6A7sB8cD9eF0gH1iJ2kLm",
+      avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+      bio: "Hardstuck Platine. Marre des noobs qui savent pas jouer. Si vous écoutez pas mes ordres et mes strats, je déco direct de la ranked.",
+      age: 19,
+      primaryPlatform: "PC",
+      playerType: "COMPETITIVE",
+      reputationScore: 18.5,
+      totalReviews: 3,
+      favoriteGames: {
+        create: [
+          {
+            rawgGameId: 4200,
+            gameTitle: "Counter-Strike 2",
+            gameSlug: "counter-strike-2",
+            gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+          },
+        ],
+      },
+    },
+  });
+
+  // 2. Création d'un Ticket LFG classique (Valorant)
   const ticket = await prisma.ticket.create({
     data: {
       title: "Recherche Duo/Trio Ranked Platine - Micro obligatoire",
@@ -155,6 +189,61 @@ async function main() {
       rating: 5,
       comment: "Super lead d'équipe, très calme et d'excellents callouts !",
       tags: ["FAIR_PLAY", "GOOD_COMMUNICATION", "LEADER"],
+    },
+  });
+
+  // 6. Salon de jeu SOLO hébergé par le joueur toxique (Seul dans son salon)
+  const soloTicket = await prisma.ticket.create({
+    data: {
+      title: "[SOLO] CS2 PREMIER TRYHARD — NO NOOBS OR KICK",
+      description: "Lobby privé pour monter Global Elite. Je joue seul pour l'instant car tous mes anciens coéquipiers étaient nuls. Micro obligatoire et pas de débutants.",
+      hostId: user3.id,
+      rawgGameId: 4200,
+      gameTitle: "Counter-Strike 2",
+      gameSlug: "counter-strike-2",
+      gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+      is18Plus: true,
+      micRequired: true,
+      targetPlatform: "PC",
+      requiredPlayerType: "COMPETITIVE",
+      language: "FR",
+      customRules: "Exécution immédiate des ordres ou kick",
+      maxPlayers: 5,
+      currentPlayers: 1, // Seul dans son salon !
+      status: "OPEN",
+    },
+  });
+
+  // 7. Inscription de ToxicGamer_99 seul dans son salon
+  await prisma.participant.create({
+    data: {
+      ticketId: soloTicket.id,
+      userId: user3.id,
+      role: "HOST",
+      status: "ACCEPTED",
+    },
+  });
+
+  // 8. Évaluations négatives de comportement reçues par ToxicGamer_99 (Badges négatifs)
+  await prisma.review.create({
+    data: {
+      ticketId: soloTicket.id,
+      reviewerId: user1.id,
+      targetUserId: user3.id,
+      rating: 1,
+      comment: "Insulte ses coéquipiers dès le round 2, refuse d'écouter les callouts et rage quit dès sa première mort en pleine ranked !",
+      tags: ["RAGE_QUIT", "TOXIC"],
+    },
+  });
+
+  await prisma.review.create({
+    data: {
+      ticketId: ticket.id,
+      reviewerId: user2.id,
+      targetUserId: user3.id,
+      rating: 1,
+      comment: "Micro coupé tout le match puis hurle en vocal quand il meurt en solo. Attitude toxique et aucun esprit d'équipe.",
+      tags: ["TOXIC", "NO_MIC", "RAGE_QUIT"],
     },
   });
 

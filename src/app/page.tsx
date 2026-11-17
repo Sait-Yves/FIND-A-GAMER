@@ -22,6 +22,7 @@ import {
   ArrowRight,
   Plus,
   AlertCircle,
+  AlertTriangle,
   Activity,
   Layers,
   Sparkles,
@@ -505,25 +506,45 @@ function ExplorerContent() {
                             }}
                             className="w-11 h-11 rounded-xl object-cover bg-surface border border-surface-container-high"
                           />
-                          <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-on-primary font-bold text-[9px]">
+                          <span
+                            className={`absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full font-bold text-[9px] ${
+                              (ticket.host?.reputationScore ?? 100) < 50
+                                ? "bg-error text-white"
+                                : "bg-primary text-on-primary"
+                            }`}
+                          >
                             ★
                           </span>
                         </div>
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2">
-                            <span className="font-display font-bold text-sm text-white">
+                            <Link
+                              href={`/profile/${ticket.host?.username || "AlexVortex"}`}
+                              className="font-display font-bold text-sm text-white hover:text-primary transition-colors"
+                            >
                               @{ticket.host?.username || "Anonyme"}
-                            </span>
+                            </Link>
                             <span className="px-1.5 py-0.5 rounded bg-surface-container font-display font-bold text-[10px] text-tertiary">
                               HÔTE SQUAD
                             </span>
                           </div>
                           <div className="flex items-center gap-2 text-on-surface-variant text-[11px]">
-                            <span className="text-primary font-bold">
+                            <span
+                              className={`font-bold ${
+                                (ticket.host?.reputationScore ?? 100) < 50
+                                  ? "text-error"
+                                  : "text-primary"
+                              }`}
+                            >
                               {ticket.host?.reputationScore ? `${ticket.host.reputationScore}% ★` : "98.4% ★"}
                             </span>
                             <span>•</span>
-                            <span>Fair-Play Score: 99%</span>
+                            <span>
+                              Fair-Play:{" "}
+                              {(ticket.host?.reputationScore ?? 100) < 50
+                                ? `${ticket.host?.reputationScore}%`
+                                : "99%"}
+                            </span>
                             <span>•</span>
                             <span className="text-primary-fixed">
                               {ticket.host?.totalReviews ? `${ticket.host.totalReviews} avis` : "24 matches"}
@@ -571,9 +592,15 @@ function ExplorerContent() {
                           <AlertCircle className="w-3.5 h-3.5" /> +18 ANS
                         </span>
                       )}
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-tertiary/15 text-tertiary text-xs font-semibold">
-                        <ShieldCheck className="w-3.5 h-3.5" /> FAIR-PLAY 4.5+
-                      </span>
+                      {(ticket.host?.reputationScore ?? 100) < 50 ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-error/15 text-error text-xs font-semibold border border-error/30">
+                          <AlertTriangle className="w-3.5 h-3.5" /> RISQUE TOXICITÉ ({ticket.host?.reputationScore ?? 18.5}% ★)
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-tertiary/15 text-tertiary text-xs font-semibold">
+                          <ShieldCheck className="w-3.5 h-3.5" /> FAIR-PLAY 4.5+
+                        </span>
+                      )}
                       {ticket.customRules && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface-variant text-xs">
                           {ticket.customRules}

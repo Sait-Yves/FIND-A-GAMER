@@ -71,6 +71,31 @@ const DEFAULT_DEMO_TICKETS = [
     customRules: "Micro obligatoire, drop groupé",
     language: "FR",
   },
+  {
+    title: "[SOLO] CS2 PREMIER TRYHARD — NO NOOBS OR KICK",
+    description: "Lobby privé pour monter Global Elite. Je joue seul pour l'instant car tous mes anciens coéquipiers étaient nuls. Micro obligatoire et pas de débutants.",
+    gameTitle: "Counter-Strike 2",
+    gameSlug: "counter-strike-2",
+    rawgGameId: 4200,
+    gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+    maxPlayers: 5,
+    currentPlayers: 1, // Seul dans son salon !
+    micRequired: true,
+    is18Plus: true,
+    targetPlatform: "PC" as Platform,
+    requiredPlayerType: "COMPETITIVE" as const,
+    customRules: "Exécution immédiate des ordres ou kick",
+    language: "FR",
+    host: {
+      id: "user-toxic-demo",
+      username: "ToxicGamer_99",
+      avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+      reputationScore: 18.5,
+      totalReviews: 3,
+      primaryPlatform: "PC",
+      playerType: "COMPETITIVE",
+    },
+  },
 ];
 
 async function getOrCreateDefaultHost() {
@@ -88,6 +113,27 @@ async function getOrCreateDefaultHost() {
         playerType: "COMPETITIVE",
         reputationScore: 98.4,
         totalReviews: 24,
+      },
+    });
+  }
+  return host;
+}
+
+async function getOrCreateToxicHost() {
+  let host = await prisma.user.findUnique({ where: { email: "toxic@gamer.fr" } });
+  if (!host) {
+    host = await prisma.user.create({
+      data: {
+        username: "ToxicGamer_99",
+        email: "toxic@gamer.fr",
+        passwordHash: "$2a$10$wT8fSgY6oN.G8sQ61nQGheK1Z.8p9R5D6A7sB8cD9eF0gH1iJ2kLm",
+        avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+        bio: "CS2 Premier Tryhard. Ne rejoignez pas si vous ne savez pas viser.",
+        age: 26,
+        primaryPlatform: "PC",
+        playerType: "COMPETITIVE",
+        reputationScore: 18.5,
+        totalReviews: 3,
       },
     });
   }
@@ -115,17 +161,20 @@ export async function GET(req: NextRequest) {
     const totalCount = await prisma.ticket.count();
     if (totalCount === 0) {
       const defaultHost = await getOrCreateDefaultHost();
+      const toxicHost = await getOrCreateToxicHost();
       for (const demo of DEFAULT_DEMO_TICKETS) {
+        const { host: demoHost, ...ticketData } = demo as any;
+        const targetHost = demoHost?.username === "ToxicGamer_99" ? toxicHost : defaultHost;
         const created = await prisma.ticket.create({
           data: {
-            ...demo,
-            hostId: defaultHost.id,
+            ...ticketData,
+            hostId: targetHost.id,
           },
         });
         await prisma.participant.create({
           data: {
             ticketId: created.id,
-            userId: defaultHost.id,
+            userId: targetHost.id,
             role: "HOST",
             status: "ACCEPTED",
           },
@@ -201,11 +250,58 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ success: true, count: tickets.length, data: tickets });
   } catch (error) {
-    console.error("Erreur GET /api/tickets:", error);
-    return NextResponse.json(
-      { error: "Impossible de récupérer les tickets" },
-      { status: 500 }
-    );
+    console.error("Erreur GET /api/tickets (mode hors-ligne actif):", error);
+    const { searchParams } = new URL(req.url);
+    const game = searchParams.get("game");
+    const query = (searchParams.get("q") || "").toLowerCase();
+
+    let fallbackTickets = DEFAULT_DEMO_TICKETS.map((t, idx) => ({
+      ...t,
+      id: t.title.includes("CS2") ? "demo-ticket-toxic-cs2" : `demo-ticket-${idx + 1}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      host: t.host || {
+        id: "user-valkyrie-demo",
+        username: "Valkyrie_FR",
+        avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+        reputationScore: 98.4,
+        totalReviews: 24,
+        playerType: "COMPETITIVE",
+        primaryPlatform: "PC",
+      },
+      participants: [
+        {
+          id: `demo-p-${idx + 1}`,
+          role: "HOST",
+          user: t.host || {
+            id: "user-valkyrie-demo",
+            username: "Valkyrie_FR",
+            avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+          },
+        },
+      ],
+    }));
+
+    if (game && game !== "Tous" && game !== "all") {
+      fallbackTickets = fallbackTickets.filter((t) =>
+        t.gameTitle.toLowerCase().includes(game.toLowerCase())
+      );
+    }
+
+    if (query) {
+      fallbackTickets = fallbackTickets.filter(
+        (t) =>
+          t.title.toLowerCase().includes(query) ||
+          t.description.toLowerCase().includes(query) ||
+          t.gameTitle.toLowerCase().includes(query)
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      count: fallbackTickets.length,
+      data: fallbackTickets,
+    });
   }
 }
 
