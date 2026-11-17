@@ -1,12 +1,14 @@
 {
   "name": "LobbyGamer - Recherche de Groupes Gaming",
   "short_name": "LobbyGamer",
-  "description": "Trouvez des coéquipiers sérieux et bienveillants pour vos jeux multijoueurs préférés.",
+  "description": "Trouvez des coéquipiers sérieux et bienveillants pour vos jeux multijoueurs préférés avec système de réputation et chat vocal/texte en direct.",
   "start_url": "/",
+  "id": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0d1117",
-  "theme_color": "#6366f1",
-  "orientation": "portrait-primary",
+  "background_color": "#0b1120",
+  "theme_color": "#4edea3",
+  "orientation": "any",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -19,18 +21,24 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "shortcuts": [
     {
-      "name": "Créer un Ticket",
-      "url": "/tickets/create",
-      "description": "Créer un salon de recherche de groupe"
+      "name": "Explorer les Salons",
+      "url": "/",
+      "description": "Parcourir les tickets de jeu ouverts"
     },
     {
-      "name": "Explorer les Salons",
-      "url": "/tickets",
-      "description": "Parcourir les tickets de jeu ouverts"
+      "name": "Classements Fair-Play",
+      "url": "/leaderboard",
+      "description": "Consulter les meilleurs coéquipiers"
     }
   ]
 }
