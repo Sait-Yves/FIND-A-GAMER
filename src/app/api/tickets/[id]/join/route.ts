@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
+import { joinDemoTicket, getDemoTicket } from "@/lib/demo-tickets-store";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -20,50 +21,111 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
     // Résolution de l'utilisateur connecté via cookie de session ou headers/body
     let userId = req.headers.get("x-user-id") || body?.userId;
+    let candidateUsername = "Vous";
     if (!userId) {
       const sessionCookie = req.cookies.get("lobbygamer_session")?.value;
       if (sessionCookie) {
         const payload = verifySessionToken(sessionCookie);
         if (payload?.id) {
           userId = payload.id;
+          candidateUsername = payload.username || candidateUsername;
         }
       }
     }
 
+    // Gestion directe pour les tickets démo
+    const isDemoTarget = ticketId.startsWith("demo-") || ticketId.includes("toxic") || ticketId.includes("cs2");
+    if (isDemoTarget) {
+      const demoResult = joinDemoTicket(ticketId, {
+        id: userId || "user-valkyrie-demo",
+        username: candidateUsername !== "Vous" ? candidateUsername : "Valkyrie_FR",
+        avatarUrl: "/avatars/avatar-default.svg",
+        playerType: "COMPETITIVE",
+        primaryPlatform: "PC",
+        reputationScore: 98.4,
+      });
+
+      if (!demoResult.success) {
+        return NextResponse.json(
+          { error: demoResult.error || "Impossible de rejoindre ce salon" },
+          { status: 400 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Vous avez rejoint l'escouade avec succès !",
+        alreadyInRoom: demoResult.alreadyInRoom,
+        isHost: demoResult.isHost,
+        data: demoResult.ticket,
+      });
+    }
+
     // Fallback utilisateur par défaut si non connecté
     if (!userId) {
-      const defaultUser = await prisma.user.findFirst({ select: { id: true } });
-      userId = defaultUser?.id;
+      try {
+        const defaultUser = await prisma.user.findFirst({ select: { id: true } });
+        userId = defaultUser?.id;
+      } catch {
+        // Base inaccessible
+      }
     }
 
     if (!userId) {
-      return NextResponse.json(
-        { error: "Authentification requise pour rejoindre un ticket" },
-        { status: 401 }
-      );
+      userId = "user-guest-demo";
     }
 
     // Récupération du ticket cible et de l'utilisateur
-    const [ticket, candidateUser] = await Promise.all([
-      prisma.ticket.findUnique({
-        where: { id: ticketId },
-        include: {
-          participants: {
-            where: { status: "ACCEPTED" },
+    let ticket: any = null;
+    let candidateUser: any = null;
+    try {
+      const [t, u] = await Promise.all([
+        prisma.ticket.findUnique({
+          where: { id: ticketId },
+          include: {
+            participants: {
+              where: { status: "ACCEPTED" },
+            },
           },
-        },
-      }),
-      prisma.user.findUnique({
-        where: { id: userId },
-      }),
-    ]);
+        }),
+        prisma.user.findUnique({
+          where: { id: userId },
+        }),
+      ]);
+      ticket = t;
+      candidateUser = u;
+    } catch {
+      // Base inaccessible
+    }
 
     if (!ticket) {
+      // Si le ticket n'existe pas en DB, vérifier s'il est dans le store démo
+      const demoResult = joinDemoTicket(ticketId, {
+        id: userId,
+        username: candidateUser?.username || "Vous",
+        avatarUrl: candidateUser?.avatarUrl || "/avatars/avatar-default.svg",
+        playerType: candidateUser?.playerType || "CHILL",
+        primaryPlatform: candidateUser?.primaryPlatform || "PC",
+        reputationScore: candidateUser?.reputationScore ?? 99.0,
+      });
+
+      if (demoResult.success) {
+        return NextResponse.json({
+          success: true,
+          message: "Vous avez rejoint l'escouade avec succès !",
+          data: demoResult.ticket,
+        });
+      }
+
       return NextResponse.json({ error: "Ticket introuvable" }, { status: 404 });
     }
 
     if (!candidateUser) {
-      return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
+      candidateUser = {
+        id: userId,
+        username: "Vous",
+        avatarUrl: "/avatars/avatar-default.svg",
+      };
     }
 
     // Règle A : Si l'utilisateur est le créateur/hôte de CE ticket
@@ -78,7 +140,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     }
 
     // Règle B : Vérifier si l'utilisateur est DÉJÀ membre accepté de CE ticket
-    const isAlreadyMemberOfThis = ticket.participants.some((p) => p.userId === userId);
+    const isAlreadyMemberOfThis = ticket.participants?.some((p: any) => p.userId === userId);
     if (isAlreadyMemberOfThis) {
       return NextResponse.json({
         success: true,

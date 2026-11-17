@@ -3,11 +3,11 @@
     <!-- Background Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="50%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#0b1120" />
       <stop offset="100%" stop-color="#020617" />
     </linearGradient>
 
-    <!-- Neon Primary Gradient (Emerald to Cyan) -->
+    <!-- Crisp Emerald to Cyan Gradient -->
     <linearGradient id="neonEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00f5a0" />
       <stop offset="60%" stop-color="#10b981" />
@@ -20,66 +20,49 @@
       <stop offset="100%" stop-color="#38bdf8" />
     </linearGradient>
 
-    <!-- Shield Border Gradient -->
+    <!-- Crisp Shield Border -->
     <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4edea3" stop-opacity="0.9" />
-      <stop offset="50%" stop-color="#10b981" stop-opacity="0.4" />
-      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.8" />
+      <stop offset="0%" stop-color="#4edea3" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#0284c7" />
     </linearGradient>
-
-    <!-- Glow Filter -->
-    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="10" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-
-    <!-- Soft Ambient Glow -->
-    <filter id="ambientGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="24" result="blur" />
-    </filter>
   </defs>
 
-  <!-- Ambient Backdrop Glow -->
-  <circle cx="256" cy="256" r="180" fill="url(#neonEmerald)" opacity="0.18" filter="url(#ambientGlow)" />
-
-  <!-- Outer Rounded Hexagonal Shield Base -->
+  <!-- Clean Hexagonal Shield Base (No background halo) -->
   <path
-    d="M 256,36 
-       L 436,112 
-       L 436,324 
-       Q 436,410 256,476 
-       Q 76,410 76,324 
-       L 76,112 Z"
+    d="M 256,40 
+       L 432,114 
+       L 432,320 
+       Q 432,406 256,472 
+       Q 80,406 80,320 
+       L 80,114 Z"
     fill="url(#bgGrad)"
     stroke="url(#shieldBorder)"
     stroke-width="12"
     stroke-linejoin="round"
   />
 
-  <!-- Inner High-Tech Border Outline -->
+  <!-- Inner High-Tech Precision Border Outline -->
   <path
-    d="M 256,62 
-       L 412,128 
-       L 412,314 
-       Q 412,390 256,450 
-       Q 100,390 100,314 
-       L 100,128 Z"
+    d="M 256,66 
+       L 410,130 
+       L 410,312 
+       Q 410,386 256,446 
+       Q 102,386 102,312 
+       L 102,130 Z"
     fill="none"
     stroke="#1e293b"
     stroke-width="3"
-    stroke-opacity="0.8"
+    stroke-opacity="0.9"
   />
 
-  <!-- Top Gamer Nexus Crosshair Indicator -->
-  <circle cx="256" cy="92" r="6" fill="#00f5a0" filter="url(#neonGlow)" />
-  <line x1="256" y1="76" x2="256" y2="84" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" />
-  <line x1="256" y1="100" x2="256" y2="108" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" />
+  <!-- Top Gamer Crosshair Indicator -->
+  <circle cx="256" cy="94" r="6" fill="#00f5a0" />
+  <line x1="256" y1="78" x2="256" y2="86" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="256" y1="102" x2="256" y2="110" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" />
 
   <!-- Gaming Controller Body Silhouette -->
-  <g filter="url(#neonGlow)">
+  <g>
     <!-- Controller Wings / Chassis -->
     <path
       d="M 160,200 
@@ -146,6 +129,5 @@
     stroke-width="6"
     stroke-linecap="round"
     stroke-linejoin="round"
-    filter="url(#neonGlow)"
   />
 </svg>

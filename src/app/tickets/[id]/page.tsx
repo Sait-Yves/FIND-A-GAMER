@@ -120,12 +120,17 @@ export default function TicketRoomPage() {
   }, [messages]);
 
   // Déterminer le statut de l'utilisateur vis-à-vis du salon
-  const isHost = ticket && currentUser && ticket.hostId === currentUser.id;
+  const isHost =
+    ticket &&
+    currentUser &&
+    (ticket.hostId === currentUser.id || ticket.host?.username === currentUser.username);
   const isParticipant =
     ticket &&
     currentUser &&
     ticket.participants?.some(
-      (p: any) => p.userId === currentUser.id && p.status === "ACCEPTED"
+      (p: any) =>
+        (p.userId === currentUser.id || p.user?.username === currentUser.username) &&
+        p.status === "ACCEPTED"
     );
   const isInRoom = isHost || isParticipant;
 
@@ -153,8 +158,12 @@ export default function TicketRoomPage() {
         throw new Error(json.error || "Échec de l'adhésion au salon");
       }
 
-      // Recharger le salon pour entrer
-      await fetchTicketData();
+      // Mettre à jour l'état du salon
+      if (json.data && json.data.participants) {
+        setTicket(json.data);
+      } else {
+        await fetchTicketData();
+      }
       await fetchMessages();
     } catch (err: any) {
       setJoinError(err.message || "Impossible de rejoindre ce salon");
@@ -563,8 +572,10 @@ export default function TicketRoomPage() {
 
                   {/* Joined Participants */}
                   {ticket.participants?.map((p: any) => {
-                    if (p.userId === ticket.hostId) return null;
-                    const isYou = currentUser?.id === p.userId;
+                    if (p.userId === ticket.hostId || p.status === "LEFT") return null;
+                    const isYou =
+                      currentUser?.id === p.userId ||
+                      (currentUser?.username && p.user?.username === currentUser.username);
                     return (
                       <div
                         key={p.id}

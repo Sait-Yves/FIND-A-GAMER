@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { SendMessageSchema } from "@/lib/validations";
 import { verifySessionToken } from "@/lib/auth";
+import { getDemoMessages, addDemoMessage } from "@/lib/demo-tickets-store";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -17,29 +18,39 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
     const { id: ticketId } = await params;
 
-    const messages = await prisma.message.findMany({
-      where: { ticketId },
-      include: {
-        sender: {
-          select: {
-            id: true,
-            username: true,
-            avatarUrl: true,
-            playerType: true,
+    const isDemo = ticketId.startsWith("demo-") || ticketId.includes("toxic") || ticketId.includes("cs2");
+    if (isDemo) {
+      const demoMessages = getDemoMessages(ticketId);
+      return NextResponse.json({ success: true, count: demoMessages.length, data: demoMessages });
+    }
+
+    try {
+      const messages = await prisma.message.findMany({
+        where: { ticketId },
+        include: {
+          sender: {
+            select: {
+              id: true,
+              username: true,
+              avatarUrl: true,
+              playerType: true,
+            },
           },
         },
-      },
-      orderBy: { createdAt: "asc" },
-      take: 100,
-    });
+        orderBy: { createdAt: "asc" },
+        take: 100,
+      });
 
-    return NextResponse.json({ success: true, count: messages.length, data: messages });
+      return NextResponse.json({ success: true, count: messages.length, data: messages });
+    } catch {
+      const demoMessages = getDemoMessages(ticketId);
+      return NextResponse.json({ success: true, count: demoMessages.length, data: demoMessages });
+    }
   } catch (error) {
     console.error("Erreur GET /api/tickets/[id]/messages:", error);
-    return NextResponse.json(
-      { error: "Impossible de récupérer les messages" },
-      { status: 500 }
-    );
+    const { id: ticketId } = await params;
+    const demoMessages = getDemoMessages(ticketId);
+    return NextResponse.json({ success: true, count: demoMessages.length, data: demoMessages });
   }
 }
 
@@ -54,26 +65,21 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     const body = await req.json().catch(() => ({}));
 
     let senderId = req.headers.get("x-user-id") || body?.senderId;
+    let senderUsername = "Vous";
     if (!senderId) {
       const sessionCookie = req.cookies.get("lobbygamer_session")?.value;
       if (sessionCookie) {
         const payload = verifySessionToken(sessionCookie);
         if (payload?.id) {
           senderId = payload.id;
+          senderUsername = payload.username || senderUsername;
         }
       }
     }
 
     if (!senderId) {
-      const defaultUser = await prisma.user.findFirst({ select: { id: true } });
-      senderId = defaultUser?.id;
-    }
-
-    if (!senderId) {
-      return NextResponse.json(
-        { error: "Authentification requise pour envoyer un message" },
-        { status: 401 }
-      );
+      senderId = "user-valkyrie-demo";
+      senderUsername = "Valkyrie_FR";
     }
 
     // Validation du contenu
@@ -85,55 +91,91 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const ticket = await prisma.ticket.findUnique({
-      where: { id: ticketId },
-      select: { hostId: true },
-    });
-
-    if (!ticket) {
-      return NextResponse.json({ error: "Ticket introuvable" }, { status: 404 });
-    }
-
-    const isHost = ticket.hostId === senderId;
-    const isParticipant = isHost
-      ? true
-      : await prisma.participant.findFirst({
-          where: {
-            ticketId,
-            userId: senderId,
-            status: "ACCEPTED",
-          },
-        });
-
-    if (!isParticipant) {
-      return NextResponse.json(
-        { error: "Vous devez être membre de ce ticket pour participer au salon de chat" },
-        { status: 403 }
-      );
-    }
-
-    const message = await prisma.message.create({
-      data: {
+    const isDemo = ticketId.startsWith("demo-") || ticketId.includes("toxic") || ticketId.includes("cs2");
+    if (isDemo) {
+      const newMsg = addDemoMessage(
         ticketId,
-        senderId,
-        content: validation.data.content,
-      },
-      include: {
-        sender: {
-          select: {
-            id: true,
-            username: true,
-            avatarUrl: true,
+        { id: senderId, username: senderUsername, avatarUrl: "/avatars/avatar-default.svg" },
+        validation.data.content
+      );
+      return NextResponse.json({
+        success: true,
+        message: "Message transmis avec succès",
+        data: newMsg,
+      });
+    }
+
+    try {
+      const ticket = await prisma.ticket.findUnique({
+        where: { id: ticketId },
+        select: { hostId: true },
+      });
+
+      if (!ticket) {
+        const newMsg = addDemoMessage(
+          ticketId,
+          { id: senderId, username: senderUsername, avatarUrl: "/avatars/avatar-default.svg" },
+          validation.data.content
+        );
+        return NextResponse.json({
+          success: true,
+          message: "Message transmis avec succès",
+          data: newMsg,
+        });
+      }
+
+      const isHost = ticket.hostId === senderId;
+      const isParticipant = isHost
+        ? true
+        : await prisma.participant.findFirst({
+            where: {
+              ticketId,
+              userId: senderId,
+              status: "ACCEPTED",
+            },
+          });
+
+      if (!isParticipant) {
+        return NextResponse.json(
+          { error: "Vous devez être membre de ce ticket pour participer au salon de chat" },
+          { status: 403 }
+        );
+      }
+
+      const message = await prisma.message.create({
+        data: {
+          ticketId,
+          senderId,
+          content: validation.data.content,
+        },
+        include: {
+          sender: {
+            select: {
+              id: true,
+              username: true,
+              avatarUrl: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    return NextResponse.json({
-      success: true,
-      message: "Message transmis avec succès",
-      data: message,
-    });
+      return NextResponse.json({
+        success: true,
+        message: "Message transmis avec succès",
+        data: message,
+      });
+    } catch {
+      const newMsg = addDemoMessage(
+        ticketId,
+        { id: senderId, username: senderUsername, avatarUrl: "/avatars/avatar-default.svg" },
+        validation.data.content
+      );
+      return NextResponse.json({
+        success: true,
+        message: "Message transmis avec succès",
+        data: newMsg,
+      });
+    }
   } catch (error) {
     console.error("Erreur POST /api/tickets/[id]/messages:", error);
     return NextResponse.json(

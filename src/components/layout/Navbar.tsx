@@ -235,7 +235,7 @@ export function Navbar({
           <img
             src="/logo.svg"
             alt="LobbyGamer Logo"
-            className="w-8 h-8 rounded-lg shadow-[0_0_12px_rgba(78,222,163,0.35)] group-hover:scale-105 transition-transform object-contain"
+            className="w-8 h-8 rounded-lg group-hover:scale-105 transition-transform object-contain"
           />
           <span className="font-display font-bold text-base sm:text-lg tracking-wider text-white hidden sm:inline">
             LOBBY<span className="text-primary">GAMER</span>

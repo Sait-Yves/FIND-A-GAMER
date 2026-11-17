@@ -55,7 +55,7 @@ export default function RegisterPage() {
             <img
               src="/logo.svg"
               alt="LobbyGamer Logo"
-              className="w-10 h-10 rounded-xl shadow-[0_0_14px_rgba(78,222,163,0.35)] group-hover:scale-105 transition-transform object-contain"
+              className="w-10 h-10 rounded-xl group-hover:scale-105 transition-transform object-contain"
             />
             <span className="font-display font-bold text-xl text-white">
               LOBBY<span className="text-primary">GAMER</span>
