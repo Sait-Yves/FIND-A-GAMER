@@ -19,7 +19,7 @@ import {
   Check,
 } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
-import { ALL_GAMES_CATALOG } from "@/app/games/page";
+import { ALL_GAMES_CATALOG } from "@/lib/games";
 
 const AVATAR_PRESETS = [
   "/avatars/avatar-alex.svg",

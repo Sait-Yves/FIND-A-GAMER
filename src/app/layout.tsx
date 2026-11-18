@@ -8,11 +8,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png" },
       { url: "/logo.svg", type: "image/svg+xml" },
       { url: "/icons/icon-192x192.png", type: "image/png", sizes: "192x192" },
-      { url: "/favicon.png", type: "image/png" },
     ],
-    shortcut: "/logo.svg",
+    shortcut: "/favicon.ico",
     apple: "/icons/icon-192x192.png",
   },
 };
@@ -34,9 +35,11 @@ export default function RootLayout({
   return (
     <html lang="fr" className="dark">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="icon" href="/icons/icon-192x192.png" type="image/png" sizes="192x192" />
-        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
