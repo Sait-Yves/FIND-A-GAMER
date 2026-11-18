@@ -140,7 +140,7 @@ export default function MessagesPage() {
     }
   }, []);
 
-  // Définition des salons / conversations
+  // Définition des salons / conversations avec les vrais joueurs actuellement en salon
   const [channels, setChannels] = useState([
     {
       id: "apex-ranked",
@@ -154,15 +154,15 @@ export default function MessagesPage() {
       voiceMembers: [
         {
           id: "m-1",
-          username: "Noxis_FPS",
-          avatarUrl: "/avatars/avatar-default.svg",
+          username: "SarahChill",
+          avatarUrl: "/avatars/avatar-sarah.svg",
           isSpeaking: false,
           isMuted: false,
           volume: 85,
         },
         {
           id: "m-2",
-          username: "Kaelen_Tank",
+          username: "AlexVortex",
           avatarUrl: "/avatars/avatar-alex.svg",
           isSpeaking: false,
           isMuted: false,
@@ -172,46 +172,38 @@ export default function MessagesPage() {
     },
     {
       id: "val-premier",
-      name: "TOURNOI PREMIER — HAVEN",
+      name: "TOURNOI PREMIER — VALORANT",
       game: "Valorant",
-      badge: "4/5 Joueurs",
-      membersCount: 4,
-      unread: 2,
+      badge: "2/5 Joueurs",
+      membersCount: 2,
+      unread: 1,
       avatar: "/games/valorant.svg",
       targetLink: "/tickets/val-premier-demo",
       voiceMembers: [
         {
           id: "m-3",
-          username: "Cypher_FR",
-          avatarUrl: "/avatars/avatar-default.svg",
+          username: "AlexVortex",
+          avatarUrl: "/avatars/avatar-alex.svg",
           isSpeaking: false,
           isMuted: false,
           volume: 80,
         },
-        {
-          id: "m-4",
-          username: "Jett_Elite",
-          avatarUrl: "/avatars/avatar-sarah.svg",
-          isSpeaking: false,
-          isMuted: false,
-          volume: 85,
-        },
       ],
     },
     {
-      id: "dm-hiroshi",
-      name: "@Hiroshi_89",
+      id: "dm-sarah",
+      name: "@SarahChill",
       game: "Message Privé",
       badge: "En Ligne",
       membersCount: 2,
       unread: 1,
-      avatar: "/avatars/avatar-alex.svg",
-      targetLink: "/profile/Hiroshi_89",
+      avatar: "/avatars/avatar-sarah.svg",
+      targetLink: "/profile/SarahChill",
       voiceMembers: [
         {
           id: "m-5",
-          username: "Hiroshi_89",
-          avatarUrl: "/avatars/avatar-alex.svg",
+          username: "SarahChill",
+          avatarUrl: "/avatars/avatar-sarah.svg",
           isSpeaking: false,
           isMuted: false,
           volume: 90,
@@ -225,8 +217,8 @@ export default function MessagesPage() {
     "apex-ranked": [
       {
         id: "1",
-        sender: "Noxis_FPS",
-        avatar: "/avatars/avatar-default.svg",
+        sender: "SarahChill",
+        avatar: "/avatars/avatar-sarah.svg",
         time: "14:32",
         text: "Bienvenue dans le salon squad ! On part sur Storm Point en classé dans 5 minutes.",
         isMe: false,
@@ -234,14 +226,14 @@ export default function MessagesPage() {
       {
         id: "2",
         sender: "Valkyrie_FR",
-        avatar: "/avatars/avatar-sarah.svg",
+        avatar: "/avatars/avatar-default.svg",
         time: "14:34",
         text: "Je suis prête. J'ai lancé le vocal WebRTC et Apex est à jour. Je lock Valkyrie.",
         isMe: true,
       },
       {
         id: "3",
-        sender: "Kaelen_Tank",
+        sender: "AlexVortex",
         avatar: "/avatars/avatar-alex.svg",
         time: "14:36",
         text: "Nickel, je prends Gibraltar pour la bulle et l'ult défensif. Let's go grind le Master !",
@@ -251,36 +243,28 @@ export default function MessagesPage() {
     "val-premier": [
       {
         id: "v1",
-        sender: "Cypher_FR",
-        avatar: "/avatars/avatar-default.svg",
+        sender: "AlexVortex",
+        avatar: "/avatars/avatar-alex.svg",
         time: "12:15",
-        text: "Salut l'équipe ! On cale les setups de pièges sur Haven site A ce soir à 21h00.",
+        text: "Salut ! On cale les strats et les flashs pour le tournoi de ce soir.",
         isMe: false,
       },
       {
         id: "v2",
         sender: "Valkyrie_FR",
-        avatar: "/avatars/avatar-sarah.svg",
+        avatar: "/avatars/avatar-default.svg",
         time: "12:18",
-        text: "Bien reçu, j'ai bossé les lineups flèches sur C Long et garage.",
+        text: "Bien reçu, j'ai bossé les lineups flèches sur Haven site A.",
         isMe: true,
       },
-      {
-        id: "v3",
-        sender: "Jett_Elite",
-        avatar: "/avatars/avatar-sarah.svg",
-        time: "12:20",
-        text: "Rejoignez l'appel vocal dès que vous lancez le jeu, micro obligatoire !",
-        isMe: false,
-      },
     ],
-    "dm-hiroshi": [
+    "dm-sarah": [
       {
         id: "h1",
-        sender: "Hiroshi_89",
-        avatar: "/avatars/avatar-alex.svg",
+        sender: "SarahChill",
+        avatar: "/avatars/avatar-sarah.svg",
         time: "Hier",
-        text: "Yo ! Chaud pour un duo classé ce soir après 20h ?",
+        text: "Yo ! Chaud pour continuer le grind ce soir après 20h ?",
         isMe: false,
       },
       {
@@ -293,8 +277,8 @@ export default function MessagesPage() {
       },
       {
         id: "h3",
-        sender: "Hiroshi_89",
-        avatar: "/avatars/avatar-alex.svg",
+        sender: "SarahChill",
+        avatar: "/avatars/avatar-sarah.svg",
         time: "14:10",
         text: "Ça marche, j'active le vocal direct sur LobbyGamer.",
         isMe: false,

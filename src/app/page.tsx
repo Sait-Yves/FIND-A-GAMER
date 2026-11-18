@@ -933,7 +933,7 @@ function ExplorerContent() {
                   Joueurs recommandés :
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {["SarahChill", "AlexVortex", "Valkyrie_FR", "Noxis_FPS", "ToxicGamer_99"].map((pseudo) => (
+                  {["SarahChill", "AlexVortex", "Valkyrie_FR", "ToxicGamer_99"].map((pseudo) => (
                     <button
                       key={pseudo}
                       type="button"

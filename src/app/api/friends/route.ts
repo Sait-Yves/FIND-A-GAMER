@@ -4,37 +4,17 @@ import { verifySessionToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-// Démos initiales pour affichage immédiat
+// Démos initiales basées sur les joueurs présents dans les salons
 const INITIAL_DEMO_FRIENDS = [
-  {
-    id: "friend-hiroshi",
-    username: "Hiroshi_89",
-    avatarUrl: "/avatars/avatar-alex.svg",
-    primaryPlatform: "PC",
-    playerType: "COMPETITIVE",
-    currentGame: "Valorant • En partie",
-    isOnline: true,
-    reputationScore: 98.2,
-  },
-  {
-    id: "friend-cynthia",
-    username: "Cynthia_F",
-    avatarUrl: "/avatars/avatar-sarah.svg",
-    primaryPlatform: "PLAYSTATION",
-    playerType: "CHILL",
-    currentGame: "Helldivers 2 • Dans le menu",
-    isOnline: true,
-    reputationScore: 99.0,
-  },
   {
     id: "friend-sarah",
     username: "SarahChill",
     avatarUrl: "/avatars/avatar-sarah.svg",
     primaryPlatform: "PLAYSTATION",
     playerType: "CHILL",
-    currentGame: "Apex Legends • En vocal",
+    currentGame: "Apex Legends • En salon",
     isOnline: true,
-    reputationScore: 100.0,
+    reputationScore: 99.2,
   },
   {
     id: "friend-alex",
@@ -42,8 +22,8 @@ const INITIAL_DEMO_FRIENDS = [
     avatarUrl: "/avatars/avatar-alex.svg",
     primaryPlatform: "PC",
     playerType: "COMPETITIVE",
-    currentGame: "CS2 • Recherche lobby",
-    isOnline: false,
+    currentGame: "Valorant • En salon",
+    isOnline: true,
     reputationScore: 96.5,
   },
 ];

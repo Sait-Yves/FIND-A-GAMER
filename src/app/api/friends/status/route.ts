@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 
     if (!resolvedTargetId) {
       // Pour les pseudos démo
-      const demoFriends = ["Hiroshi_89", "Cynthia_F", "SarahChill"];
+      const demoFriends = ["SarahChill", "AlexVortex"];
       if (targetUsername && demoFriends.includes(targetUsername)) {
         return NextResponse.json({ isFriend: true });
       }

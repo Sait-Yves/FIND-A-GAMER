@@ -17,106 +17,46 @@ export const FALLBACK_LEADERBOARD_PLAYERS: LeaderboardPlayer[] = [
   {
     rank: 1,
     id: "user-top-1",
-    username: "Aurelius_Prime",
-    avatarUrl: "/avatars/avatar-alex.svg",
-    reputationScore: 99.8,
-    matchesFinished: 242,
-    playerType: "STRATEGIST",
-    primaryPlatform: "PC",
-    primaryGame: "Valorant",
-    badges: ["LEADER", "FAIR_PLAY", "PUNCTUAL"],
-  },
-  {
-    rank: 2,
-    id: "user-top-2",
     username: "SarahChill",
     avatarUrl: "/avatars/avatar-sarah.svg",
     reputationScore: 99.2,
-    matchesFinished: 189,
+    matchesFinished: 38,
     playerType: "CHILL",
     primaryPlatform: "PLAYSTATION",
     primaryGame: "Helldivers 2",
     badges: ["TEAM_PLAYER", "PATIENT", "FAIR_PLAY"],
   },
   {
-    rank: 3,
-    id: "user-top-3",
+    rank: 2,
+    id: "user-top-2",
     username: "Valkyrie_FR",
     avatarUrl: "/avatars/avatar-default.svg",
     reputationScore: 98.4,
-    matchesFinished: 156,
+    matchesFinished: 32,
     playerType: "COMPETITIVE",
     primaryPlatform: "CROSSPLAY",
     primaryGame: "Apex Legends",
     badges: ["GOOD_COMMUNICATION", "FAIR_PLAY", "LEADER"],
   },
   {
-    rank: 4,
-    id: "user-top-4",
+    rank: 3,
+    id: "user-top-3",
     username: "AlexVortex",
     avatarUrl: "/avatars/avatar-alex.svg",
     reputationScore: 96.5,
-    matchesFinished: 132,
+    matchesFinished: 28,
     playerType: "COMPETITIVE",
     primaryPlatform: "PC",
     primaryGame: "Counter-Strike 2",
     badges: ["FAIR_PLAY", "PUNCTUAL"],
   },
   {
-    rank: 5,
-    id: "user-top-5",
-    username: "Noxis_FPS",
-    avatarUrl: "/avatars/avatar-default.svg",
-    reputationScore: 95.8,
-    matchesFinished: 98,
-    playerType: "HARDCORE",
-    primaryPlatform: "PC",
-    primaryGame: "Warzone 2",
-    badges: ["GOOD_COMMUNICATION", "TEAM_PLAYER"],
-  },
-  {
-    rank: 6,
-    id: "user-top-6",
-    username: "ZenKitsune",
-    avatarUrl: "/avatars/avatar-sarah.svg",
-    reputationScore: 95.1,
-    matchesFinished: 84,
-    playerType: "CHILL",
-    primaryPlatform: "SWITCH",
-    primaryGame: "Rocket League",
-    badges: ["PATIENT", "TEAM_PLAYER"],
-  },
-  {
-    rank: 7,
-    id: "user-top-7",
-    username: "ShadowStriker",
-    avatarUrl: "/avatars/avatar-alex.svg",
-    reputationScore: 94.7,
-    matchesFinished: 79,
-    playerType: "STRATEGIST",
-    primaryPlatform: "PC",
-    primaryGame: "Valorant",
-    badges: ["GOOD_COMMUNICATION", "PUNCTUAL"],
-  },
-  {
-    rank: 8,
-    id: "user-top-8",
-    username: "PixelQueen",
-    avatarUrl: "/avatars/avatar-default.svg",
-    reputationScore: 94.0,
-    matchesFinished: 67,
-    playerType: "CHATTY",
-    primaryPlatform: "XBOX",
-    primaryGame: "Apex Legends",
-    badges: ["FAIR_PLAY", "LEADER"],
-  },
-  {
-    rank: 9,
+    rank: 4,
     id: "user-toxic-demo",
     username: "ToxicGamer_99",
     avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
     reputationScore: 18.5,
-    matchesFinished: 34,
+    matchesFinished: 3,
     playerType: "COMPETITIVE",
     primaryPlatform: "PC",
     primaryGame: "Counter-Strike 2",
@@ -194,17 +134,9 @@ export async function getLeaderboardData(): Promise<LeaderboardPlayer[]> {
       };
     });
 
-    // Compléter avec le roster de démo pour toujours afficher au moins 5 rangs
-    if (players.length < 5) {
-      const existingUsernames = new Set(players.map((p) => p.username));
-      for (const fallback of FALLBACK_LEADERBOARD_PLAYERS) {
-        if (!existingUsernames.has(fallback.username)) {
-          players.push({
-            ...fallback,
-            rank: players.length + 1,
-          });
-        }
-      }
+    // Si aucun joueur en base, utiliser la liste des joueurs actifs dans les salons
+    if (players.length === 0) {
+      return FALLBACK_LEADERBOARD_PLAYERS;
     }
 
     // Toujours s'assurer que ToxicGamer_99 est visible pour la démonstration des badges négatifs

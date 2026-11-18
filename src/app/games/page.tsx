@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -26,6 +26,39 @@ export default function GamesCatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState("Tous les jeux");
   const [rawgResults, setRawgResults] = useState<any[]>([]);
   const [isSearchingRawg, setIsSearchingRawg] = useState(false);
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [loadingTickets, setLoadingTickets] = useState(true);
+
+  // Charger les vrais salons actifs depuis l'API
+  useEffect(() => {
+    async function loadTickets() {
+      try {
+        const res = await fetch("/api/tickets");
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          setTickets(json.data);
+        }
+      } catch (err) {
+        console.warn("Impossible de récupérer les salons en cours:", err);
+      } finally {
+        setLoadingTickets(false);
+      }
+    }
+    loadTickets();
+  }, []);
+
+  // Calcul du nombre réel de salons pour un jeu
+  const getGameRoomsCount = (gameName: string, rawgId: number) => {
+    return tickets.filter(
+      (t) =>
+        t.status !== "CLOSED" &&
+        (t.gameTitle?.toLowerCase() === gameName.toLowerCase() ||
+          t.rawgGameId === rawgId ||
+          t.gameSlug === gameName.toLowerCase().replace(/\s+/g, "-"))
+    ).length;
+  };
+
+  const totalRooms = tickets.filter((t) => t.status !== "CLOSED").length;
 
   // Filtrage local
   const filteredGames = ALL_GAMES_CATALOG.filter((game) => {
@@ -55,8 +88,6 @@ export default function GamesCatalogPage() {
       setIsSearchingRawg(false);
     }
   };
-
-  const totalRooms = ALL_GAMES_CATALOG.reduce((acc, g) => acc + g.activeRooms, 0);
 
   return (
     <div className="min-h-screen bg-surface flex flex-col overflow-x-hidden">
@@ -96,7 +127,9 @@ export default function GamesCatalogPage() {
               </div>
               <div className="px-4 py-2.5 rounded-xl bg-surface-container border border-primary/30 flex flex-col items-center shadow-[0_0_12px_rgba(78,222,163,0.15)]">
                 <span className="text-[10px] uppercase font-bold text-primary">Salons Ouverts</span>
-                <span className="font-mono text-base font-bold text-primary">{totalRooms} Sessions</span>
+                <span className="font-mono text-base font-bold text-primary">
+                  {loadingTickets ? "..." : `${totalRooms} ${totalRooms > 1 ? "Salons Actifs" : "Salon Actif"}`}
+                </span>
               </div>
             </div>
           </div>
@@ -216,9 +249,20 @@ export default function GamesCatalogPage() {
                         <h2 className="font-display font-bold text-lg text-white group-hover:text-primary transition-colors tracking-tight">
                           {game.name}
                         </h2>
-                        <span className="text-xs font-mono text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20 shrink-0">
-                          {game.activeRooms} salons
-                        </span>
+                        {(() => {
+                          const roomCount = getGameRoomsCount(game.name, game.id);
+                          return (
+                            <span
+                              className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
+                                roomCount > 0
+                                  ? "text-primary font-bold bg-primary/10 border-primary/20 shadow-[0_0_8px_rgba(78,222,163,0.15)]"
+                                  : "text-on-surface-variant/50 bg-surface-container-high/40 border-surface-container-high"
+                              }`}
+                            >
+                              {roomCount} {roomCount > 1 ? "salons" : "salon"}
+                            </span>
+                          );
+                        })()}
                       </div>
 
                       <span className="text-[11px] text-tertiary font-medium">

@@ -154,7 +154,7 @@ export default function FriendsPage() {
     { username: "SarahChill", platform: "PLAYSTATION", activity: "Apex Legends" },
     { username: "AlexVortex", platform: "PC", activity: "CS2" },
     { username: "Valkyrie_FR", platform: "PC", activity: "Valorant" },
-    { username: "Noxis_FPS", platform: "PC", activity: "Helldivers 2" },
+    { username: "ToxicGamer_99", platform: "PC", activity: "CS2" },
   ];
 
   return (
@@ -505,7 +505,7 @@ export default function FriendsPage() {
                     type="text"
                     value={newFriendUsername}
                     onChange={(e) => setNewFriendUsername(e.target.value)}
-                    placeholder="Ex: SarahChill, Hiroshi_89..."
+                    placeholder="Ex: SarahChill, AlexVortex..."
                     required
                     className="w-full bg-surface-container-low border border-surface-container-high rounded-xl pl-7 pr-3 py-2.5 text-xs text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
                   />
