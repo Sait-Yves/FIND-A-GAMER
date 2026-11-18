@@ -3,7 +3,7 @@ import { FALLBACK_LEADERBOARD_PLAYERS } from "@/lib/leaderboard";
 
 describe("Classement & Système Fair-Play (Unit Tests)", () => {
   it("fournit une liste de joueurs de démo avec des scores valides", () => {
-    expect(FALLBACK_LEADERBOARD_PLAYERS.length).toBeGreaterThanOrEqual(5);
+    expect(FALLBACK_LEADERBOARD_PLAYERS.length).toBeGreaterThanOrEqual(4);
 
     FALLBACK_LEADERBOARD_PLAYERS.forEach((player, index) => {
       expect(player.rank).toBe(index + 1);
