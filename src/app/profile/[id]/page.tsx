@@ -52,7 +52,7 @@ export default function UserProfilePage() {
             id: 4200,
             title: "Counter-Strike 2",
             slug: "counter-strike-2",
-            coverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+            coverUrl: "/games/counter-strike-2.svg",
             hours: "1 250h de jeu",
           },
         ]
@@ -75,7 +75,7 @@ export default function UserProfilePage() {
             id: 3498,
             title: "Grand Theft Auto V",
             slug: "grand-theft-auto-v",
-            coverUrl: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg",
+            coverUrl: "/games/grand-theft-auto-v.svg",
             hours: "210h de jeu",
           },
         ],

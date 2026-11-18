@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgR6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#121e2d"/>
+      <stop offset="50%" stop-color="#1b2f47"/>
+      <stop offset="100%" stop-color="#080e16"/>
+    </linearGradient>
+    <linearGradient id="r6Blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00c0ff"/>
+      <stop offset="100%" stop-color="#0066cc"/>
+    </linearGradient>
+    <linearGradient id="r6Orange" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff9900"/>
+      <stop offset="100%" stop-color="#ff5500"/>
+    </linearGradient>
+    <pattern id="gridR6" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#00c0ff" stroke-opacity="0.1" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgR6)"/>
+  <rect width="600" height="350" fill="url(#gridR6)"/>
+
+  <!-- Rainbow Six Iconic "6" with Tactical Crosshair / Shield -->
+  <g transform="translate(265, 60)">
+    <!-- Tactical Hexagonal Shield Frame -->
+    <polygon points="35,0 70,18 70,72 35,90 0,72 0,18" fill="url(#bgR6)" stroke="url(#r6Blue)" stroke-width="3"/>
+    <!-- Bold Numeral 6 with Inverted Weapon Grip -->
+    <path d="M 46 16 L 24 16 C 18 16 14 22 14 28 L 14 62 C 14 68 18 74 25 74 L 45 74 C 52 74 56 68 56 62 L 56 46 C 56 40 52 34 45 34 L 26 34 L 26 28 L 46 28 Z M 26 44 L 44 44 L 44 62 L 26 62 Z" fill="#ffffff"/>
+    <!-- Orange Tactical Notch -->
+    <rect x="52" y="20" width="8" height="8" rx="2" fill="url(#r6Orange)"/>
+  </g>
+
+  <text x="300" y="235" font-family="'Space Grotesk', system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">RAINBOW SIX SIEGE</text>
+  <text x="300" y="265" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="600" fill="#00c0ff" text-anchor="middle" letter-spacing="1.5">UBISOFT • TACTICAL CQB 5V5</text>
+</svg>

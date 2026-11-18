@@ -129,7 +129,7 @@ export async function GET(req: NextRequest) {
             id: "demo-ticket-toxic-cs2",
             title: "[SOLO] CS2 PREMIER TRYHARD — NO NOOBS OR KICK",
             gameTitle: "Counter-Strike 2",
-            gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+            gameCoverUrl: "/games/counter-strike-2.svg",
             currentPlayers: 1,
             maxPlayers: 5,
             targetPlatform: "PC",

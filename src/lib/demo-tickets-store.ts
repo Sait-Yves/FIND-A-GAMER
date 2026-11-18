@@ -97,7 +97,7 @@ function getStore(): Map<string, DemoTicket> {
       gameSlug: "counter-strike-2",
       rawgGameId: 4200,
       gameCoverUrl:
-        "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+        "/games/counter-strike-2.svg",
       maxPlayers: 5,
       currentPlayers: 1, // Hôte seul au départ
       micRequired: true,

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgGta" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e2316"/>
+      <stop offset="50%" stop-color="#183b25"/>
+      <stop offset="100%" stop-color="#06120b"/>
+    </linearGradient>
+    <linearGradient id="gtaGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <linearGradient id="gtaGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <pattern id="gridGta" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M 26 0 L 0 0 0 26" fill="none" stroke="#22c55e" stroke-opacity="0.1" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgGta)"/>
+  <rect width="600" height="350" fill="url(#gridGta)"/>
+
+  <!-- Iconic GTA "V" Roman Numeral with Ribbon Banner -->
+  <g transform="translate(255, 60)">
+    <!-- Roman V -->
+    <polygon points="12,8 38,8 55,72 72,8 98,8 65,96 45,96" fill="url(#gtaGreen)" stroke="#ffffff" stroke-width="2.5"/>
+    <!-- Banknote Banner Across Center -->
+    <rect x="0" y="42" width="110" height="24" rx="4" fill="url(#gtaGold)" stroke="#ffffff" stroke-width="1.5"/>
+    <text x="55" y="59" font-family="'Space Grotesk', system-ui, sans-serif" font-size="12" font-weight="900" fill="#000000" text-anchor="middle" letter-spacing="3">FIVE</text>
+  </g>
+
+  <text x="300" y="235" font-family="'Space Grotesk', system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">GRAND THEFT AUTO V</text>
+  <text x="300" y="265" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="600" fill="#4ade80" text-anchor="middle" letter-spacing="1.5">ROCKSTAR GAMES • BRAQUAGES &amp; OPEN WORLD</text>
+</svg>

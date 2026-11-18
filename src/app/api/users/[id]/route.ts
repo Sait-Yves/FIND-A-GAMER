@@ -26,7 +26,7 @@ const TOXIC_MOCK_USER = {
       rawgGameId: 4200,
       gameTitle: "Counter-Strike 2",
       gameSlug: "counter-strike-2",
-      gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+      gameCoverUrl: "/games/counter-strike-2.svg",
     },
   ],
   reviewsReceived: [
@@ -60,7 +60,7 @@ const TOXIC_MOCK_USER = {
       id: "demo-ticket-toxic-cs2",
       title: "[SOLO] CS2 PREMIER TRYHARD — NO NOOBS OR KICK",
       gameTitle: "Counter-Strike 2",
-      gameCoverUrl: "https://media.rawg.io/media/games/736/736190963952e2be29b72bcfa7ce7fa6.jpg",
+      gameCoverUrl: "/games/counter-strike-2.svg",
       maxPlayers: 5,
       currentPlayers: 1,
       createdAt: new Date(),

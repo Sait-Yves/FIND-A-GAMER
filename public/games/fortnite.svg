@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <linearGradient id="bgFn" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#220b45"/>
+      <stop offset="50%" stop-color="#3b1578"/>
+      <stop offset="100%" stop-color="#0e0420"/>
+    </linearGradient>
+    <linearGradient id="fnCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="fnYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe600"/>
+      <stop offset="100%" stop-color="#ff007a"/>
+    </linearGradient>
+    <pattern id="gridFn" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#a855f7" stroke-opacity="0.15" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="350" fill="url(#bgFn)"/>
+  <rect width="600" height="350" fill="url(#gridFn)"/>
+
+  <!-- Fortnite Iconic Stylized "F" with energetic tilt -->
+  <g transform="translate(265, 65)">
+    <!-- Shadow / 3D extrusion -->
+    <path d="M 12 12 L 62 12 L 58 36 L 36 36 L 34 50 L 52 50 L 48 72 L 30 72 L 24 108 L 4 108 Z" fill="#000000" opacity="0.4"/>
+    <!-- Front Face -->
+    <path d="M 8 8 L 60 8 L 56 32 L 34 32 L 32 46 L 50 46 L 46 68 L 28 68 L 22 104 L 2 104 Z" fill="url(#fnCyan)"/>
+    <!-- Accent Highlight Notch -->
+    <polygon points="56,8 60,8 46,68 42,68" fill="#ffffff" opacity="0.6"/>
+  </g>
+
+  <text x="300" y="235" font-family="'Space Grotesk', system-ui, sans-serif" font-size="32" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="5">FORTNITE</text>
+  <text x="300" y="265" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="600" fill="#00f0ff" text-anchor="middle" letter-spacing="1.5">EPIC GAMES • BATTLE ROYALE &amp; ZÉRO BUILD</text>
+</svg>
