@@ -67,21 +67,46 @@ function ExplorerContent() {
 
   // Data state
   const [tickets, setTickets] = useState<any[]>([]);
+  const [allTickets, setAllTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const games = [
-    { name: "Tous", activeRooms: 785, Icon: Layers },
-    { name: "Apex Legends", activeRooms: 148, Icon: Trophy },
-    { name: "Valorant", activeRooms: 92, Icon: Shield },
-    { name: "Overwatch 2", activeRooms: 76, Icon: Swords },
-    { name: "Fortnite", activeRooms: 124, Icon: Trophy },
-    { name: "Marvel Rivals", activeRooms: 85, Icon: Shield },
-    { name: "Helldivers 2", activeRooms: 64, Icon: Rocket },
-    { name: "Warzone 2", activeRooms: 115, Icon: Crosshair },
-    { name: "Rocket League", activeRooms: 43, Icon: CircleDot },
-    { name: "Counter-Strike 2", activeRooms: 88, Icon: Swords },
-    { name: "Rainbow Six Siege", activeRooms: 39, Icon: ShieldCheck },
+    { name: "Tous", Icon: Layers },
+    { name: "Apex Legends", Icon: Trophy },
+    { name: "Valorant", Icon: Shield },
+    { name: "Overwatch 2", Icon: Swords },
+    { name: "Fortnite", Icon: Trophy },
+    { name: "Marvel Rivals", Icon: Shield },
+    { name: "Helldivers 2", Icon: Rocket },
+    { name: "Warzone 2", Icon: Crosshair },
+    { name: "Rocket League", Icon: CircleDot },
+    { name: "Counter-Strike 2", Icon: Swords },
+    { name: "Grand Theft Auto V", Icon: Shield },
+    { name: "Rainbow Six Siege", Icon: ShieldCheck },
   ];
+
+  // Calcul dynamique du nombre réel de salons ouverts par jeu
+  const getGameRoomsCount = (gameName: string) => {
+    if (gameName === "Tous") return allTickets.length;
+    return allTickets.filter(
+      (t) =>
+        t.gameTitle?.toLowerCase().includes(gameName.toLowerCase()) ||
+        t.gameSlug?.toLowerCase().includes(gameName.toLowerCase().replace(/\s+/g, "-"))
+    ).length;
+  };
+
+  // Charger la liste complète des tickets pour les compteurs globaux
+  const fetchAllTickets = useCallback(async () => {
+    try {
+      const res = await fetch("/api/tickets");
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setAllTickets(json.data);
+      }
+    } catch (err) {
+      console.warn("Erreur chargement tous les tickets:", err);
+    }
+  }, []);
 
   const fetchTickets = useCallback(async () => {
     try {
@@ -114,6 +139,12 @@ function ExplorerContent() {
           );
         }
         setTickets(sorted);
+        // Si aucun filtre actif, synchroniser allTickets
+        if (!selectedGame || selectedGame === "Tous") {
+          if (!searchQuery && platformFilter === "ALL") {
+            setAllTickets(json.data);
+          }
+        }
       }
     } catch (err) {
       console.error("Erreur chargement des tickets:", err);
@@ -121,6 +152,10 @@ function ExplorerContent() {
       setLoading(false);
     }
   }, [selectedGame, searchQuery, platformFilter, micFilter, is18PlusFilter, sortBy]);
+
+  useEffect(() => {
+    fetchAllTickets();
+  }, [fetchAllTickets]);
 
   useEffect(() => {
     fetchTickets();
@@ -237,15 +272,17 @@ function ExplorerContent() {
               </div>
               <span className="text-on-surface-variant hidden sm:inline" aria-hidden="true">•</span>
               <span className="text-on-surface text-[11px] sm:text-xs">
-                <strong className="text-primary font-bold">3 842</strong> Joueurs en ligne
+                <strong className="text-primary font-bold">
+                  {allTickets.reduce((acc, t) => acc + (t.currentPlayers || 1), 0)}
+                </strong> Joueurs en salon
               </span>
               <span className="text-on-surface-variant hidden sm:inline" aria-hidden="true">•</span>
               <span className="text-on-surface text-[11px] sm:text-xs">
-                <strong className="text-tertiary font-bold">{tickets.length}</strong> Salons actifs
+                <strong className="text-tertiary font-bold">{tickets.length}</strong> {tickets.length > 1 ? "Salons actifs" : "Salon actif"}
               </span>
               <span className="text-on-surface-variant hidden md:inline" aria-hidden="true">•</span>
               <span className="text-on-surface text-[11px] sm:text-xs hidden md:inline">
-                <strong className="text-secondary font-mono">~42s</strong> Matchmaking médian
+                <strong className="text-secondary font-mono">100%</strong> Salons vérifiés
               </span>
             </div>
 
@@ -257,7 +294,10 @@ function ExplorerContent() {
                 </span>
               </div>
               <button
-                onClick={() => fetchTickets()}
+                onClick={() => {
+                  fetchTickets();
+                  fetchAllTickets();
+                }}
                 title="Actualiser les salons"
                 aria-label="Actualiser la liste des salons"
                 className="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all cursor-pointer"
@@ -275,6 +315,7 @@ function ExplorerContent() {
               {games.map((game) => {
                 const isSelected = selectedGame === game.name;
                 const Icon = game.Icon;
+                const roomCount = getGameRoomsCount(game.name);
                 return (
                   <button
                     key={game.name}
@@ -297,10 +338,12 @@ function ExplorerContent() {
                       className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
                         isSelected
                           ? "bg-primary/20 text-primary font-bold"
-                          : "bg-surface text-on-surface-variant"
+                          : roomCount > 0
+                          ? "bg-primary/10 text-primary font-bold"
+                          : "bg-surface text-on-surface-variant/40"
                       }`}
                     >
-                      {game.activeRooms}
+                      {roomCount}
                     </span>
                   </button>
                 );
@@ -559,18 +602,15 @@ function ExplorerContent() {
                                   : "text-primary"
                               }`}
                             >
-                              {ticket.host?.reputationScore ? `${ticket.host.reputationScore}% ★` : "98.4% ★"}
+                              {ticket.host?.reputationScore ? `${ticket.host.reputationScore}% ★` : "100% ★"}
                             </span>
                             <span>•</span>
                             <span>
-                              Fair-Play:{" "}
-                              {(ticket.host?.reputationScore ?? 100) < 50
-                                ? `${ticket.host?.reputationScore}%`
-                                : "99%"}
+                              Fair-Play: {ticket.host?.reputationScore ?? 100}%
                             </span>
                             <span>•</span>
                             <span className="text-primary-fixed">
-                              {ticket.host?.totalReviews ? `${ticket.host.totalReviews} avis` : "24 matches"}
+                              {ticket.host?.totalReviews ? `${ticket.host.totalReviews} avis` : "Hôte vérifié"}
                             </span>
                           </div>
                         </div>

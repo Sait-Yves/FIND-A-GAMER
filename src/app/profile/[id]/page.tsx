@@ -53,7 +53,7 @@ export default function UserProfilePage() {
             title: "Counter-Strike 2",
             slug: "counter-strike-2",
             coverUrl: "/games/counter-strike-2.svg",
-            hours: "1 250h de jeu",
+            hours: "Jeu favori",
           },
         ]
       : [
@@ -62,21 +62,21 @@ export default function UserProfilePage() {
             title: "Valorant",
             slug: "valorant",
             coverUrl: "/games/valorant.svg",
-            hours: "340h de jeu",
+            hours: "Jeu favori",
           },
           {
             id: 4200,
             title: "Portal 2",
             slug: "portal-2",
             coverUrl: "/games/portal-2.svg",
-            hours: "85h de jeu",
+            hours: "Jeu favori",
           },
           {
             id: 3498,
             title: "Grand Theft Auto V",
             slug: "grand-theft-auto-v",
             coverUrl: "/games/grand-theft-auto-v.svg",
-            hours: "210h de jeu",
+            hours: "Jeu favori",
           },
         ],
     reviews: isToxicDemo
