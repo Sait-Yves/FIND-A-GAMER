@@ -100,7 +100,7 @@ export const config = {
     /*
      * Appliquer sur toutes les routes sauf fichiers statiques publics (_next/static, favicon, etc.)
      */
-    "/((?!_next/static|_next/image|favicon.ico|manifest.json|sw.js|fallback-offline.html).*)",
+    "/((?!_next/static|_next/image|favicon|logo\\.svg|icon|icons|manifest\\.json|sw\\.js|fallback-offline\\.html|uploads).*)",
   ],
 };
 

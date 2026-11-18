@@ -9,16 +9,22 @@ import {
   Sliders,
   Mic,
   Bell,
-  Link2,
   LogOut,
   User,
   Shield,
   Volume2,
   Sparkles,
+  Download,
+  CheckCircle2,
+  Monitor,
+  Smartphone,
+  Info,
 } from "lucide-react";
+import { usePwa } from "@/components/providers/PwaProvider";
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { isInstallable, isInstalled, install } = usePwa();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [micVolume, setMicVolume] = useState(85);
   const [pushEnabled, setPushEnabled] = useState(true);
@@ -78,7 +84,7 @@ export default function SettingsPage() {
                 Paramètres & Préférences
               </h1>
               <p className="text-xs sm:text-sm text-on-surface-variant">
-                Gérez vos périphériques vocaux, vos notifications et la sécurité de votre compte.
+                Gérez vos périphériques vocaux, vos notifications et téléchargez l'application.
               </p>
             </div>
 
@@ -91,7 +97,69 @@ export default function SettingsPage() {
             </Link>
           </div>
 
-          {/* Section 1: Compte & Déconnexion (Haute visibilité) */}
+          {/* Section 1: Télécharger l'Application (PWA - Bouton clair) */}
+          <div className="p-5 bg-surface-container-low rounded-2xl border border-primary/40 flex flex-col gap-4 shadow-[0_0_20px_rgba(78,222,163,0.08)]">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-display font-bold text-white flex items-center gap-2">
+                <Download className="w-4 h-4 text-primary" />
+                <span>Télécharger l'Application (PWA)</span>
+              </h2>
+              {isInstalled && (
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/15 text-primary text-[10px] font-bold border border-primary/30">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Application Déjà Installée
+                </span>
+              )}
+            </div>
+
+            <div className="p-4 rounded-xl bg-surface-container border border-surface-container-high flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-surface-container-lowest border border-primary/30 flex items-center justify-center shrink-0">
+                  <img
+                    src="/logo.svg"
+                    alt="Logo LobbyGamer"
+                    className="w-8 h-8 object-contain"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-display font-bold text-sm text-white">
+                    LobbyGamer Desktop & Mobile App
+                  </span>
+                  <span className="text-xs text-on-surface-variant">
+                    Installation 1-clic ultra-légère sans passer par un store. Fonctionne hors-ligne avec accès instantané.
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={install}
+                className="flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_16px_rgba(78,222,163,0.35)] hover:shadow-[0_0_24px_rgba(78,222,163,0.5)] transition-all cursor-pointer shrink-0 active:scale-95 w-full md:w-auto"
+              >
+                <Download className="w-4 h-4" />
+                <span>Installer / Télécharger l'App</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-on-surface-variant">
+              <div className="p-3 bg-surface-container/60 rounded-xl border border-surface-container-high/60 flex items-start gap-2.5">
+                <Monitor className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold text-white block mb-0.5">Sur PC & Mac (Chrome / Edge / Brave) :</span>
+                  Cliquez sur le bouton ci-dessus ou sur l'icône d'installation dans la barre d'adresse du navigateur.
+                </div>
+              </div>
+              <div className="p-3 bg-surface-container/60 rounded-xl border border-surface-container-high/60 flex items-start gap-2.5">
+                <Smartphone className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold text-white block mb-0.5">Sur Smartphone & Tablette :</span>
+                  Ouvrez le menu de votre navigateur (trois points ou bouton Partager) puis sélectionnez « Ajouter à l'écran d'accueil ».
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Compte & Déconnexion */}
           <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-4 shadow-sm">
             <h2 className="text-sm font-display font-bold text-white flex items-center gap-2">
               <Shield className="w-4 h-4 text-primary" />
@@ -136,7 +204,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Section 2: Audio & Voix WebRTC */}
+          {/* Section 3: Audio & Voix WebRTC */}
           <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-4 shadow-sm">
             <h2 className="text-sm font-display font-bold text-white flex items-center gap-2">
               <Mic className="w-4 h-4 text-primary" />
@@ -181,11 +249,11 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Section 3: Notifications & PWA */}
+          {/* Section 4: Notifications Push & PWA */}
           <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-4 shadow-sm">
             <h2 className="text-sm font-display font-bold text-white flex items-center gap-2">
               <Bell className="w-4 h-4 text-primary" />
-              <span>Notifications Push & PWA</span>
+              <span>Notifications Push</span>
             </h2>
 
             <div className="flex flex-col gap-3">
@@ -218,35 +286,6 @@ export default function SettingsPage() {
                   className="accent-primary w-4 h-4 cursor-pointer"
                 />
               </label>
-            </div>
-          </div>
-
-          {/* Section 4: Intégrations Plateformes */}
-          <div className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high flex flex-col gap-4 shadow-sm">
-            <h2 className="text-sm font-display font-bold text-white flex items-center gap-2">
-              <Link2 className="w-4 h-4 text-primary" />
-              <span>Comptes & Plateformes Associées</span>
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3.5 bg-surface-container rounded-xl border border-surface-container-high flex items-center justify-between">
-                <span className="text-xs font-bold text-white">Steam</span>
-                <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  Connecté
-                </span>
-              </div>
-              <div className="p-3.5 bg-surface-container rounded-xl border border-surface-container-high flex items-center justify-between">
-                <span className="text-xs font-bold text-white">Xbox Live</span>
-                <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  Connecté
-                </span>
-              </div>
-              <div className="p-3.5 bg-surface-container rounded-xl border border-surface-container-high flex items-center justify-between">
-                <span className="text-xs font-bold text-white">Discord</span>
-                <span className="text-[10px] font-bold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
-                  Actif
-                </span>
-              </div>
             </div>
           </div>
         </div>

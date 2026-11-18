@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserPlus, Mail, Lock, User, AlertCircle, Loader2 } from "lucide-react";
+import { CustomSelect } from "@/components/ui/CustomSelect";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -138,35 +139,35 @@ export default function RegisterPage() {
               <label htmlFor="reg-platform" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Plateforme
               </label>
-              <select
+              <CustomSelect
                 id="reg-platform"
                 value={primaryPlatform}
-                onChange={(e) => setPrimaryPlatform(e.target.value)}
-                className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
-              >
-                <option value="PC">PC</option>
-                <option value="PLAYSTATION">PlayStation</option>
-                <option value="XBOX">Xbox</option>
-                <option value="SWITCH">Switch</option>
-                <option value="CROSSPLAY">Crossplay</option>
-              </select>
+                onChange={setPrimaryPlatform}
+                options={[
+                  { value: "PC", label: "PC" },
+                  { value: "PLAYSTATION", label: "PlayStation" },
+                  { value: "XBOX", label: "Xbox" },
+                  { value: "SWITCH", label: "Switch" },
+                  { value: "CROSSPLAY", label: "Crossplay" },
+                ]}
+              />
             </div>
 
             <div>
               <label htmlFor="reg-player-type" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Style de jeu
               </label>
-              <select
+              <CustomSelect
                 id="reg-player-type"
                 value={playerType}
-                onChange={(e) => setPlayerType(e.target.value)}
-                className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
-              >
-                <option value="CHILL">Chill / Détente</option>
-                <option value="COMPETITIVE">Compétitif / Tryhard</option>
-                <option value="STRATEGIST">Stratège / Leader</option>
-                <option value="HARDCORE">Hardcore</option>
-              </select>
+                onChange={setPlayerType}
+                options={[
+                  { value: "CHILL", label: "Chill / Détente" },
+                  { value: "COMPETITIVE", label: "Compétitif / Tryhard" },
+                  { value: "STRATEGIST", label: "Stratège / Leader" },
+                  { value: "HARDCORE", label: "Hardcore" },
+                ]}
+              />
             </div>
           </div>
 

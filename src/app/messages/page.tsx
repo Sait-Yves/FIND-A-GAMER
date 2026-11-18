@@ -24,6 +24,9 @@ import {
   X,
   AlertCircle,
   UserPlus,
+  ImagePlus,
+  Image as ImageIcon,
+  Loader2,
 } from "lucide-react";
 import { useVoiceCall } from "@/hooks/useVoiceCall";
 
@@ -33,6 +36,7 @@ interface MessageItem {
   avatar: string;
   time: string;
   text: string;
+  imageUrl?: string;
   isMe: boolean;
 }
 
@@ -42,6 +46,13 @@ export default function MessagesPage() {
   const [activeChannelId, setActiveChannelId] = useState("apex-ranked");
   const [messageText, setMessageText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // État d'envoi d'images sécurisé
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [previewModalImage, setPreviewModalImage] = useState<string | null>(null);
 
   // Gestion des amis et de la suppression de conversations
   const [friends, setFriends] = useState<any[]>([]);
@@ -407,10 +418,76 @@ export default function MessagesPage() {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // Envoi d'un message dans la conversation active
-  const handleSend = (e: React.FormEvent) => {
+  // Sélection et validation d'une image pour le chat
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validation stricte du type MIME
+    const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowed.includes(file.type)) {
+      setToastMessage("Format d'image non supporté. Seuls JPG, PNG, WEBP et GIF sont acceptés.");
+      setTimeout(() => setToastMessage(null), 3500);
+      return;
+    }
+
+    // Validation de la taille (max 5 Mo)
+    if (file.size > 5 * 1024 * 1024) {
+      setToastMessage("L'image dépasse la limite autorisée de 5 Mo.");
+      setTimeout(() => setToastMessage(null), 3500);
+      return;
+    }
+
+    setSelectedImage(file);
+    setImagePreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleCancelImage = () => {
+    if (imagePreviewUrl) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
+    setSelectedImage(null);
+    setImagePreviewUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // Envoi d'un message (avec texte et/ou image) dans la conversation active
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!messageText.trim()) return;
+    if (!messageText.trim() && !selectedImage) return;
+
+    let uploadedImageUrl: string | undefined = undefined;
+
+    // Si une image est attachée, téléversement sécurisé via l'API
+    if (selectedImage) {
+      setIsUploadingImage(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", selectedImage);
+        formData.append("type", "chat");
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || "Échec de l'envoi de l'image");
+        }
+
+        uploadedImageUrl = data.url;
+      } catch (err: any) {
+        setToastMessage(err.message || "Erreur lors du téléversement");
+        setTimeout(() => setToastMessage(null), 3500);
+        setIsUploadingImage(false);
+        return;
+      } finally {
+        setIsUploadingImage(false);
+      }
+    }
 
     const myName = currentUser?.username || "Valkyrie_FR";
     const myAvatar = currentUser?.avatarUrl || "/avatars/avatar-default.svg";
@@ -421,6 +498,7 @@ export default function MessagesPage() {
       avatar: myAvatar,
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       text: messageText.trim(),
+      imageUrl: uploadedImageUrl,
       isMe: true,
     };
 
@@ -430,6 +508,7 @@ export default function MessagesPage() {
     }));
 
     setMessageText("");
+    handleCancelImage();
   };
 
   return (
@@ -784,7 +863,18 @@ export default function MessagesPage() {
                               </span>
                               <span>{m.time}</span>
                             </div>
-                            <p>{m.text}</p>
+                            {m.text && <p>{m.text}</p>}
+                            {m.imageUrl && (
+                              <div className="mt-2 rounded-xl overflow-hidden border border-surface-container-high bg-black/40">
+                                <img
+                                  src={m.imageUrl}
+                                  alt="Image partagée"
+                                  loading="lazy"
+                                  onClick={() => setPreviewModalImage(m.imageUrl || null)}
+                                  className="max-h-60 max-w-full rounded-xl object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))
@@ -792,25 +882,91 @@ export default function MessagesPage() {
                     <div ref={messagesEndRef} />
                   </div>
 
+                  {/* Image Attachment Preview Bar */}
+                  {imagePreviewUrl && (
+                    <div className="px-4 py-2 bg-surface-container-low border-t border-surface-container-high flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2">
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-primary/50 bg-black/50 shrink-0">
+                          <img
+                            src={imagePreviewUrl}
+                            alt="Aperçu sélection"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-semibold text-white truncate max-w-xs">
+                            {selectedImage?.name}
+                          </span>
+                          <span className="text-[10px] text-primary">
+                            {(Number(selectedImage?.size || 0) / 1024).toFixed(0)} Ko • Prêt à envoyer
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleCancelImage}
+                        aria-label="Retirer l'image sélectionnée"
+                        className="p-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-colors cursor-pointer"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+
                   {/* Message Input Form */}
                   <form
                     onSubmit={handleSend}
                     className="p-3 bg-surface-container border-t border-surface-container-high flex items-center gap-2"
                   >
+                    {/* Hidden Secure File Input */}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                      aria-label="Sélectionner une image"
+                    />
+
+                    {/* Image Attachment Button */}
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploadingImage}
+                      className="p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-primary border border-surface-container-high hover:border-primary/40 transition-colors cursor-pointer disabled:opacity-50 shrink-0"
+                      title="Joindre une image (JPG, PNG, WEBP, GIF max 5 Mo)"
+                      aria-label="Joindre une image"
+                    >
+                      <ImagePlus className="w-4 h-4" />
+                    </button>
+
                     <input
                       type="text"
                       value={messageText}
                       onChange={(e) => setMessageText(e.target.value)}
                       placeholder={`Envoyer un message dans ${activeChannel.name}...`}
                       aria-label="Rédiger un message pour ce salon"
+                      disabled={isUploadingImage}
                       className="flex-1 bg-surface-container-low border border-surface-container-high rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
                     />
+
                     <button
                       type="submit"
-                      className="px-4 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(78,222,163,0.25)] active:scale-95"
+                      disabled={(!messageText.trim() && !selectedImage) || isUploadingImage}
+                      className="px-4 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(78,222,163,0.25)] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
                     >
-                      <span>Envoyer</span>
-                      <Send className="w-3.5 h-3.5" />
+                      {isUploadingImage ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Envoi...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Envoyer</span>
+                          <Send className="w-3.5 h-3.5" />
+                        </>
+                      )}
                     </button>
                   </form>
                 </>
@@ -941,6 +1097,34 @@ export default function MessagesPage() {
         <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-surface-container-highest border border-primary/50 text-white text-xs font-display font-bold shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
           <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
           <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Lightbox / Zoom Plein Écran d'une Image */}
+      {previewModalImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setPreviewModalImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in"
+        >
+          <div
+            className="relative max-w-4xl max-h-[90vh] flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setPreviewModalImage(null)}
+              aria-label="Fermer l'aperçu"
+              className="absolute -top-10 right-0 p-1.5 rounded-lg bg-surface-container text-white hover:bg-surface-container-high transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <img
+              src={previewModalImage}
+              alt="Aperçu agrandi"
+              className="max-h-[85vh] w-auto rounded-xl object-contain shadow-2xl border border-surface-container-high"
+            />
+          </div>
         </div>
       )}
     </div>

@@ -1,19 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
+    <!-- Background Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0f172a" />
       <stop offset="50%" stop-color="#0b1120" />
       <stop offset="100%" stop-color="#020617" />
     </linearGradient>
+
+    <!-- Crisp Emerald to Cyan Gradient -->
     <linearGradient id="neonEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00f5a0" />
       <stop offset="60%" stop-color="#10b981" />
       <stop offset="100%" stop-color="#06b6d4" />
     </linearGradient>
+
+    <!-- Accent Gradient -->
     <linearGradient id="neonAccent" x1="0%" y1="100%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#4edea3" />
       <stop offset="100%" stop-color="#38bdf8" />
     </linearGradient>
+
+    <!-- Crisp Shield Border -->
     <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4edea3" />
       <stop offset="50%" stop-color="#10b981" />
@@ -21,36 +28,106 @@
     </linearGradient>
   </defs>
 
+  <!-- Clean Hexagonal Shield Base (No background halo) -->
   <path
-    d="M 256,40 L 432,114 L 432,320 Q 432,406 256,472 Q 80,406 80,320 L 80,114 Z"
+    d="M 256,40 
+       L 432,114 
+       L 432,320 
+       Q 432,406 256,472 
+       Q 80,406 80,320 
+       L 80,114 Z"
     fill="url(#bgGrad)"
     stroke="url(#shieldBorder)"
     stroke-width="12"
     stroke-linejoin="round"
   />
 
+  <!-- Inner High-Tech Precision Border Outline -->
+  <path
+    d="M 256,66 
+       L 410,130 
+       L 410,312 
+       Q 410,386 256,446 
+       Q 102,386 102,312 
+       L 102,130 Z"
+    fill="none"
+    stroke="#1e293b"
+    stroke-width="3"
+    stroke-opacity="0.9"
+  />
+
+  <!-- Top Gamer Crosshair Indicator -->
   <circle cx="256" cy="94" r="6" fill="#00f5a0" />
   <line x1="256" y1="78" x2="256" y2="86" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" />
   <line x1="256" y1="102" x2="256" y2="110" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" />
 
+  <!-- Gaming Controller Body Silhouette -->
   <g>
+    <!-- Controller Wings / Chassis -->
     <path
-      d="M 160,200 C 190,190 322,190 352,200 C 382,210 404,244 394,304 C 386,348 356,368 326,346 C 300,328 284,310 256,310 C 228,310 212,328 186,346 C 156,368 126,348 118,304 C 108,244 130,210 160,200 Z"
+      d="M 160,200 
+         C 190,190 322,190 352,200 
+         C 382,210 404,244 394,304 
+         C 386,348 356,368 326,346 
+         C 300,328 284,310 256,310 
+         C 228,310 212,328 186,346 
+         C 156,368 126,348 118,304 
+         C 108,244 130,210 160,200 Z"
       fill="#0b1120"
       stroke="url(#neonEmerald)"
       stroke-width="14"
       stroke-linejoin="round"
     />
-    <path d="M 172,246 h 16 v -16 h 14 v 16 h 16 v 14 h -16 v 16 h -14 v -16 h -16 z" fill="url(#neonAccent)" />
+
+    <!-- Controller D-Pad (Left Side) -->
+    <path
+      d="M 172,246 h 16 v -16 h 14 v 16 h 16 v 14 h -16 v 16 h -14 v -16 h -16 z"
+      fill="url(#neonAccent)"
+    />
+
+    <!-- Controller Action Diamond Buttons (Right Side) -->
     <circle cx="324" cy="240" r="7" fill="#38bdf8" />
     <circle cx="344" cy="254" r="7" fill="#00f5a0" />
     <circle cx="304" cy="254" r="7" fill="#4edea3" />
     <circle cx="324" cy="268" r="7" fill="#06b6d4" />
 
-    <path d="M 238,236 L 238,274 L 250,274" stroke="#00f5a0" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-    <path d="M 274,244 A 15,15 0 1,0 274,268 H 262 V 256" stroke="#38bdf8" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <!-- Center Lobby Pulse Emblem (L & G Monogram Nexus) -->
+    <!-- Stylized 'L' Wing -->
+    <path
+      d="M 238,236 
+         L 238,274 
+         L 250,274"
+      stroke="#00f5a0"
+      stroke-width="6.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+
+    <!-- Stylized 'G' Wing -->
+    <path
+      d="M 274,244 
+         A 15,15 0 1,0 274,268 
+         H 262 
+         V 256"
+      stroke="#38bdf8"
+      stroke-width="5.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+
+    <!-- Interconnecting Fair-Play Energy Spark -->
     <polygon points="256,220 252,238 262,238 250,260 254,244 246,244" fill="#facc15" />
   </g>
 
-  <path d="M 216,396 L 244,420 L 298,374" fill="none" stroke="url(#neonEmerald)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Bottom Fair-Play Check Wings -->
+  <path
+    d="M 216,396 L 244,420 L 298,374"
+    fill="none"
+    stroke="url(#neonEmerald)"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
 </svg>

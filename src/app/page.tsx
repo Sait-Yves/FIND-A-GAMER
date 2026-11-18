@@ -30,7 +30,9 @@ import {
   UserPlus,
   UserMinus,
   X,
+  Globe,
 } from "lucide-react";
+import { CustomSelect } from "@/components/ui/CustomSelect";
 
 function ExplorerContent() {
   const searchParams = useSearchParams();
@@ -52,6 +54,8 @@ function ExplorerContent() {
   // Filters state
   const [platformFilter, setPlatformFilter] = useState("ALL");
   const [modeFilter, setModeFilter] = useState("ALL");
+  const [regionFilter, setRegionFilter] = useState("FR_EU");
+  const [rankFilter, setRankFilter] = useState("ALL");
   const [micFilter, setMicFilter] = useState<boolean | null>(null);
   const [is18PlusFilter, setIs18PlusFilter] = useState<boolean | null>(null);
   const [activeChip, setActiveChip] = useState("");
@@ -62,9 +66,12 @@ function ExplorerContent() {
   const [loading, setLoading] = useState(true);
 
   const games = [
-    { name: "Tous", activeRooms: 589, Icon: Layers },
+    { name: "Tous", activeRooms: 785, Icon: Layers },
     { name: "Apex Legends", activeRooms: 148, Icon: Trophy },
     { name: "Valorant", activeRooms: 92, Icon: Shield },
+    { name: "Overwatch 2", activeRooms: 76, Icon: Swords },
+    { name: "Fortnite", activeRooms: 124, Icon: Trophy },
+    { name: "Marvel Rivals", activeRooms: 85, Icon: Shield },
     { name: "Helldivers 2", activeRooms: 64, Icon: Rocket },
     { name: "Warzone 2", activeRooms: 115, Icon: Crosshair },
     { name: "Rocket League", activeRooms: 43, Icon: CircleDot },
@@ -306,65 +313,71 @@ function ExplorerContent() {
                 <label htmlFor="filter-mode-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Mode de Jeu
                 </label>
-                <select
+                <CustomSelect
                   id="filter-mode-select"
                   value={modeFilter}
-                  onChange={(e) => setModeFilter(e.target.value)}
-                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
-                >
-                  <option value="ALL">Tous les modes (Ranked & Chill)</option>
-                  <option value="RANKED">Classé / Compétitif</option>
-                  <option value="CHILL">Partie Rapide / Chill</option>
-                  <option value="SCRIM">Tournoi / Scrims</option>
-                </select>
+                  onChange={setModeFilter}
+                  options={[
+                    { value: "ALL", label: "Tous les modes (Ranked & Chill)" },
+                    { value: "RANKED", label: "Classé / Compétitif" },
+                    { value: "CHILL", label: "Partie Rapide / Chill" },
+                    { value: "SCRIM", label: "Tournoi / Scrims" },
+                  ]}
+                  aria-label="Filtrer par mode de jeu"
+                />
               </div>
 
               <div>
                 <label htmlFor="filter-platform-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Plateforme
                 </label>
-                <select
+                <CustomSelect
                   id="filter-platform-select"
                   value={platformFilter}
-                  onChange={(e) => setPlatformFilter(e.target.value)}
-                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
-                >
-                  <option value="ALL">Crossplay (Toutes plateformes)</option>
-                  <option value="PC">PC Uniquement</option>
-                  <option value="PLAYSTATION">PlayStation 5</option>
-                  <option value="XBOX">Xbox Series X|S</option>
-                </select>
+                  onChange={setPlatformFilter}
+                  options={[
+                    { value: "ALL", label: "Crossplay (Toutes plateformes)" },
+                    { value: "PC", label: "PC Uniquement" },
+                    { value: "PLAYSTATION", label: "PlayStation 5" },
+                    { value: "XBOX", label: "Xbox Series X|S" },
+                  ]}
+                  aria-label="Filtrer par plateforme"
+                />
               </div>
 
               <div>
                 <label htmlFor="filter-region-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Langue & Région
                 </label>
-                <select
+                <CustomSelect
                   id="filter-region-select"
+                  value={regionFilter}
+                  onChange={setRegionFilter}
+                  options={[
+                    { value: "FR_EU", label: "Français & Anglais (Europe)" },
+                    { value: "FR", label: "Français uniquement (100% FR)" },
+                    { value: "EU", label: "Anglais (Global EU)" },
+                  ]}
                   aria-label="Langue et région"
-                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
-                >
-                  <option>Français & Anglais (Europe)</option>
-                  <option>Français uniquement (100% FR)</option>
-                  <option>Anglais (Global EU)</option>
-                </select>
+                />
               </div>
 
               <div>
                 <label htmlFor="filter-rank-select" className="block text-[10px] font-display font-bold uppercase tracking-wider text-on-surface-variant/70 mb-1">
                   Niveau / Rang
                 </label>
-                <select
+                <CustomSelect
                   id="filter-rank-select"
+                  value={rankFilter}
+                  onChange={setRankFilter}
+                  options={[
+                    { value: "ALL", label: "Tous niveaux acceptés" },
+                    { value: "DIAMOND", label: "Diamant II+ Minimum" },
+                    { value: "PLATINUM", label: "Platine / Master" },
+                    { value: "BEGINNER", label: "Débutant bienvenu" },
+                  ]}
                   aria-label="Niveau ou rang minimum"
-                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary"
-                >
-                  <option>Tous niveaux acceptés</option>
-                  <option>Diamant II+ Minimum</option>
-                  <option>Platine / Master</option>
-                  <option>Débutant bienvenu</option>
-                </select>
+                />
               </div>
             </div>
 
@@ -560,13 +573,12 @@ function ExplorerContent() {
                       </div>
 
                       <div className="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-xl border border-surface-container-high/60 text-xs">
-                        <Activity className="w-3.5 h-3.5 text-primary" />
-                        <span className="text-white font-medium">EU Frankfurt</span>
-                        <span className="text-primary font-mono font-bold bg-primary/10 px-1.5 py-0.5 rounded">
-                          19ms
+                        <Globe className="w-3.5 h-3.5 text-primary" />
+                        <span className="text-white font-medium">
+                          {ticket.language === "FR" ? "France (FR)" : "Europe (EU)"}
                         </span>
-                        <span className="text-on-surface-variant hidden sm:inline">
-                          {ticket.targetPlatform}
+                        <span className="text-primary font-mono font-bold bg-primary/10 px-1.5 py-0.5 rounded">
+                          {ticket.targetPlatform || "CROSSPLAY"}
                         </span>
                       </div>
                     </div>

@@ -16,6 +16,7 @@ import {
   Save,
   Loader2,
 } from "lucide-react";
+import { CustomSelect } from "@/components/ui/CustomSelect";
 
 const AVATAR_PRESETS = [
   "/avatars/avatar-alex.svg",
@@ -377,17 +378,17 @@ export default function ProfileEditPage() {
                 <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                   Plateforme Principale
                 </label>
-                <select
+                <CustomSelect
                   value={primaryPlatform}
-                  onChange={(e) => setPrimaryPlatform(e.target.value)}
-                  className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-primary"
-                >
-                  <option value="PC">PC (Steam / Riot / Battle.net)</option>
-                  <option value="PLAYSTATION">PlayStation 5 / PS4</option>
-                  <option value="XBOX">Xbox Series X|S</option>
-                  <option value="SWITCH">Nintendo Switch</option>
-                  <option value="CROSSPLAY">Crossplay (Multi-plateformes)</option>
-                </select>
+                  onChange={setPrimaryPlatform}
+                  options={[
+                    { value: "PC", label: "PC (Steam / Riot / Battle.net)" },
+                    { value: "PLAYSTATION", label: "PlayStation 5 / PS4" },
+                    { value: "XBOX", label: "Xbox Series X|S" },
+                    { value: "SWITCH", label: "Nintendo Switch" },
+                    { value: "CROSSPLAY", label: "Crossplay (Multi-plateformes)" },
+                  ]}
+                />
               </div>
             </div>
 
@@ -396,17 +397,17 @@ export default function ProfileEditPage() {
               <label className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Style de Joueur
               </label>
-              <select
+              <CustomSelect
                 value={playerType}
-                onChange={(e) => setPlayerType(e.target.value)}
-                className="w-full bg-surface-container border border-surface-container-high rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-primary"
-              >
-                <option value="COMPETITIVE">Compétitif / Tryhard (Objectif Victoire)</option>
-                <option value="CHILL">Chill / Détente (Bonne humeur avant tout)</option>
-                <option value="STRATEGIST">Stratège / Leader (Callouts & Rotations)</option>
-                <option value="CHATTY">Bavard / Convivial (Social gaming)</option>
-                <option value="HARDCORE">Hardcore (Grind intensif)</option>
-              </select>
+                onChange={setPlayerType}
+                options={[
+                  { value: "COMPETITIVE", label: "Compétitif / Tryhard (Objectif Victoire)" },
+                  { value: "CHILL", label: "Chill / Détente (Bonne humeur avant tout)" },
+                  { value: "STRATEGIST", label: "Stratège / Leader (Callouts & Rotations)" },
+                  { value: "CHATTY", label: "Bavard / Convivial (Social gaming)" },
+                  { value: "HARDCORE", label: "Hardcore (Grind intensif)" },
+                ]}
+              />
             </div>
 
             {/* Footer Buttons */}

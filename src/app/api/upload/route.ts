@@ -16,18 +16,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validation du type de fichier
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-      "image/gif",
-      "image/svg+xml",
-    ];
+    const uploadType = (formData.get("type") as string) || "general";
+
+    // Validation du type de fichier (SVG interdit pour les pièces jointes de messagerie pour prévenir tout vecteur XSS)
+    const allowedTypes = uploadType === "chat"
+      ? ["image/jpeg", "image/png", "image/webp", "image/gif"]
+      : ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: "Format non supporté. Veuillez envoyer une image JPG, PNG, WEBP, GIF ou SVG." },
+        {
+          error:
+            uploadType === "chat"
+              ? "Format non autorisé en messagerie. Seuls les formats JPG, PNG, WEBP et GIF sont acceptés pour des raisons de sécurité."
+              : "Format non supporté. Veuillez envoyer une image JPG, PNG, WEBP, GIF ou SVG.",
+        },
         { status: 400 }
       );
     }
@@ -43,14 +46,15 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Détermination de l'extension
+    // Détermination sécurisée de l'extension
     let ext = "png";
     if (file.type === "image/jpeg") ext = "jpg";
     else if (file.type === "image/webp") ext = "webp";
     else if (file.type === "image/gif") ext = "gif";
     else if (file.type === "image/svg+xml") ext = "svg";
 
-    const fileName = `avatar-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
+    const prefix = uploadType === "chat" ? "chat" : "avatar";
+    const fileName = `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
     
     // Essai 1 : Écriture dans public/uploads
     // Essai 2 (Fallback si droits restreints) : Écriture dans /tmp/uploads

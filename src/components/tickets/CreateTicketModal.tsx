@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { PlusCircle, X, AlertCircle } from "lucide-react";
+import { CustomSelect } from "@/components/ui/CustomSelect";
 
 interface CreateTicketModalProps {
   isOpen: boolean;
@@ -22,6 +24,24 @@ const GAME_PRESETS = [
     rawgId: 415171,
     defaultPlayers: 5,
     coverUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
+  },
+  {
+    name: "Overwatch 2",
+    rawgId: 842103,
+    defaultPlayers: 5,
+    coverUrl: "https://media.rawg.io/media/games/609/609d94943fcf31c3bf791fc5a4d4f243.jpg",
+  },
+  {
+    name: "Fortnite",
+    rawgId: 3328,
+    defaultPlayers: 4,
+    coverUrl: "https://media.rawg.io/media/games/d0f/d0f91fe1d923321be5463ab29bead521.jpg",
+  },
+  {
+    name: "Marvel Rivals",
+    rawgId: 992834,
+    defaultPlayers: 6,
+    coverUrl: "https://media.rawg.io/media/games/49c/49c34b89ab60fb23f447743f52508924.jpg",
   },
   {
     name: "Helldivers 2",
@@ -61,8 +81,24 @@ const GAME_PRESETS = [
   },
 ];
 
+const PLATFORM_OPTIONS = [
+  { value: "CROSSPLAY", label: "Crossplay (Toutes plateformes)" },
+  { value: "PC", label: "PC (Steam / Battle.net / Epic)" },
+  { value: "PLAYSTATION", label: "PlayStation" },
+  { value: "XBOX", label: "Xbox" },
+  { value: "SWITCH", label: "Nintendo Switch" },
+];
+
+const PLAYER_TYPE_OPTIONS = [
+  { value: "COMPETITIVE", label: "Compétitif / Tryhard" },
+  { value: "CHILL", label: "Chill / Détente" },
+  { value: "HARDCORE", label: "Hardcore" },
+  { value: "STRATEGIST", label: "Stratège" },
+];
+
 export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketModalProps) {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedGameName, setSelectedGameName] = useState(GAME_PRESETS[0].name);
@@ -75,7 +111,27 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Définir la plateforme par défaut selon le compte de l'utilisateur connecté
+  useEffect(() => {
+    async function loadUserPlatform() {
+      try {
+        const res = await fetch("/api/auth/me");
+        const json = await res.json();
+        if (json.success && json.user?.primaryPlatform) {
+          setTargetPlatform(json.user.primaryPlatform);
+        }
+      } catch (err) {
+        console.warn("Impossible de récupérer la plateforme du profil:", err);
+      }
+    }
+    loadUserPlatform();
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const currentPreset = GAME_PRESETS.find((g) => g.name === selectedGameName) || GAME_PRESETS[0];
 
@@ -134,7 +190,12 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
     }
   };
 
-  return (
+  const gameOptions = GAME_PRESETS.map((p) => ({
+    value: p.name,
+    label: p.name,
+  }));
+
+  const modalContent = (
     <div
       role="dialog"
       aria-modal="true"
@@ -142,10 +203,10 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
       onKeyDown={(e) => {
         if (e.key === "Escape") onClose();
       }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
     >
-      <div className="relative w-full max-w-2xl bg-surface-container border border-surface-container-high rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
+      <div className="relative w-full max-w-2xl bg-surface-container border border-surface-container-high rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col gap-5 my-auto max-h-[92vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-3 border-b border-surface-container-high shrink-0">
           <div className="flex items-center gap-2">
             <PlusCircle className="w-6 h-6 text-primary" aria-hidden="true" />
             <h2 id="create-ticket-modal-title" className="text-lg font-display font-bold text-white tracking-wide">
@@ -153,6 +214,7 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
             </h2>
           </div>
           <button
+            type="button"
             onClick={onClose}
             aria-label="Fermer la boîte de création de salon"
             className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-white flex items-center justify-center transition-colors cursor-pointer"
@@ -162,8 +224,9 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-error/10 border border-error/30 text-error text-xs font-medium" role="alert">
-            {error}
+          <div className="p-3 rounded-xl bg-error/10 border border-error/30 text-error text-xs font-medium flex items-center gap-2" role="alert">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
@@ -181,7 +244,7 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: TRIO RANKED — GRIND MASTER / DIAMANT II+"
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
             />
           </div>
 
@@ -190,18 +253,13 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
               <label htmlFor="create-ticket-game" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Jeu Vidéo *
               </label>
-              <select
+              <CustomSelect
                 id="create-ticket-game"
                 value={selectedGameName}
-                onChange={(e) => handleGameChange(e.target.value)}
-                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-primary focus:outline-none"
-              >
-                {GAME_PRESETS.map((preset) => (
-                  <option key={preset.name} value={preset.name}>
-                    {preset.name}
-                  </option>
-                ))}
-              </select>
+                onChange={handleGameChange}
+                options={gameOptions}
+                placeholder="Choisir un jeu"
+              />
             </div>
 
             <div>
@@ -215,7 +273,7 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
                 max={32}
                 value={maxPlayers}
                 onChange={(e) => setMaxPlayers(Number(e.target.value))}
-                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-primary focus:outline-none"
+                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:border-primary focus:outline-none"
               />
             </div>
           </div>
@@ -233,7 +291,7 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Décrivez vos attentes, style de jeu, ambiance..."
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl p-3 text-sm text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none resize-none"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl p-3 text-xs sm:text-sm text-white placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none resize-none"
             />
           </div>
 
@@ -242,34 +300,24 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
               <label htmlFor="create-ticket-platform" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Plateforme
               </label>
-              <select
+              <CustomSelect
                 id="create-ticket-platform"
                 value={targetPlatform}
-                onChange={(e) => setTargetPlatform(e.target.value)}
-                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:border-primary focus:outline-none"
-              >
-                <option value="CROSSPLAY">Crossplay (Toutes)</option>
-                <option value="PC">PC Uniquement</option>
-                <option value="PLAYSTATION">PlayStation</option>
-                <option value="XBOX">Xbox</option>
-              </select>
+                onChange={setTargetPlatform}
+                options={PLATFORM_OPTIONS}
+              />
             </div>
 
             <div>
               <label htmlFor="create-ticket-playertype" className="block text-xs font-display font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
                 Style Recherché
               </label>
-              <select
+              <CustomSelect
                 id="create-ticket-playertype"
                 value={requiredPlayerType}
-                onChange={(e) => setRequiredPlayerType(e.target.value)}
-                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-xs text-white focus:border-primary focus:outline-none"
-              >
-                <option value="COMPETITIVE">Compétitif / Tryhard</option>
-                <option value="CHILL">Chill / Détente</option>
-                <option value="HARDCORE">Hardcore</option>
-                <option value="STRATEGIST">Stratège</option>
-              </select>
+                onChange={setRequiredPlayerType}
+                options={PLAYER_TYPE_OPTIONS}
+              />
             </div>
 
             <div>
@@ -277,21 +325,21 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
                 Règles de salon
               </span>
               <div className="flex flex-col gap-2 pt-1">
-                <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
+                <label className="flex items-center gap-2 text-xs text-white cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={micRequired}
                     onChange={(e) => setMicRequired(e.target.checked)}
-                    className="accent-primary rounded"
+                    className="accent-primary rounded w-4 h-4"
                   />
                   <span>Micro Obligatoire</span>
                 </label>
-                <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
+                <label className="flex items-center gap-2 text-xs text-white cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={is18Plus}
                     onChange={(e) => setIs18Plus(e.target.checked)}
-                    className="accent-primary rounded"
+                    className="accent-primary rounded w-4 h-4"
                   />
                   <span>Majeurs (+18 ans)</span>
                 </label>
@@ -313,18 +361,19 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-surface-container-high">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-surface-container-high">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-display font-semibold text-on-surface-variant hover:text-white hover:bg-surface-container-low transition-colors"
+              disabled={loading}
+              className="px-4 py-2.5 rounded-xl text-xs font-display font-bold text-on-surface-variant hover:text-white hover:bg-surface-container-low transition-colors cursor-pointer"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider shadow-[0_0_12px_rgba(78,222,163,0.3)] disabled:opacity-50 transition-all cursor-pointer"
+              className="px-5 py-2.5 bg-primary hover:bg-primary-fixed text-on-primary font-display font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_15px_rgba(78,222,163,0.3)] transition-all cursor-pointer disabled:opacity-50 active:scale-95"
             >
               {loading ? "Création en cours..." : "Publier le Ticket"}
             </button>
@@ -333,4 +382,6 @@ export function CreateTicketModal({ isOpen, onClose, onCreated }: CreateTicketMo
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

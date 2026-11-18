@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/logo.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icons/icon-192x192.png", type: "image/png", sizes: "192x192" },
+      { url: "/favicon.png", type: "image/png" },
     ],
     shortcut: "/logo.svg",
     apple: "/icons/icon-192x192.png",
@@ -34,7 +35,8 @@ export default function RootLayout({
     <html lang="fr" className="dark">
       <head>
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-        <link rel="alternate icon" href="/favicon.ico" />
+        <link rel="icon" href="/icons/icon-192x192.png" type="image/png" sizes="192x192" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

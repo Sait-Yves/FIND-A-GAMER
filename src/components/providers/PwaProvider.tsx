@@ -1,11 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import { Download, X } from "lucide-react";
+
+interface PwaContextType {
+  isInstallable: boolean;
+  isInstalled: boolean;
+  install: () => Promise<void>;
+}
+
+const PwaContext = createContext<PwaContextType>({
+  isInstallable: false,
+  isInstalled: false,
+  install: async () => {},
+});
+
+export function usePwa() {
+  return useContext(PwaContext);
+}
 
 export function PwaProvider({ children }: { children: React.ReactNode }) {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
@@ -35,25 +52,47 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
     // 3. Détecter si l'application est déjà installée / exécutée en mode standalone
     if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
       setIsInstallable(false);
+      setIsInstalled(true);
     }
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    };
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      // Fallback si l'API automatique n'est pas déclenchée : avertir l'utilisateur
+      alert(
+        "Pour installer LobbyGamer :\n\n- Sur Chrome/Edge : Cliquez sur l'icône d'installation dans la barre d'adresse (en haut à droite).\n- Sur Mobile : Menu du navigateur > 'Ajouter à l'écran d'accueil'."
+      );
+      return;
+    }
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
       setIsInstallable(false);
+      setIsInstalled(true);
     }
     setDeferredPrompt(null);
   };
 
   return (
-    <>
+    <PwaContext.Provider
+      value={{
+        isInstallable,
+        isInstalled,
+        install: handleInstallClick,
+      }}
+    >
       {children}
 
       {/* Bannière discrète d'installation PWA 1-Click */}
@@ -97,6 +136,6 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
       )}
-    </>
+    </PwaContext.Provider>
   );
 }
