@@ -63,10 +63,10 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       active: pathname === "/friends",
     },
     {
-      label: "Jeux Favoris",
-      href: "/favorites",
+      label: "Catalogue de Jeux",
+      href: "/games",
       Icon: Gamepad2,
-      active: pathname === "/favorites",
+      active: pathname === "/games" || pathname === "/favorites",
     },
     {
       label: "Classements & Fair-Play",

@@ -45,6 +45,10 @@ function ExplorerContent() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
+    const g = searchParams.get("game");
+    if (g) {
+      setSelectedGame(g);
+    }
     const q = searchParams.get("search") || searchParams.get("q");
     if (q !== null && q !== undefined) {
       setSearchQuery(q);

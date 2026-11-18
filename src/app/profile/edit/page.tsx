@@ -15,8 +15,11 @@ import {
   AlertCircle,
   Save,
   Loader2,
+  Gamepad2,
+  Check,
 } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { ALL_GAMES_CATALOG } from "@/app/games/page";
 
 const AVATAR_PRESETS = [
   "/avatars/avatar-alex.svg",
@@ -43,6 +46,23 @@ export default function ProfileEditPage() {
   const [age, setAge] = useState(24);
   const [primaryPlatform, setPrimaryPlatform] = useState("PC");
   const [playerType, setPlayerType] = useState("COMPETITIVE");
+  const [selectedFavoriteGames, setSelectedFavoriteGames] = useState<string[]>([
+    "Valorant",
+    "Counter-Strike 2",
+    "Grand Theft Auto V",
+  ]);
+
+  const toggleFavoriteGame = (gameName: string) => {
+    setSelectedFavoriteGames((prev) => {
+      if (prev.includes(gameName)) {
+        return prev.filter((g) => g !== gameName);
+      }
+      if (prev.length >= 5) {
+        return prev;
+      }
+      return [...prev, gameName];
+    });
+  };
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -65,6 +85,22 @@ export default function ProfileEditPage() {
           if (json.user.age) setAge(json.user.age);
           if (json.user.primaryPlatform) setPrimaryPlatform(json.user.primaryPlatform);
           if (json.user.playerType) setPlayerType(json.user.playerType);
+
+          // Récupérer les jeux favoris enregistrés
+          const targetId = json.user.id || "me";
+          try {
+            const userRes = await fetch(`/api/users/${targetId}`);
+            const userJson = await userRes.json();
+            if (
+              userJson.success &&
+              userJson.user?.favoriteGames &&
+              userJson.user.favoriteGames.length > 0
+            ) {
+              setSelectedFavoriteGames(
+                userJson.user.favoriteGames.map((g: any) => g.gameTitle)
+              );
+            }
+          } catch {}
         }
       } catch (e) {
         console.error("Erreur chargement profil:", e);
@@ -140,6 +176,16 @@ export default function ProfileEditPage() {
     setSavedSuccess(false);
 
     try {
+      const gamesPayload = selectedFavoriteGames.map((gameTitle) => {
+        const catalogItem = ALL_GAMES_CATALOG.find((g) => g.name === gameTitle);
+        return {
+          rawgGameId: catalogItem?.id || 1000,
+          gameTitle: gameTitle,
+          gameSlug: catalogItem?.slug || gameTitle.toLowerCase().replace(/\s+/g, "-"),
+          gameCoverUrl: catalogItem?.coverUrl || "/games/default-game.svg",
+        };
+      });
+
       const res = await fetch(`/api/users/${userId || "me"}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -149,6 +195,7 @@ export default function ProfileEditPage() {
           age: Number(age),
           primaryPlatform,
           playerType,
+          favoriteGames: gamesPayload,
         }),
       });
 
@@ -408,6 +455,56 @@ export default function ProfileEditPage() {
                   { value: "HARDCORE", label: "Hardcore (Grind intensif)" },
                 ]}
               />
+            </div>
+
+            {/* Jeux Vidéo Favoris (Affichés sur le profil) */}
+            <div id="games" className="flex flex-col gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                <div>
+                  <label className="block text-xs font-display font-semibold text-white uppercase tracking-wider">
+                    Jeux Vidéo Favoris (Affichés sur votre profil)
+                  </label>
+                  <span className="text-[11px] text-on-surface-variant">
+                    Sélectionnez jusqu'à 5 jeux pour mettre en avant vos préférences de matchmaking.
+                  </span>
+                </div>
+                <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 shrink-0 self-start sm:self-auto">
+                  {selectedFavoriteGames.length} / 5 sélectionnés
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 pt-1">
+                {ALL_GAMES_CATALOG.map((game) => {
+                  const isSelected = selectedFavoriteGames.includes(game.name);
+                  return (
+                    <button
+                      key={game.id}
+                      type="button"
+                      onClick={() => toggleFavoriteGame(game.name)}
+                      className={`relative flex items-center gap-2.5 p-2 rounded-xl border text-left transition-all cursor-pointer select-none ${
+                        isSelected
+                          ? "bg-primary/15 border-primary shadow-[0_0_10px_rgba(78,222,163,0.15)] text-white"
+                          : "bg-surface-container border-surface-container-high text-on-surface-variant hover:text-white hover:border-surface-container-highest"
+                      }`}
+                    >
+                      <img
+                        src={game.coverUrl}
+                        alt={game.name}
+                        onError={(e) => {
+                          e.currentTarget.src = "/games/default-game.svg";
+                        }}
+                        className="w-8 h-8 rounded-lg object-cover shrink-0 bg-surface-container-low"
+                      />
+                      <span className="text-xs font-semibold truncate flex-1">
+                        {game.name}
+                      </span>
+                      {isSelected && (
+                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Footer Buttons */}

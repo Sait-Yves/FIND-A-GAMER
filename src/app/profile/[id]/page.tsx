@@ -20,6 +20,7 @@ import {
   UserMinus,
   UserCheck,
   Loader2,
+  ArrowRight,
 } from "lucide-react";
 
 export default function UserProfilePage() {
@@ -455,30 +456,68 @@ export default function UserProfilePage() {
 
           {/* Tab 1: Favorite Games Grid */}
           {activeTab === "games" && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {user.favoriteGames.map((game) => (
-                <div
-                  key={game.id}
-                  className="group relative rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high hover:border-primary/50 transition-all shadow-md"
-                >
-                  <div className="h-40 overflow-hidden bg-surface-container">
-                    <img
-                      src={game.coverUrl}
-                      alt={game.title}
-                      onError={(e) => {
-                        e.currentTarget.src = "/games/default-game.svg";
-                      }}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col gap-1">
-                    <h3 className="font-display font-bold text-sm text-white group-hover:text-primary transition-colors">
-                      {game.title}
-                    </h3>
-                    <span className="text-[11px] text-on-surface-variant">{game.hours}</span>
-                  </div>
+            <div className="flex flex-col gap-4">
+              {currentUser?.username === user.username && (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-1">
+                  <span className="text-xs text-on-surface-variant">
+                    Ces jeux sont affichés sur votre profil public. Cliquez sur un jeu pour explorer ses salons LFG.
+                  </span>
+                  <Link
+                    href="/profile/edit#games"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high border border-surface-container-high text-xs font-display font-semibold text-primary transition-colors shrink-0"
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    <span>Modifier mes jeux favoris</span>
+                  </Link>
                 </div>
-              ))}
+              )}
+
+              {user.favoriteGames.length === 0 ? (
+                <div className="p-8 rounded-2xl bg-surface-container-low border border-surface-container-high text-center flex flex-col items-center justify-center gap-3">
+                  <Gamepad2 className="w-8 h-8 text-on-surface-variant/40" />
+                  <p className="text-xs text-on-surface-variant">
+                    Aucun jeu favori configuré pour le moment.
+                  </p>
+                  <Link
+                    href="/games"
+                    className="px-4 py-2 bg-primary/20 hover:bg-primary text-primary hover:text-on-primary font-display font-bold text-xs rounded-xl transition-all"
+                  >
+                    Parcourir le catalogue de jeux
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {user.favoriteGames.map((game) => (
+                    <Link
+                      key={game.id}
+                      href={`/?game=${encodeURIComponent(game.title)}`}
+                      className="group relative rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high hover:border-primary/60 hover:shadow-[0_4px_20px_rgba(78,222,163,0.12)] transition-all shadow-md flex flex-col cursor-pointer"
+                    >
+                      <div className="h-40 overflow-hidden bg-surface-container relative">
+                        <img
+                          src={game.coverUrl}
+                          alt={game.title}
+                          onError={(e) => {
+                            e.currentTarget.src = "/games/default-game.svg";
+                          }}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent" />
+                        <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-lg bg-surface/90 backdrop-blur-md text-[10px] font-mono font-bold text-primary border border-primary/30 flex items-center gap-1 group-hover:bg-primary group-hover:text-black transition-colors shadow-sm">
+                          <span>Explorer les salons</span>
+                          <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                        </span>
+                      </div>
+                      <div className="p-4 flex flex-col gap-1">
+                        <h3 className="font-display font-bold text-sm text-white group-hover:text-primary transition-colors">
+                          {game.title}
+                        </h3>
+                        <span className="text-[11px] text-on-surface-variant">{game.hours}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
