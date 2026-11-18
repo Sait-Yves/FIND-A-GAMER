@@ -73,6 +73,7 @@ export function Navbar({
   const [localQuery, setLocalQuery] = useState(searchQuery);
   const [isSearching, setIsSearching] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [shortcutLabel, setShortcutLabel] = useState("Ctrl+K");
   const [searchResults, setSearchResults] = useState<{
     users: SearchUserResult[];
     tickets: SearchTicketResult[];
@@ -124,6 +125,14 @@ export function Navbar({
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Détection de l'OS pour le badge de raccourci (Ctrl+K sur Windows/Linux, ⌘K sur Mac)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isMac = /(Mac|iPhone|iPod|iPad)/i.test(navigator.userAgent || navigator.platform);
+      setShortcutLabel(isMac ? "⌘K" : "Ctrl+K");
+    }
   }, []);
 
   // Raccourci global Ctrl+K / Cmd+K pour activer la barre de recherche
@@ -263,7 +272,7 @@ export function Navbar({
               if (localQuery.trim()) setIsDropdownOpen(true);
             }}
             onKeyDown={handleSearchKeyDown}
-            placeholder="Rechercher un salon, un joueur... [Ctrl+K]"
+            placeholder="Rechercher un salon, un joueur..."
             aria-label="Rechercher un salon ou un joueur"
             role="combobox"
             aria-expanded={isDropdownOpen}
@@ -285,7 +294,7 @@ export function Navbar({
               </button>
             ) : null}
             <kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] font-mono text-on-surface-variant/70 bg-surface-container border border-surface-container-high rounded pointer-events-none" aria-hidden="true">
-              ⌘K
+              {shortcutLabel}
             </kbd>
           </div>
         </div>
